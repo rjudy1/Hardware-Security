@@ -75,6 +75,12 @@ architecture behavior of avr_fpga is
     end component;
  
     signal S_7_SEGMENT : std_logic_vector( 6 downto 0);
+    signal L_CLK       : std_logic := '0';
+    signal L_CLK_CNT   : std_logic_vector( 2 downto 0) := "000";
+    signal L_CLR       : std_logic;        --reset, low active (double check)
+    signal L_CLR_N     : std_logic := '0'; --reset, low active
+    signal L_C1_N      : std_logic := '0'; --switch debounce, active low
+    signal L_C2_N      : std_logic := '0'; --switch debounce, active low
 
 
 
