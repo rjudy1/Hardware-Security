@@ -16,7 +16,6 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 	Q_TX : out std_logic
 	);
 
-
 architecture behavior of avr_fpga is
     component cpu_core
 	port ( 
@@ -39,7 +38,6 @@ architecture behavior of avr_fpga is
      signal C_DOUT : std_logic_vector( 7 downto 0);
      signal C_RD_IO : std_logic;
      signal C_WE_IO : std_logic;
-
 
     component io
 	port ( 
@@ -82,8 +80,76 @@ architecture behavior of avr_fpga is
     signal L_C1_N      : std_logic := '0'; --switch debounce, active low
     signal L_C2_N      : std_logic := '0'; --switch debounce, active low
 
-
-
 begin
+	cpu: cpu_core
+	port map(  I_CLK     => L_CLK,
+		   I_CLR     => L_CLR,
+		   I_DIN     => N_DOUT,
+		   I_INTVEC  => N_INTVEC,
+		 
+		   Q_ADR_IO  => C_ADR_IO,
+		   Q_DOUT    => C_DOUT,
+		   Q_OPC     => C_OPC,
+		   Q_PC      => C_PC,
+		   Q_RD_IO   => C_RD_IO,
+		   Q_WE_IO   => C_WE_IO );
+		
+	ino: io
+	port map(  I_CLK     => L_CLK,
+		   I_CLR     => L_CLR,
+		   I_ADR_IO  => C_ADR_IO,
+		   I_DIN     => C_DOUT,
+		   I_RD_IO   => C_RD_IO,
+		   I_RX      => I_RX,
+		   I_SWITCH  => I_SWITCH(7 downto 0),
+		   I_WE_IO   => C_WE_IO,
+		 
+		   Q_7_SEGMENT => N_7_SEGMENT,
+		   Q_DOUT      => N_DOUT,
+		   Q_INTVEC    => N_INTVEC,
+		   Q_LEDS      => Q_LEDS(1 downto 0),
+		   Q_TX        => N_TX);
+		
+	seg: segment7
+	port map( I_CLK        => L_CLK,
+		  I_CLR        => L_CLR, 
+		  I_OPC        => C_OPC,
+		  I_PC         => C_PC,
+		 
+		  Q_7_SEGMENT  => S_7_SEGMENT);
+		
+	clk_div: process(I_CLK_100)
+	begin
+		if (rising_edge(I_CLK_100)) then
+			L_CLK_CNT    <= L_CLK_CNT + "001";
+			if (L_CLK_CNT = "001") then
+				L_CLK_CNT = "000";
+				L_CLK   <= not L_CLK
+			end if;
+		end if;
+	end process;
+	
+	deb : process(L_CLK)
+	begin
+		if (rising_edge(L_CLK)) then
+			--switch debounce
+			if ((I_SWITCH(8) = '0') or (I_SWITCH(9) = '0')) then   --pushed
+				L_CLR_N    <= '0';
+				L_C2_N     <= '0';
+				L_C1_N     <= '0';
+			else
+				L_CLR_N    <= L_C2_N;
+				L_C2_N     <= L_C1_N;
+				L_C1_N     <= '1';
+			end if;
+		end if;
+	end process;
+			
+	L_CLR        <= not L_CLR_N;
+	
+	Q_LEDS(2)    <= I_RX;
+	Q_LEDS(3)    <= N_TX;
+	Q_7_SEGMENT  <= N_7_SEGMENT when (I_SWITCH(7) = '1') else S_7_SEGMENT;
+	Q_TX         <= N_TX;
 
 end behavior;
