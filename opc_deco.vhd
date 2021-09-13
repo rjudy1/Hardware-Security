@@ -6,30 +6,39 @@
  --use work.common.ALL;
  	
 entity opc_deco is
-   port (  I_CLK       : in  std_logic;
+   port (  I_CLK       : in  std_logic; -- clk signal input
 	
-            I_OPC       : in  std_logic_vector(31 downto 0);
-            I_PC        : in  std_logic_vector(15 downto 0);
-            I_T0        : in  std_logic;
+            I_OPC       : in  std_logic_vector(31 downto 0); -- opcode input to be decoded
+            I_PC        : in  std_logic_vector(15 downto 0); -- address from which it was fetched
+            I_T0        : in  std_logic; -- 1 in first cycle, 0 on second cycle
 	
-            Q_ALU_OP    : out std_logic_vector( 4 downto 0);
-            Q_AMOD      : out std_logic_vector( 5 downto 0);
-            Q_BIT       : out std_logic_vector( 3 downto 0);
-            Q_DDDDD     : out std_logic_vector( 4 downto 0);
-            Q_IMM       : out std_logic_vector(15 downto 0);
-            Q_JADR      : out std_logic_vector(15 downto 0);
-            Q_OPC       : out std_logic_vector(15 downto 0);
-            Q_PC        : out std_logic_vector(15 downto 0);
-            Q_PC_OP     : out std_logic_vector( 2 downto 0);
-            Q_PMS       : out std_logic;  -- program memory select
-            Q_RD_M      : out std_logic;
-            Q_RRRRR     : out std_logic_vector( 4 downto 0);
-            Q_RSEL      : out std_logic_vector( 1 downto 0);
-            Q_WE_01     : out std_logic;
-            Q_WE_D      : out std_logic_vector( 1 downto 0);
-            Q_WE_F      : out std_logic;
-            Q_WE_M      : out std_logic_vector( 1 downto 0);
-            Q_WE_XYZS   : out std_logic);
+            Q_ALU_OP    : out std_logic_vector( 4 downto 0); -- operation put out
+
+	-- based on data path
+	-- AS_SP = stack pointer (3 bits of addr source)
+	-- AS_Z = Z register pair
+	-- AS_IMM = immediate 
+	-- A0_Q, offset q from address source provided on IMM input (derived from opcode)
+	-- AM_ indicates if X, Y, Z, SP are updated and go with decode of WE_XYZS
+
+            Q_AMOD      : out std_logic_vector( 5 downto 0); -- addressing mode
+            Q_BIT       : out std_logic_vector( 3 downto 0); -- bit value used in bit instructions
+            Q_DDDDD     : out std_logic_vector( 4 downto 0); -- destination register
+            Q_IMM       : out std_logic_vector(15 downto 0); -- immediate value
+            Q_JADR      : out std_logic_vector(15 downto 0); -- jump addr
+            Q_OPC       : out std_logic_vector(15 downto 0); -- opcode being decoded
+            Q_PC        : out std_logic_vector(15 downto 0); -- pc from which opcode fetched
+            Q_PC_OP     : out std_logic_vector( 2 downto 0); -- operation to be performed on pc
+            Q_PMS       : out std_logic;  -- program memory select 
+            Q_RD_M      : out std_logic; -- set high for reads
+            Q_RRRRR     : out std_logic_vector( 4 downto 0); -- second register
+            Q_RSEL      : out std_logic_vector( 1 downto 0); -- select source of second operand as immediate, data from memory or I/O on DIN
+
+            Q_WE_01     : out std_logic; -- indicates mult instruction for reg pair 0
+            Q_WE_D      : out std_logic_vector( 1 downto 0); -- when reg Dx5 should be written
+            Q_WE_F      : out std_logic; -- for status flags
+            Q_WE_M      : out std_logic_vector( 1 downto 0); -- for memory writing
+            Q_WE_XYZS   : out std_logic); -- for stack pointer or XYZ, encoded in AMOD
 end opc_deco;
 
 architecture behavioral of opc_deco is
@@ -42,10 +51,10 @@ begin
 		Q_ALU_OP <= ALU_D_MV_Q;
 	        Q_AMOD    <= AMOD_ABS;
 	        Q_BIT     <= I_OPC(10) & I_OPC(2 downto 0);
-	        Q_DDDDD   <= I_OPC(8 downto 4);
+	        Q_DDDDD   <= I_OPC(8 downto 4); -- 5 bits 8 to 4 of opcode represent DDDDD
 	        Q_IMM     <= X"0000";
-	        Q_JADR    <= I_OPC(31 downto 16);
- 	        Q_OPC     <= I_OPC(15 downto  0);
+	        Q_JADR    <= I_OPC(31 downto 16); -- jump address contained in top 15 bits
+ 	        Q_OPC     <= I_OPC(15 downto  0); -- opcode contained in bottom 15
  	        Q_PC      <= I_PC;
  	        Q_PC_OP   <= PC_NEXT;
  	        Q_PMS     <= '0';
