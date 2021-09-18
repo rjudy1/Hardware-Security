@@ -1,4 +1,4 @@
---reg_16.vhd
+--status_reg.vhd
 --Leslie Wallace
 --18 Sept, 2021: Create code based on tutorial
 
