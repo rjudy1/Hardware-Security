@@ -43,6 +43,8 @@ entity data_path is
   end data_path;
   
   architecture Behavioral of data_path is
+      
+      component alu
       port(I_ALU_OP  : in std_logic_vector(4 downto 0);
            I_BIT     : in std_logic_vector(3 downto 0);
            I_D       : in std_logic_vector(15 downto 0);
