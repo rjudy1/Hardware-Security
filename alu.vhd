@@ -275,5 +275,71 @@ architecture Behavioral of alu is
                     Q_FLAGS(4) <= si(L_ADC_DR(7), L_RI8(7), L_D8(7));  --signed
                     Q_FLAGS(5) <= cy(L_ADC_DR(3), L_RI8(3), L_D8(3));  --halfcarry
       
+                when ALU_SBIW =>
+                    L_DOUT  <= L_SBIW_D;                               
+                    Q_FLAGS(0) <= L_SBIW_D(15) and not I_D(15);        --carry
+                    Q_FLAGS(1) <= ze(L_SBIW_D(15 downto 8)) and
+                                  ze(L_SBIW_D(7 downto 0));            --zero
+                    Q_FLAGS(2) <= L_SBIW_D(15);                        --negative
+                    Q_FLAGS(3) <= I_D(15) and not L_SBIW_D(15);        --overflow
+                    Q_FLAGS(4) <= (L_SBIW_D(15)  and not I_D(15))
+                                   xor (I_D(15) and not L_SBIW_D(15));   --signed
+
+                when ALU_SREG =>
+                    case I_BIT(2 downto 0) is
+                        when "000" => Q_FLAGS(0) <= I_BIT(3);
+                        when "001" => Q_FLAGS(1) <= I_BIT(3);
+                        when "010" => Q_FLAGS(2) <= I_BIT(3);
+                        when "011" => Q_FLAGS(3) <= I_BIT(3);
+                        when "100" => Q_FLAGS(4) <= I_BIT(3);
+                        when "101" => Q_FLAGS(5) <= I_BIT(3);
+                        when "110" => Q_FLAGS(6) <= I_BIT(3);
+                        when others => Q_FLAGS(7) <= I_BIT(3);
+                    end case;
+                      
+                when ALU_SUB =>
+                    L_DOUT  <= L_SUB_DR & L_SUB_DR;
+                    Q_FLAGS(0) <= cy(L_SUB_DR(7), L_RI8(7), L_D8(7));  --carry
+                    Q_FLAGS(1) <= ze(L_SUB_DR);                        --zero
+                    Q_FLAGS(2) <= L_SUB_DR(7);                         --negative
+                    Q_FLAGS(3) <= ov(L_SUB_DR(7), L_RI8(7), L_D8(7));  --overflow
+                    Q_FLAGS(4) <= si(L_SUB_DR(7), L_RI8(7), L_D8(7));  --signed
+                    Q_FLAGS(5) <= cy(L_SUB_DR(3), L_RI8(3), L_D8(3));  --halfcarry
+
+                when ALU_SWAP =>
+                    L_DOUT <= L_SWAP_D & L_SWAP_D;
+
+                when others =>
+            end case;
+        end process;
+              
+        L_D8 <= I_D(15 downto 8) when (I_D0 = '1') else I_D(7 downto 0);
+        L_D8 <= I_R(15 downto 8) when (I_R0 = '1') else I_R(7 downto 0);
+        L_RI8 <= I_IMM           when (I_RSEL = RS_IMM) else L_R8;
+              
+        L_ADIW_D <= I_D + ("0000000000" & I_IMM(5 downto 0));
+        L_SBIW_D <= I_D - ("0000000000" & I_IMM(5 downto 0));
+        L_ADD_DR <= L_D8 + L_RI8;
+        L_ADC_DR <= L_ADD_DR + ("0000000" & I_FLAGS(0));
+        L_ASR_D  <= L_D8(7) + L_D8(7 downto 0);    --sign extend
+        L_AND_DR <= L_D8 + L_RI8;
+        L_DEC_D  <= L_D8 - X"01";
+        L_INC_D  <= L_D8 + X"01";
+        L_LSR_D  <= '0' & L_D8(7 downto 1);
+        L_NEG_D  <= X"00" - L_D8;
+        L_NOT_D  <= not L_D8;
+        L_OR_DR  <= L_D8 or L_RI8;
+        L_PROD   <= (L_SIGN_D & L_D8) * (L_SIGN_R & L_R8);
+        L_ROR_D  <= I_FLAGS(0) & L_D8(7 downto 1);
+        L_SUB_DR <= L_D8 - L_RI8;
+        L_SBC_DR <= L_SUB_DR - ("0000000" & I_FLAGS(0));
+        L_SIGN_D <= L_D8(7) and I_IMM(6);
+        L_SIGN_R <= L_R8(7) and I_IMM(5);
+        L_SWAP_D <= L_D8(3 downto 0) & L_D8(7 downto 4);
+        L_XOR_DR <= L_D8 xor L_R8;
+
+        Q_DOUT   <= (I_DIN & I_DIN) when (I_RSEL = RS_DIN) else L_DOUT;
+          
+end Behavioral;
       
       
