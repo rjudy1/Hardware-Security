@@ -95,7 +95,7 @@ entity data_path is
       signal F_S     : std_logic_vector(7 downto 0);
       signal F_Z     : std_logic_vector(15 downto 0);
 
-      entity data_mem
+      component data_mem
           port(I_CLK   : in std_logic;
          
                I_ADR   : in std_logic_vector(10 downto 0);
@@ -114,6 +114,22 @@ entity data_path is
   begin         
     
       alui : alu
+      port map(I_ALU_OP  => I_ALU_OP,
+               I_BIT     => I_BIT,
+               I_D       => F_D,
+               I_D0      => I_DDDDD(0),
+               I_DIN     => L_DIN,
+               I_FLAGS   => F_FLAGS,
+               I_IMM     => I_IMM(7 downto 0),
+               I_PC      => I_PC,
+               I_R       => F_R,
+               I_R0      => I_RRRRR(0),
+               I_RSEL    => I_RSEL,
+               
+               Q_FLAGS   => A_FLAGS,
+               Q_DOUT    => A_DOUT);
+      
+      regs : register_file
       port map(I_CLK      => I_CLK,
               
                I_AMOD     => I_AMOD,
@@ -136,7 +152,7 @@ entity data_path is
                Q_FLAGS   => F_FLAGS,
                Q_R       => F_R,
                Q_S       => F_S,   --Q_Rxx(F_ADR)
-               Q_ADR     => F_Z);
+               Q_Z       => F_Z);
         
         sram : data_mem
         port map(I_CLK   => I_CLK,
@@ -181,17 +197,36 @@ entity data_path is
                 when PC_LD_Z => Q_SKIP <= '1';             --yes
                 when PC_LD_S => Q_SKIP <= '1';             --yes
                 when PC_SKIP_Z => Q_SKIP <= L_FLAGS_98(8); --if Z set
-                when PC_SKIP_T => Q_SKIP <= L_FLAGS_98();  --if T set
+                when PC_SKIP_T => Q_SKIP <= L_FLAGS_98(9); --if T set
                 when otherS   => Q_SKIP <= '0';            --no
             end case;
         end process;        
               
-        
-        
-        
-        
-        
-        
-        
-         
-         
+        Q_ADR    <= F_ADR;
+        Q_DOUT   <= A_DOUT(7 downto 0);
+        Q_INT_ENA <= A_FLAGS(7);
+        Q_OPC    <= I_OPC;
+        Q_PC     <= I_PC;
+
+        Q_RD_IO  <= '0' when (F_ADR <X"20")
+            else (I_RD_M and not I_PMS) when (F_ADR <X"5D")
+            else '0';
+        Q_WE_IO  <= '0' when (F_ADR <X"20")
+            else I_WE_M(0) when (F_ADR <X"5D")
+            else '0';
+        L_WE_SRAM  <= "00" when (F_ADR <X"0060") 
+            else I_WE_M;
+        L_DIN <= I_DIN when (I_PMS = '1')
+            else F_S when (F_ADR <X"0020")
+            else I_DIN when (F_ADR <X"005D")
+            else F_S when (F_ADR <X"0060")
+            else M_DOUT(7 downto 0);
+                
+        --compute potential new PC valule from Z, (SP), or IMM.
+        --
+        Q_NEW_PC <= F_Z when I_PC_OP = PC_LD_Z    --IJMP, ICALL
+            else M_DOUT when I_PC_OP = PC_LD_S    --RET, RETI
+            else I_JADR;                          --JMP adr
+                
+end Behavioral;
+               
