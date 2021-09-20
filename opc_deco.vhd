@@ -29,13 +29,13 @@ entity opc_deco is
             Q_OPC       : out std_logic_vector(15 downto 0); -- opcode being decoded
             Q_PC        : out std_logic_vector(15 downto 0); -- pc from which opcode fetched
             Q_PC_OP     : out std_logic_vector( 2 downto 0); -- operation to be performed on pc
-            Q_PMS       : out std_logic;  -- program memory select 
-            Q_RD_M      : out std_logic; -- set high for reads
+            Q_PMS       : out std_logic;  -- program memory select - for pm not data memory
+            Q_RD_M      : out std_logic; -- set high for reads from data mem
             Q_RRRRR     : out std_logic_vector( 4 downto 0); -- second register
             Q_RSEL      : out std_logic_vector( 1 downto 0); -- select source of second operand as immediate, data from memory or I/O on DIN
 
             Q_WE_01     : out std_logic; -- indicates mult instruction for reg pair 0
-            Q_WE_D      : out std_logic_vector( 1 downto 0); -- when reg Dx5 should be written
+            Q_WE_D      : out std_logic_vector( 1 downto 0); -- when reg Dx5 should be written, WE_D bit 0 indicates to use Dx5[0]
             Q_WE_F      : out std_logic; -- for status flags
             Q_WE_M      : out std_logic_vector( 1 downto 0); -- for memory writing
             Q_WE_XYZS   : out std_logic); -- for stack pointer or XYZ, encoded in AMOD
@@ -48,8 +48,8 @@ begin
   	begin
  	    if (rising_edge(I_CLK)) then
 		--set most common settings as default (also nop)
-		Q_ALU_OP <= ALU_D_MV_Q;
-	        Q_AMOD    <= AMOD_ABS;
+			Q_ALU_OP <= ALU_D_MV_Q; -- move query
+	        Q_AMOD    <= AMOD_ABS; -- absolute addressing
 	        Q_BIT     <= I_OPC(10) & I_OPC(2 downto 0);
 	        Q_DDDDD   <= I_OPC(8 downto 4); -- 5 bits 8 to 4 of opcode represent DDDDD
 	        Q_IMM     <= X"0000";
@@ -57,15 +57,15 @@ begin
  	        Q_OPC     <= I_OPC(15 downto  0); -- opcode contained in bottom 15
  	        Q_PC      <= I_PC;
  	        Q_PC_OP   <= PC_NEXT;
- 	        Q_PMS     <= '0';
- 	        Q_RD_M    <= '0';
- 	        Q_RRRRR   <= I_OPC(9) & I_OPC(3 downto 0);
+ 	        Q_PMS     <= '0'; -- don't use program memory
+ 	        Q_RD_M    <= '0'; -- don't read from data mem by default
+ 	        Q_RRRRR   <= I_OPC(9) & I_OPC(3 downto 0); -- second reg address
  	        Q_RSEL    <= RS_REG;
  	        Q_WE_D    <= "00";
  	        Q_WE_01   <= '0';
  	        Q_WE_F    <= '0';
  	        Q_WE_M    <= "00";
- 	        Q_WE_XYZS <= '0';
+ 	        Q_WE_XYZS <= '0'; -- flags off
 
 		-- case based on opcode
 		case I_OPC(15 downto 10) is
