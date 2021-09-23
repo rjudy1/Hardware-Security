@@ -1,5 +1,6 @@
 --reg_16.vhd
 --Leslie Wallace
+--23 Sept, 2021: Add comments
 --18 Sept, 2021: Create code based on tutorial
 
 library IEEE;
@@ -24,15 +25,18 @@ entity reg_16 is
       process(I_CLK)
       begin
           if (rising_edge(I_CLK)) then
+              --Write enable Odd/High Byte
               if (I_WE(1) = '1') then 
                   L(15 downto 8)  <= I_D(15 downto 8);
               end if;
+              --Write enable Even/Low Byte
               if (I_WE(0) = '1') then 
                   L(7 downto 0)  <= I_D(7 downto 0);
               end if;
           end if;
       end process;
-            
+      
+      --Output internal signal
       Q <= L;
 
   end Behavioral;          

@@ -14,7 +14,8 @@ entity data_mem is
          I_DIN   : in std_logic_vector(15 downto 0);
          I_WE    : in std_logic_vector(1 downto 0);
          
-         Q_DOUT  : out std_logic_vector(15 downto 0);
+         Q_DOUT  : out std_logic_vector(15 downto 0));
+end data_mem;
          
 architecture Behavioral of data_mem is 
      
