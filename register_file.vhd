@@ -1,5 +1,6 @@
 --register_file
 --Leslie Wallace
+--23 Sept, 2021: Add Comments
 --18 Sept, 2021: Create code based on tutorial
 
 library IEEE;
@@ -101,6 +102,7 @@ entity register_file is
        signal L_XYZS  : std_logic_vector(15 downto 0);
 
  begin
+       --creating the 16 double registers and the sp register
        r00: reg_16 port map(I_CLK => I_CLK, I_WE => L_WE(1 downto 0),   I_D => I_DIN, Q => R_R00);
        r02: reg_16 port map(I_CLK => I_CLK, I_WE => L_WE(3 downto 2),   I_D => I_DIN, Q => R_R02);
        r04: reg_16 port map(I_CLK => I_CLK, I_WE => L_WE(5 downto 4),   I_D => I_DIN, Q => R_R04);
@@ -119,7 +121,7 @@ entity register_file is
        r30: reg_16 port map(I_CLK => I_CLK, I_WE => L_WE(31 downto 30), I_D => L_DZ, Q => R_R30);
        sp : reg_16 port map(I_CLK => I_CLK, I_WE => L_WE_SP           , I_D => L_DSP, Q => R_SP);
          
-       sr: statis_reg
+       sr: status_reg
             port(I_CLK   => I_CLK,
                  I_COND  => I_COND,
                  I_DIN   => I_DIN(7 downto 0),
@@ -241,12 +243,14 @@ entity register_file is
        L_XYZS <= L_BASE + L_POST;
        L_ADD  <= L_BASE + L_PRE;
 
+       --write enables
        L_WE_A <= I_WE_M when (L_ADR(15 downto 5) = "00000000000") else '0';
        L_WE_SR <= I_WE_M when (L_ADR = X"005F") else '0';
        L_WE_SP_AMOD <= I_WE_XYZS when (I_AMOD(2 downto 0) = AS_SP) else '0';
        L_WE_SP(1) <= I_WE_M when (L_ADR = X"005E") else L_WE_SP_AMOD;
        L_WE_SP(0) <= I_WE_M when (L_ADR = x"005D") else L_WE_SP_AMOD;
          
+       --Data for special pointer registers
        L_DX <= L_XYZS when (L_WE_MISC(26) = '1') else I_DIN;
        L_DY <= L_XYZS when (L_WE_MISC(28) = '1') else I_DIN;
        L_DZ <= L_XYZS when (L_WE_MISC(30) = '1') else I_DIN;
@@ -370,6 +374,7 @@ entity register_file is
 
        L_WE <= L_WE_D  or L_WE_DD or L_WE_IO or L_WE_MISC;
 
+       --outputs
        Q_S <= L_S(7 downto 0) when (L_ADR(0) = '0') else L_S(15 downto 8);
        Q_FLAGS <= S_FLAGS;
        Q_Z <= R_R30;
