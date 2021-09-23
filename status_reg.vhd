@@ -1,11 +1,14 @@
 --status_reg.vhd
 --Leslie Wallace
+--23 Sept, 2021: Add comments
 --18 Sept, 2021: Create code based on tutorial
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+--Typically updates as a result of alu function
 
 entity status_reg is 
     port(I_CLK   : in std_logic;

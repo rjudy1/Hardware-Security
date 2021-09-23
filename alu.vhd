@@ -1,5 +1,6 @@
 --alu.vhd
 --Leslie Wallace
+--23 Sept, 2021: Add comments
 --19 Sept, 2021: Create code based on tutorial
 
 library IEEE;
@@ -27,28 +28,37 @@ entity alu is
 end alu;
   
 architecture Behavioral of alu is
+    --Functions to determine flag values
   
+    --Used to determine if register is X"00"  
+    --8 bit NOR
+    --all bits have to be 0 to return '1'
     function ze(A: std_logic_vector(7 downto 0)) return std_logic is
     begin
         return not (A(0) or A(1) or A(2) or A(3) or
                     A(4) or A(5) or A(6) or A(7));
     end;
     
+    --Used to determine carry (or halfcarry)
+    --D tends to be L_D8(7), R tends to be L_RI8(7)
     function cy(D, R, S: std_logic) return std_logic is
     begin
         return (D and R) or (D and not S) or (R and not S);
     end;
       
+    --Used to determine overflow
     function ov(D, R, S: std_logic) return std_logic is
     begin
         return (D and R and (not S)) or ((not D) and (not R) and S);
     end;
 
+    --Used to determine if signed
     function si(D, R, S: std_logic) return std_logic is
     begin
         return S xor ov(D, R, S);
     end;    
    
+    --Innternal Signal Declarations
     signal L_ADC_DR  : std_logic_vector( 7 downto 0);   --D+R+Carry
     signal L_ADD_DR  : std_logic_vector( 7 downto 0);   --D+R
     signal L_ADIW_D  : std_logic_vector(15 downto 0);   --D+IMM
@@ -78,6 +88,7 @@ architecture Behavioral of alu is
 
     begin
         
+        --used to map D bits onto R bits?
         dinbit: process(I_DIN, I_BIT(2 downto 0))
         begin
             case I_BIT(2 downto 0) is
@@ -92,6 +103,8 @@ architecture Behavioral of alu is
             end case;
         end process;
 
+              
+        --Sets flags and internal output values for each operation (ALU level)
         process(L_ADC_DR, L_ADD_DR, L_ADIW_D, I_ALU_OP, L_AND_DR, L_ASR_D,
                 I_BIT, I_D, L_D8, L_DEC_D, I_DIN, I_FLAGS, I_IMM, L_MASK_I,
                 L_INC_D, L_LSR_D, L_NEG_D, L_NOT_D, L_OR_DR, I_PC, L_PROD,
@@ -104,6 +117,7 @@ architecture Behavioral of alu is
             L_DOUT     <= X"0000";
 
             case I_ALU_OP is
+                --Additon + I_Flag(0) (carry-in?)
                 when ALU_ADC =>
                     L_DOUT  <= L_ADC_DR & L_ADC_DR;
                     Q_FLAGS(0) <= cy(L_D8(7), L_RI8(7), L_ADC_DR(7));  --carry
@@ -113,6 +127,7 @@ architecture Behavioral of alu is
                     Q_FLAGS(4) <= si(L_D8(7), L_RI8(7), L_ADC_DR(7));  --signed
                     Q_FLAGS(5) <= cy(L_D8(3), L_RI8(3), L_ADC_DR(3));  --halfcarry
 
+                --Addition
                 when ALU_ADD =>
                     L_DOUT  <= L_ADD_DR & L_ADD_DR;
                     Q_FLAGS(0) <= cy(L_D8(7), L_RI8(7), L_ADD_DR(7));  --carry
@@ -122,6 +137,7 @@ architecture Behavioral of alu is
                     Q_FLAGS(4) <= si(L_D8(7), L_RI8(7), L_ADD_DR(7));  --signed
                     Q_FLAGS(5) <= cy(L_D8(3), L_RI8(3), L_ADD_DR(3));  --halfcarry
 
+                --Addition, D + IMM
                 when ALU_ADIW =>
                     L_DOUT  <= L_ADIW_D;                               
                     Q_FLAGS(0) <= L_ADIW_D(15) and not I_D(15);        --carry
@@ -132,6 +148,7 @@ architecture Behavioral of alu is
                     Q_FLAGS(4) <= (L_ADIW_D(15)  and not I_D(15))
                                    xor (I_D(15) and not L_ADIW_D(15));   --signed
 
+                --AND
                 when ALU_AND =>
                     L_DOUT  <= L_AND_DR & L_AND_DR;
                     Q_FLAGS(1) <= ze(L_AND_DR);                        --zero
@@ -139,6 +156,7 @@ architecture Behavioral of alu is
                     Q_FLAGS(3) <= '0';                                 --overflow
                     Q_FLAGS(4) <= L_AND_DR(7);                         --signed
 
+                --Right Shift, Signed (sign extend)
                 when ALU_ASR =>
                     L_DOUT  <= L_ASR_D & L_ASR_D;
                     Q_FLAGS(0) <= L_D8(0);                             --carry
@@ -166,7 +184,8 @@ architecture Behavioral of alu is
                             when others => L_DOUT( 7)  <= I_FLAGS(6);
                                            L_DOUT(15)  <= I_FLAGS(6);
                         end case;
-                                   
+               
+                --Complement
                 when ALU_COM =>
                     L_DOUT  <= L_NOT_D & L_NOT_D;
                     Q_FLAGS(0) <= '1';                                 --carry
@@ -179,7 +198,8 @@ architecture Behavioral of alu is
                         Q_FLAGS(3) <= '0';                             --overflow
                         Q_FLAGS(4) <= L_DEC_D(7);                       --signed  
                     end if;
-                       
+                
+                --Exclusive OR
                 when ALU_EOR =>
                     L_DOUT  <= L_XOR_DR & L_XOR_DR;
                     Q_FLAGS(1) <= ze(L_XOR_DR);                        --zero
@@ -187,6 +207,7 @@ architecture Behavioral of alu is
                     Q_FLAGS(3) <= '0';                                 --overflow
                     Q_FLAGS(4) <= L_XOR_DR(7);                         --signed
 
+                --Increment
                 when ALU_INC =>
                     L_DOUT  <= L_INC_D & L_INC_D;
                     Q_FLAGS(1) <= ze(L_INC_D);                         --zero
@@ -199,10 +220,12 @@ architecture Behavioral of alu is
                         Q_FLAGS(4) <= L_INC_D(7);                       --signed  
                     end if;
 
+                --interrupt?
                 when ALU_INTR =>
                     L_DOUT <= I_PC;
                     Q_FLAGS(7) <= I_IMM(6);  --ena/disable interrupts
 
+                --Right Shift, unsigned/append 0
                 when ALU_LSR =>
                     L_DOUT  <= L_LSR_D & L_LSR_D;
                     Q_FLAGS(0) <= L_D8(0);                             --carry
@@ -218,8 +241,9 @@ architecture Behavioral of alu is
                     L_DOUT <= L_RI8 & L_RI8;
 
                 when ALU_MV_16 =>
-                    L_DOUT <= L_R(15 downto 0) & L_RI8;
+                    L_DOUT <= L_R(15 downto 8) & L_RI8;
 
+                --Multiplication
                 when ALU_MULT =>
                     Q_FLAGS(0) <= L_PROD(15);                         --carry
                     if I_IMM(7) = '0' then                            --mult
@@ -231,7 +255,8 @@ architecture Behavioral of alu is
                         Q_FLAGS(1) <= ze(L_PROD(14 downto 7))          --zero
                                   and ze(L_PROD(6 downto 9)&"0");
                     end if;
-                      
+                
+                --Negative
                 when ALU_NEG =>
                     L_DOUT  <= L_NEG_D & L_NEG_D;
                     Q_FLAGS(0) <= not ze(L_D8);                        --carry
@@ -246,6 +271,7 @@ architecture Behavioral of alu is
                     end if;    
                     Q_FLAGS(5) <= L_D8(3) or L_NEG_D(3);               --halfcarry
 
+                --OR
                 when ALU_OR =>
                     L_DOUT  <= L_OR_DR & L_OR_DR;
                     Q_FLAGS(1) <= ze(L_OR_DR);                        --zero
@@ -253,12 +279,15 @@ architecture Behavioral of alu is
                     Q_FLAGS(3) <= '0';                                --overflow
                     Q_FLAGS(4) <= L_OR_DR(7);                         --signed
 
+                --Increment Program Counter by 1
                 when ALU_PC_1 =>  --ICALL, RCALL
                     L_DOUT <= I_PC + X"0001";
 
+                --Increment Program Counter by 2
                 when ALU_PC_2 =>  --CALL
                     L_DOUT <= I_PC + X"0002";
 
+                --Append I_Flag(0) to right shfit
                 when ALU_ROR =>
                     L_DOUT  <= L_ROR_DR & L_ROR_DR;
                     Q_FLAGS(1) <= ze(L_ROR_DR);                        --zero
@@ -266,6 +295,7 @@ architecture Behavioral of alu is
                     Q_FLAGS(3) <= I_FLAGS(0) xor L_D8(0);             --overflow
                     Q_FLAGS(4) <= I_FLAGS(0);                         --signed
        
+                --Subtract and subrtract I_FLags(0)
                 when ALU_SBC =>
                     L_DOUT  <= L_SBC_DR & L_SBC_DR;
                     Q_FLAGS(0) <= cy(L_SBC_DR(7), L_RI8(7), L_D8(7));  --carry
@@ -275,6 +305,7 @@ architecture Behavioral of alu is
                     Q_FLAGS(4) <= si(L_ADC_DR(7), L_RI8(7), L_D8(7));  --signed
                     Q_FLAGS(5) <= cy(L_ADC_DR(3), L_RI8(3), L_D8(3));  --halfcarry
       
+                --Subtraction, D - IMM
                 when ALU_SBIW =>
                     L_DOUT  <= L_SBIW_D;                               
                     Q_FLAGS(0) <= L_SBIW_D(15) and not I_D(15);        --carry
@@ -296,7 +327,8 @@ architecture Behavioral of alu is
                         when "110" => Q_FLAGS(6) <= I_BIT(3);
                         when others => Q_FLAGS(7) <= I_BIT(3);
                     end case;
-                      
+                 
+                --Subtracion, D-R
                 when ALU_SUB =>
                     L_DOUT  <= L_SUB_DR & L_SUB_DR;
                     Q_FLAGS(0) <= cy(L_SUB_DR(7), L_RI8(7), L_D8(7));  --carry
@@ -306,22 +338,26 @@ architecture Behavioral of alu is
                     Q_FLAGS(4) <= si(L_SUB_DR(7), L_RI8(7), L_D8(7));  --signed
                     Q_FLAGS(5) <= cy(L_SUB_DR(3), L_RI8(3), L_D8(3));  --halfcarry
 
+                --Swap Odd and Even Bytes
                 when ALU_SWAP =>
                     L_DOUT <= L_SWAP_D & L_SWAP_D;
 
                 when others =>
             end case;
         end process;
-              
+        
+        --Set data values
         L_D8 <= I_D(15 downto 8) when (I_D0 = '1') else I_D(7 downto 0);
         L_D8 <= I_R(15 downto 8) when (I_R0 = '1') else I_R(7 downto 0);
         L_RI8 <= I_IMM           when (I_RSEL = RS_IMM) else L_R8;
               
+        --individual ALU operations--actuall operations
+        --all internal to alu
         L_ADIW_D <= I_D + ("0000000000" & I_IMM(5 downto 0));
         L_SBIW_D <= I_D - ("0000000000" & I_IMM(5 downto 0));
         L_ADD_DR <= L_D8 + L_RI8;
         L_ADC_DR <= L_ADD_DR + ("0000000" & I_FLAGS(0));
-        L_ASR_D  <= L_D8(7) + L_D8(7 downto 0);    --sign extend
+        L_ASR_D  <= L_D8(7) & L_D8(7 downto 1);    
         L_AND_DR <= L_D8 + L_RI8;
         L_DEC_D  <= L_D8 - X"01";
         L_INC_D  <= L_D8 + X"01";
