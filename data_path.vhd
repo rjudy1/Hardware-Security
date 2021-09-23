@@ -1,5 +1,6 @@
 --data_path.vhd
 --Leslie Wallace
+--23 Sept, 2012: Add comments
 --18 Sept, 2021: Create code based on tutorial
 
 library IEEE;
@@ -44,6 +45,7 @@ entity data_path is
   
   architecture Behavioral of data_path is
       
+      --interacts with alu
       component alu
       port(I_ALU_OP  : in std_logic_vector(4 downto 0);
            I_BIT     : in std_logic_vector(3 downto 0);
@@ -97,6 +99,7 @@ entity data_path is
       signal F_S     : std_logic_vector(7 downto 0);
       signal F_Z     : std_logic_vector(15 downto 0);
 
+      --accesses with the data memory
       component data_mem
           port(I_CLK   : in std_logic;
          
