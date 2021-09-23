@@ -1,5 +1,6 @@
 --data_mem.vhd
 --Leslie Wallace
+--23 Sept, 2021: Add comments
 --18 Sept, 2021: Create code based on tutorial
 
 library IEEE;
@@ -146,16 +147,23 @@ architecture Behavioral of data_mem is
           --the second port is comrrently unused, but may be used later.
           --e.g. for DMA
           --
-            
+          
+           --internal signal assignment
+           --Addresses
+           --this seems like it might be flipped
            L_ADR_O  <= I_ADR(10 downto 1);
            L_ADR_E  <= I_ADR(10 downto 1) + ("000000000" & I_ADR(0));
-               
-           L_DIN_O  <= I_DIN(7 downto 0) when (I_ADR(0) = '0') else I_DIN(15 downto 8);
-           L_DIN_E  <= I_DIN(7 downto 0) when (I_ADR(0) = '1') else I_DIN(15 downto 8);
-               
+            
+           --data in
+           --depends where it is spaced in memory
+           L_DIN_E  <= I_DIN(7 downto 0) when (I_ADR(0) = '0') else I_DIN(15 downto 8);
+           L_DIN_O  <= I_DIN(7 downto 0) when (I_ADR(0) = '1') else I_DIN(15 downto 8);
+            
+           --write enable
            L_WE_O   <= I_WE(1) or (I_WE(0) and not I_ADR(0));
            L_WE_E   <= I_WE((1) or (I_WE(0) and    I_ADR(0));
                
+           --output
            Q_DOUT( 7 downto 0) <= L_DOUT_E when (L_ADR_0 = '0') else L_DOUT_O;
            Q_DOUT(15 downto 8) <= L_DOUT_E when (L_ADR_0 = '1') else L_DOUT_O;
                
