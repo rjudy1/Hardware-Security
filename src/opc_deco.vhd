@@ -3,7 +3,7 @@
  use IEEE.STD_LOGIC_ARITH.ALL;
  use IEEE.STD_LOGIC_UNSIGNED.ALL;
  
- --use work.common.ALL;
+use work.common.ALL;
  	
 entity opc_deco is
    port (  I_CLK       : in  std_logic; -- clk signal input
