@@ -122,7 +122,7 @@ entity register_file is
        sp : reg_16 port map(I_CLK => I_CLK, I_WE => L_WE_SP           , I_D => L_DSP, Q => R_SP);
          
        sr: status_reg
-            port(I_CLK   => I_CLK,
+            port map(I_CLK   => I_CLK,
                  I_COND  => I_COND,
                  I_DIN   => I_DIN(7 downto 0),
                  I_FLAGS => I_FLAGS,

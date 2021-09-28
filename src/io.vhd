@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
-
+use work.common.ALL;
 entity io is
 	port(
 		I_CLK		: in	std_logic;						--Same clock as CPU
@@ -22,7 +22,7 @@ entity io is
 		
 		Q_7_SEGMENT	: out	std_logic_vector(6 downto 0);	--(This output isn't shown in the block diagram and seems redundant?)
 		Q_LEDS		: out	std_logic_vector(1 downto 0);	--LED outputs
-		Q_TX		: out	std_logic)						--UART TX (active low)
+		Q_TX		: out	std_logic						--UART TX (active low)
 		);
 end io;
 
@@ -43,7 +43,7 @@ component uart
 			Q_RX_READY	: out std_logic;
 			Q_TX		: out std_logic;
 			Q_TX_BUSY	: out std_logic);
-end componenet;
+end component;
 
 signal U_RX_READY		: std_logic;
 signal U_TX_BUSY		: std_logic;
