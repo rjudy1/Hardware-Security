@@ -20,7 +20,7 @@ end data_mem;
          
 architecture Behavioral of data_mem is 
      
-    constant zero_256 : bit_vector := X"00000000000000000000000000000000"
+    constant zero_265 : bit_vector := X"00000000000000000000000000000000"
                                     & X"00000000000000000000000000000000";
     constant nine_256 : bit_vector := X"99999999999999999999999999999999"
                                     & X"99999999999999999999999999999999"; 
