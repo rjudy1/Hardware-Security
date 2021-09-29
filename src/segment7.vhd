@@ -1,10 +1,4 @@
 
-Previous Lesson	Table of Content	Next Lesson
-24 LISTING OF segment7.vhd
-
-  1	-------------------------------------------------------------------------------
-  2	-- 
-  3	-- Copyright (C) 2009, 2010 Dr. Juergen Sauermann
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;

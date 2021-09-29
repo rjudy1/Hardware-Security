@@ -3,16 +3,17 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
-
+use work.common.ALL;
 entity seg is
 port (
 	I_PC			:in std_logic_vector(15 downto 0);		--Program counter from CPU
 	I_clk			:in std_logic;							--Used to time delays between showing each digit
 	
 	Q_decoder		:out std_logic_vector(3 downto 0);		--Output to decoder
-	Q_decoder_blank	:out std_logic;							--When '1', 7 segment is off entirely
+	Q_decoder_blank	:out std_logic							--When '1', 7 segment is off entirely
 	);
-	
+end seg;
+
 architecture behavior of seg is
 	signal L_digitBeingShown	:std_logic_vector(2 downto 0);	--This value determines which digit is being shown
 begin
@@ -23,7 +24,7 @@ begin
 		end if;
 	end process;
 	
-	if(L_digitBeingShown(2 downto 1) = "00") then			--When L_digitBeingShown is 0 or 1
+	if (L_digitBeingShown(2 downto 1) = "00") then			--When L_digitBeingShown is 0 or 1
 		Q_decoder <= I_PC(15 downto 12);						--Show first digit
 		Q_decoder_blank <= '0';
 	elsif(L_digitBeingShown(2 downto 1) = "01") then		--When L_digitBeingShown is 2 or 3

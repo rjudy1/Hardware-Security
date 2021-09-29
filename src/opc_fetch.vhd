@@ -16,6 +16,7 @@ port(
 	Q_OPC		: out std_logic_vector(31 downto 0);		--The fetched OPCODE(?)
 	Q_T0		: out std_logic
 	);
+end opc_fetch;
 	
 	
 architecture behavior of opc_fetch is
