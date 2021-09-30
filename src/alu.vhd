@@ -93,14 +93,14 @@ architecture Behavioral of alu is
         dinbit: process(I_DIN, I_BIT(2 downto 0))
         begin
             case I_BIT(2 downto 0) is
-                when "000" => L_RBIT <= I_DIN(0); L_MASK <= "00000001";
-                when "001" => L_RBIT <= I_DIN(1); L_MASK <= "00000010";
-                when "010" => L_RBIT <= I_DIN(2); L_MASK <= "00000100";
-                when "011" => L_RBIT <= I_DIN(3); L_MASK <= "00001000";
-                when "100" => L_RBIT <= I_DIN(4); L_MASK <= "00010000";
-                when "101" => L_RBIT <= I_DIN(5); L_MASK <= "00100000";
-                when "110" => L_RBIT <= I_DIN(6); L_MASK <= "01000000";
-                when others => L_RBIT <= I_DIN(7); L_MASK <= "1000000";
+                when "000" => L_RBIT <= I_DIN(0); L_MASK_I <= "00000001";
+                when "001" => L_RBIT <= I_DIN(1); L_MASK_I <= "00000010";
+                when "010" => L_RBIT <= I_DIN(2); L_MASK_I <= "00000100";
+                when "011" => L_RBIT <= I_DIN(3); L_MASK_I <= "00001000";
+                when "100" => L_RBIT <= I_DIN(4); L_MASK_I <= "00010000";
+                when "101" => L_RBIT <= I_DIN(5); L_MASK_I <= "00100000";
+                when "110" => L_RBIT <= I_DIN(6); L_MASK_I <= "01000000";
+                when others => L_RBIT <= I_DIN(7); L_MASK_I <= "1000000";
             end case;
         end process;
 
@@ -109,10 +109,10 @@ architecture Behavioral of alu is
         process(L_ADC_DR, L_ADD_DR, L_ADIW_D, I_ALU_OP, L_AND_DR, L_ASR_D,
                 I_BIT, I_D, L_D8, L_DEC_D, I_DIN, I_FLAGS, I_IMM, L_MASK_I,
                 L_INC_D, L_LSR_D, L_NEG_D, L_NOT_D, L_OR_DR, I_PC, L_PROD,
-                I_R, L_RI8, L_RBIT, L_ROR_D, L_SBIW_D, L_SUB_DR, L_SBC_DR
+                I_R, L_RI8, L_RBIT, L_ROR_D, L_SBIW_D, L_SUB_DR, L_SBC_DR,
                 L_SIGN_D, L_SIGN_R, L_SWAP_D, L_XOR_DR)
         begin 
-            Q_FLAGS(9) <= L_RBIT xor not I_BIT(3)        --DIN[BIT]=BIT[3]
+            Q_FLAGS(9) <= L_RBIT xor not I_BIT(3);        --DIN[BIT]=BIT[3]
             Q_FLAGS(8) <= ze(L_SUB_DR);                  --D == R for CPSE 
             Q_FLAGS(7 downto 0) <= I_FLAGS;
             L_DOUT     <= X"0000";
@@ -242,7 +242,7 @@ architecture Behavioral of alu is
                     L_DOUT <= L_RI8 & L_RI8;
 
                 when ALU_MV_16 =>
-                    L_DOUT <= L_R(15 downto 8) & L_RI8;
+                    L_DOUT <= I_R(15 downto 8) & L_RI8;
 
                 --Multiplication
                 when ALU_MULT =>

@@ -1,29 +1,23 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
-use work.common.ALL;
+
 entity io is
-	port(
-		I_CLK		: in	std_logic;						--Same clock as CPU
-		
-		I_CLR		: in	std_logic;						--When set, I/O componenets will be reset
-		I_ADR_IO	: in	std_logic_vector(7 downto 0);	--The address of an I/O register
-		I_DIN		: in	std_logic_vector(7 downto 0);	--Data input to register specified by ADR_IO when WR_IO signaled
-		I_RD_IO		: in	std_logic;						--Read strobe, set when need to read from ADR_IO
-		I_WR_IO		: in 	std_logic;						--Write strobe, set when need to write to ADR_IO with value on DIN
-		
-		
-		I_SWTICH	: in	std_logic_vector(7 downto 0);	--The DIP switch on the board (there are 7 in the code example)
-		I_RX		: in	std_logic;						--RX for UART (UART serial input, active low)
-		
-		Q_DOUT		: out	std_logic_vector(7 downto 0);	--Data output from register designated by ADR_IO when RD_IO is high
-		Q_INTVEC	: out	std_logic_vector(5 downto 0);	--Interrupt vector output. MSB = 1 means valid interrupt is pending
-		
-		
-		Q_7_SEGMENT	: out	std_logic_vector(6 downto 0);	--(This output isn't shown in the block diagram and seems redundant?)
-		Q_LEDS		: out	std_logic_vector(1 downto 0);	--LED outputs
-		Q_TX		: out	std_logic						--UART TX (active low)
-		);
+    port ( I_CLK       : in  std_logic;
+           I_CLR       : in  std_logic;
+           I_ADR_IO    : in  std_logic_vector( 7 downto 0);
+           I_DIN       : in  std_logic_vector( 7 downto 0);
+           I_SWITCH    : in  std_logic_vector( 7 downto 0);
+           I_RD_IO     : in  std_logic;
+           I_RX        : in  std_logic;
+           I_WE_IO     : in  std_logic;
+	
+           Q_7_SEGMENT : out std_logic_vector( 6 downto 0);
+           Q_DOUT      : out std_logic_vector( 7 downto 0);
+           Q_INTVEC    : out std_logic_vector( 5 downto 0);
+           Q_LEDS      : out std_logic_vector( 1 downto 0);
+           Q_TX        : out std_logic);
 end io;
 
 architecture behavior of io is
@@ -75,7 +69,7 @@ begin
 				
 	
 	-- IO read process
-	iord: process(I_ADR_IO, I_SWTICH, U_RX_DATA, U_RX_READY, L_RX_INT_ENABLED, U_TX_BUSY, L_TX_INT_ENABLED)
+	iord: process(I_ADR_IO, I_SWITCH, U_RX_DATA, U_RX_READY, L_RX_INT_ENABLED, U_TX_BUSY, L_TX_INT_ENABLED)
 	begin
 		case I_ADR_IO is
 			when X"2A"	=> Q_DOUT	<=								--UCSRB:		(Note: Look at CPU register UCSRB in AVR datasheet for explaination)
@@ -108,7 +102,7 @@ begin
 										& "11"						--8 bits/char
 										& '0';						--Rising clock edge
 			
-			when X"36"	=>	Q_DOUT	<= I_SWTICH;					--PINB
+			when X"36"	=>	Q_DOUT	<= I_SWITCH;					--PINB
 			
 			when others =>	Q_DOUT	<= X"AA";						--For any invalid address, AA is returned
 		end case;
@@ -148,15 +142,15 @@ begin
 				L_INTVEC <= "000000";									--Interrupt vector is invalid (MSB is 0) and clear (all bits are 0)
 			else												--If there was no clear,
 				if(L_RX_INT_ENABLED and U_RX_READY) = '1' then			--If RX is ready and enabled
-					if(L_INTVEC(5) = '0' then								--If there is no interrupt pending
+					if(L_INTVEC(5) = '0') then								--If there is no interrupt pending
 						L_INTVEC <= "101011";									--Generate Interrupt, vector 11
 					end if;
 				elsif(L_TX_INT_ENABLED and not U_TX_BUSY) = '1' then	--else if TX is enabled and not busy (ready)
-					if(L_INTVEC(5) = '0' then								--If there is no interrupt pending
+					if(L_INTVEC(5) = '0') then								--If there is no interrupt pending
 						L_INTVEC <= "101011";									--Generate Interrupt, vector 12
 					end if;
 				else
-					L_INTVEC <= "000000"								--else clear interrupt vector and make invalid
+					L_INTVEC <= "000000";								--else clear interrupt vector and make invalid
 				end if;
 			end if;
 		end if;

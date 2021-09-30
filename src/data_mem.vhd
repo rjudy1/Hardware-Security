@@ -41,8 +41,8 @@ architecture Behavioral of data_mem is
                  INIT_0C : bit_vector := zero_265;
                  INIT_0D : bit_vector := zero_265;
                  INIT_0E : bit_vector := zero_265;
-                 INIT_0F : bit_vector := zero_265;
-                 
+                 INIT_0F : bit_vector := zero_265
+          );
           port(DOA    : out std_logic_vector (3 downto 0);
                DOB    : out std_logic_vector (3 downto 0);
                ADDRA  : in std_logic_vector (9 downto 0);
@@ -56,7 +56,8 @@ architecture Behavioral of data_mem is
                RSTA   : in std_ulogic;
                RSTB   : in std_ulogic;
                WEA    : in std_ulogic;
-               WEB    : in std_ulogic;
+               WEB    : in std_ulogic
+               );
           end component;
                
           signal L_ADR_0 : std_logic; 
@@ -80,7 +81,7 @@ architecture Behavioral of data_mem is
                
           port map(ADDRA => L_ADR_E,            ADDRB => "0000000000",
                    CLKA => I_CLK,               CLKB => I_CLK,
-                   DIA => L_DIN_E(3 downto 0),  DIA => "0000",
+                   DIA => L_DIN_E(3 downto 0),  DIB => "0000",
                    ENA => '1',                  ENB => '0',
                    RSTA => '0',                 RSTB => '0',
                    WEA => L_WE_E,               WEB => '0',
@@ -96,7 +97,7 @@ architecture Behavioral of data_mem is
                
           port map(ADDRA => L_ADR_E,            ADDRB => "0000000000",
                    CLKA => I_CLK,               CLKB => I_CLK,
-                   DIA => L_DIN_E(7 downto 4),  DIA => "0000",
+                   DIA => L_DIN_E(7 downto 4),  DIB => "0000",
                    ENA => '1',                  ENB => '0',
                    RSTA => '0',                 RSTB => '0',
                    WEA => L_WE_E,               WEB => '0',
@@ -128,7 +129,7 @@ architecture Behavioral of data_mem is
                
           port map(ADDRA => L_ADR_O,            ADDRB => "0000000000",
                    CLKA => I_CLK,               CLKB => I_CLK,
-                   DIA => L_DIN_O(7 downto 4),  DIA => "0000",
+                   DIA => L_DIN_O(7 downto 4),  DIB => "0000",
                    ENA => '1',                  ENB => '0',
                    RSTA => '0',                 RSTB => '0',
                    WEA => L_WE_O,               WEB => '0',
@@ -162,7 +163,7 @@ architecture Behavioral of data_mem is
             
            --write enable
            L_WE_O   <= I_WE(1) or (I_WE(0) and not I_ADR(0));
-           L_WE_E   <= I_WE((1) or (I_WE(0) and    I_ADR(0));
+           L_WE_E   <= I_WE(1) or (I_WE(0) and I_ADR(0));
                
            --output
            Q_DOUT( 7 downto 0) <= L_DOUT_E when (L_ADR_0 = '0') else L_DOUT_O;
