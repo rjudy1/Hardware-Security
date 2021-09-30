@@ -113,7 +113,7 @@ architecture Behavioral of data_mem is
                
           port map(ADDRA => L_ADR_O,            ADDRB => "0000000000",
                    CLKA => I_CLK,               CLKB => I_CLK,
-                   DIA => L_DIN_O(3 downto 0),  DIA => "0000",
+                   DIA => L_DIN_O(3 downto 0),  DIB => "0000",
                    ENA => '1',                  ENB => '0',
                    RSTA => '0',                 RSTB => '0',
                    WEA => L_WE_O,               WEB => '0',

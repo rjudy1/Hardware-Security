@@ -11,7 +11,7 @@ entity io is
            I_SWITCH    : in  std_logic_vector( 7 downto 0);
            I_RD_IO     : in  std_logic;
            I_RX        : in  std_logic;
-           I_WE_IO     : in  std_logic;
+           I_WR_IO     : in  std_logic;
 	
            Q_7_SEGMENT : out std_logic_vector( 6 downto 0);
            Q_DOUT      : out std_logic_vector( 7 downto 0);
@@ -115,7 +115,7 @@ begin
 			if(I_CLR = '1') then				--Check if there is a clear signal, and if there is
 				L_RX_INT_ENABLED <= '0';				--RX_INT_ENABLED is cleared
 				L_TX_INT_ENABLED <=	'0';				--TX_INT_ENABLED is cleared
-			elsif (I_WE_IO = '1') then			--if there isn't a clear signal and write is enabled,
+			elsif (I_WR_IO = '1') then			--if there isn't a clear signal and write is enabled,
 				case I_ADR_IO is
 					when X"38" => 	Q_7_SEGMENT <= I_DIN(6 downto 0);		--PORTB
 									L_LEDS <= not L_LEDS;
@@ -156,7 +156,7 @@ begin
 		end if;
 	end process;
 	
-	L_WE_UART <= I_WE_IO when (I_ADR_IO = X"2C") else '0';		--Write UART UDR
+	L_WE_UART <= I_WR_IO when (I_ADR_IO = X"2C") else '0';		--Write UART UDR
 	L_RD_UART <= I_RD_IO when (I_ADR_IO = X"2C") else '0';		--Read UART UDR
 	
 	Q_LEDS(1) <= L_LEDS;

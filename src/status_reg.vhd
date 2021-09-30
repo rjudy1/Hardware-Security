@@ -27,18 +27,17 @@ entity status_reg is
      signal L : std_logic_vector(7 downto 0);
 
   begin  
-      process(I_CLK)
-      begin
-          if (rising_edge(I_CLK)) then
-             if (I_WE_F(1) = '1') then 
-                L  <= I_FLAGS;        --write flags (from ALU)
-             end if;
-             if (I_WE(0) = '1') then 
-                L <= I_DIN;           --write I/O
-             end if;
-         end if;
-      end process;
-            
+     process(I_CLK)
+     begin
+         if (rising_edge(I_CLK)) then
+            if (I_WE_F = '1') then          -- write flags (from ALU)
+ 	                L <= I_FLAGS;
+            elsif (I_WE_SR = '1') then      -- write I/O
+                L <= I_DIN;
+            end if;
+        end if;
+     end process;
+
       cond: process(I_COND, L)
       begin
           case I_COND(2 downto 0) is

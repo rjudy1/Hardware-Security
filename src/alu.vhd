@@ -100,7 +100,7 @@ architecture Behavioral of alu is
                 when "100" => L_RBIT <= I_DIN(4); L_MASK_I <= "00010000";
                 when "101" => L_RBIT <= I_DIN(5); L_MASK_I <= "00100000";
                 when "110" => L_RBIT <= I_DIN(6); L_MASK_I <= "01000000";
-                when others => L_RBIT <= I_DIN(7); L_MASK_I <= "1000000";
+                when others => L_RBIT <= I_DIN(7); L_MASK_I <= "10000000";
             end case;
         end process;
 
@@ -290,8 +290,8 @@ architecture Behavioral of alu is
 
                 --Append I_Flag(0) to right shfit
                 when ALU_ROR =>
-                    L_DOUT  <= L_ROR_DR & L_ROR_DR;
-                    Q_FLAGS(1) <= ze(L_ROR_DR);                        --zero
+                    L_DOUT  <= L_ROR_D & L_ROR_D;
+                    Q_FLAGS(1) <= ze(L_ROR_D);                        --zero
                     Q_FLAGS(2) <= I_FLAGS(0);                         --negative
                     Q_FLAGS(3) <= I_FLAGS(0) xor L_D8(0);             --overflow
                     Q_FLAGS(4) <= I_FLAGS(0);                         --signed

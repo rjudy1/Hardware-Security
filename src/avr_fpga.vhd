@@ -46,7 +46,7 @@
              I_ADR_IO    : in  std_logic_vector( 7 downto 0);
              I_DIN       : in  std_logic_vector( 7 downto 0);
              I_RD_IO     : in  std_logic;
-             I_WE_IO     : in  std_logic;
+             I_WR_IO     : in  std_logic;
              I_SWITCH    : in  std_logic_vector( 7 downto 0);
              I_RX        : in  std_logic;
              Q_7_SEGMENT : out std_logic_vector( 6 downto 0);
@@ -102,7 +102,7 @@
                 I_RD_IO     => C_RD_IO,
                 I_RX        => I_RX,
                 I_SWITCH    => I_SWITCH(7 downto 0),
-                I_WE_IO     => C_WE_IO,
+                I_WR_IO     => C_WE_IO,
 	
                 Q_7_SEGMENT => N_7_SEGMENT,
                 Q_DOUT      => N_DOUT,

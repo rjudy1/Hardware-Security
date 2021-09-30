@@ -19,7 +19,7 @@ entity register_file is
          I_DIN   : in std_logic_vector(15 downto 0);
          I_FLAGS : in std_logic_vector(7 downto 0);
          I_IMM   : in std_logic_vector(15 downto 0);
-         I_RRR   : in std_logic_vector(4 downto 0);
+         I_RRRR   : in std_logic_vector(4 downto 0);
          I_WE_01 : in std_logic;
          I_WE_D  : in std_logic_vector(1 downto 0);
          I_WE_F  : in std_logic;
@@ -83,6 +83,7 @@ entity register_file is
        signal L_DSP   : std_logic_vector(15 downto 0);
        signal L_DX    : std_logic_vector(15 downto 0);
        signal L_DY    : std_logic_vector(15 downto 0);
+       signal L_DZ    : std_logic_vector(15 downto 0);
        signal L_PRE   : std_logic_vector(15 downto 0);
        signal L_POST  : std_logic_vector(15 downto 0);
        signal L_S     : std_logic_vector(15 downto 0);
@@ -127,7 +128,7 @@ entity register_file is
                  I_DIN   => I_DIN(7 downto 0),
                  I_FLAGS => I_FLAGS,
                  I_WE_F  => I_WE_F,
-                 I_WE_SR => I_WE_SR,
+                 I_WE_SR => L_WE_SR,
                  Q       => S_FLAGS,
                  Q_CC    => Q_CC);
        --the output of the register selected by L_ADR
@@ -136,7 +137,7 @@ entity register_file is
                R_R16, R_R18, R_R20, R_R22, R_R24, R_R26, R_R28, R_R30,
                R_SP, S_FLAGS, L_ADR(6 downto 1))
        begin
-            case L_ADDR(6 downto 1) is
+            case L_ADR(6 downto 1) is
                 when "000000" => L_S <= R_R00;
                 when "000001" => L_S <= R_R02;
                 when "000010" => L_S <= R_R04;
@@ -188,7 +189,7 @@ entity register_file is
        --
        process(R_R00, R_R02, R_R04, R_R06, R_R08, R_R10, R_R12, R_R14,
                R_R16, R_R18, R_R20, R_R22, R_R24, R_R26, R_R28, R_R30,
-               I_RRR)
+               I_RRRR)
        begin
             case I_RRRR is
                 when "0000" => Q_R <= R_R00;
@@ -230,7 +231,7 @@ entity register_file is
        process(I_AMOD(5 downto 3), I_IMM)
        begin
             case I_AMOD(5 downto 3) is
-                when AO    => L_PRE <= X"0000"; L_POST <= X"0000";
+                when AO_0    => L_PRE <= X"0000"; L_POST <= X"0000";
                 when AO_i  => L_PRE <= X"0000"; L_POST <= X"0001";
                 when AO_ii => L_PRE <= X"0000"; L_POST <= X"0002";
                 when AO_q  => L_PRE <= I_IMM; L_POST <= X"0000";
@@ -241,7 +242,7 @@ entity register_file is
        end process;      
               
        L_XYZS <= L_BASE + L_POST;
-       L_ADD  <= L_BASE + L_PRE;
+       L_ADR  <= L_BASE + L_PRE;
 
        --write enables
        L_WE_A <= I_WE_M when (L_ADR(15 downto 5) = "00000000000") else '0';
@@ -363,9 +364,9 @@ entity register_file is
        --4c I_WE_XYZS for Y (register pairs 28/29 and I_AMOD matches)
        --4d I_WE_XYZS for Z (register pairs 30/31 and I_AMOD matches)
        --
-       LE_WE_X <= I_WE_XYZS when (I_AMOD(3 downto 0) = AM_WX) else '0';
-       LE_WE_Y <= I_WE_XYZS when (I_AMOD(3 downto 0) = AM_WY) else '0';
-       LE_WE_Z <= I_WE_XYZS when (I_AMOD(3 downto 0) = AM_WZ) else '0';
+       L_WE_X <= I_WE_XYZS when (I_AMOD(3 downto 0) = AM_WX) else '0';
+       L_WE_Y <= I_WE_XYZS when (I_AMOD(3 downto 0) = AM_WY) else '0';
+       L_WE_Z <= I_WE_XYZS when (I_AMOD(3 downto 0) = AM_WZ) else '0';
        L_WE_MISC <= L_WE_Z & L_WE_Z &   -- -Z and +Z address modes r30
                     L_WE_Y & L_WE_Y &   -- -Y and +Y address modes r28
                     L_WE_X & L_WE_X &   -- -X and +X address modes r26

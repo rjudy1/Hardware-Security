@@ -215,4 +215,4 @@ architecture behavior of cpu_core is
 	    L_INTVEC_5 <= I_INTVEC(5) and R_INT_ENA;
 	    Q_ADR_IO <= R_ADR(7 downto 0);
 	
-end Behavioral;
+end behavior;
