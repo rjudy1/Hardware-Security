@@ -75,7 +75,7 @@ entity data_path is
                I_DIN   : in std_logic_vector(15 downto 0);
                I_FLAGS : in std_logic_vector(7 downto 0);
                I_IMM   : in std_logic_vector(15 downto 0);
-               I_RRRR   : in std_logic_vector(4 downto 0);
+               I_RRRR   : in std_logic_vector(4 downto 1);
                I_WE_01 : in std_logic;
                I_WE_D  : in std_logic_vector(1 downto 0);
                I_WE_F  : in std_logic;

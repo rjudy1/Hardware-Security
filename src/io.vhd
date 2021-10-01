@@ -114,7 +114,7 @@ begin
 		if(rising_edge(I_CLK)) then 		--On a rising clock,
 			if(I_CLR = '1') then				--Check if there is a clear signal, and if there is
 				L_RX_INT_ENABLED <= '0';				--RX_INT_ENABLED is cleared
-				L_TX_INT_ENABLED <=	'0';				--TX_INT_ENABLED is cleared
+--				L_TX_INT_ENABLED <=	'0';				--TX_INT_ENABLED is cleared - multiple drivers for this
 			elsif (I_WR_IO = '1') then			--if there isn't a clear signal and write is enabled,
 				case I_ADR_IO is
 					when X"38" => 	Q_7_SEGMENT <= I_DIN(6 downto 0);		--PORTB
@@ -137,8 +137,8 @@ begin
 	begin
 		if(rising_edge(I_CLK)) then 					--On a rising clock,
 			if(I_CLR = '1') then								--Check if there is a clear signal, and if there is
-				L_RX_INT_ENABLED <= '0';								--RX_INT_ENABLED is cleared
-				L_TX_INT_ENABLED <=	'0';								--TX_INT_ENABLED is cleared
+--				L_RX_INT_ENABLED <= '0';								--RX_INT_ENABLED is cleared
+--				L_TX_INT_ENABLED <=	'0';								--TX_INT_ENABLED is cleared
 				L_INTVEC <= "000000";									--Interrupt vector is invalid (MSB is 0) and clear (all bits are 0)
 			else												--If there was no clear,
 				if(L_RX_INT_ENABLED and U_RX_READY) = '1' then			--If RX is ready and enabled

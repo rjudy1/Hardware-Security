@@ -77,22 +77,17 @@ architecture Behavioral of RAMB4_S4_S4 is
 begin
     process(CLKA, CLKB)
     begin
+        -- drive clock A and B on the same clock
         if (rising_edge(CLKA)) then
             if (ENA = '1') then
-                DOA(3) <= cv(DATA(conv_integer(ADDRA & "11")));
-                DOA(2) <= cv(DATA(conv_integer(ADDRA & "10")));
-                DOA(1) <= cv(DATA(conv_integer(ADDRA & "01")));
-                DOA(0) <= cv(DATA(conv_integer(ADDRA & "00")));
-                if (WEA = '1') then
-                    DATA(conv_integer(ADDRA & "11")) <= cv1(DIA(3));
-                    DATA(conv_integer(ADDRA & "10")) <= cv1(DIA(2));
-                    DATA(conv_integer(ADDRA & "01")) <= cv1(DIA(1));
-                    DATA(conv_integer(ADDRA & "00")) <= cv1(DIA(0));
-                end if;
+                DOA <= cv(DATA(conv_integer(ADDRA & "11"))) &
+                 cv(DATA(conv_integer(ADDRA & "10"))) & 
+                 cv(DATA(conv_integer(ADDRA & "01"))) &
+                 cv(DATA(conv_integer(ADDRA & "00")));
            end if;
-        end if;
+--        end if;
 	
-        if (rising_edge(CLKB)) then
+--        if (rising_edge(CLKB)) then
             if (ENB = '1') then
                 DOB(3) <= cv(DATA(conv_integer(ADDRB & "11")));
                 DOB(2) <= cv(DATA(conv_integer(ADDRB & "10")));
@@ -105,6 +100,16 @@ begin
                     DATA(conv_integer(ADDRB & "00")) <= cv1(DIB(0));
                 end if;
             end if;
+            
+            if (ENA = '1') then
+                if (WEA = '1') then
+                    DATA(conv_integer(ADDRA & "11")) <= cv1(DIA(3));
+                    DATA(conv_integer(ADDRA & "10")) <= cv1(DIA(2));
+                    DATA(conv_integer(ADDRA & "01")) <= cv1(DIA(1));
+                    DATA(conv_integer(ADDRA & "00")) <= cv1(DIA(0));
+                end if;
+           end if;
+            
         end if;
     end process;
 	

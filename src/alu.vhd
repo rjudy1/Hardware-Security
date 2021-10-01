@@ -254,7 +254,7 @@ architecture Behavioral of alu is
                     else 
                         L_DOUT <= L_PROD(14 downto 0) & "0";
                         Q_FLAGS(1) <= ze(L_PROD(14 downto 7))          --zero
-                                  and ze(L_PROD(6 downto 9)&"0");
+                                  and ze(L_PROD(6 downto 0)&"0");
                     end if;
                 
                 --Negative

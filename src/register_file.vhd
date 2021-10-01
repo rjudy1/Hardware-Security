@@ -19,7 +19,7 @@ entity register_file is
          I_DIN   : in std_logic_vector(15 downto 0);
          I_FLAGS : in std_logic_vector(7 downto 0);
          I_IMM   : in std_logic_vector(15 downto 0);
-         I_RRRR   : in std_logic_vector(4 downto 0);
+         I_RRRR   : in std_logic_vector(4 downto 1);
          I_WE_01 : in std_logic;
          I_WE_D  : in std_logic_vector(1 downto 0);
          I_WE_F  : in std_logic;
@@ -79,7 +79,7 @@ entity register_file is
 
        signal L_ADR   : std_logic_vector(15 downto 0);
        signal L_BASE  : std_logic_vector(15 downto 0);
-       signal L_DDDD  : std_logic_vector(4 downto 0);
+       signal L_DDDD  : std_logic_vector(4 downto 1);
        signal L_DSP   : std_logic_vector(15 downto 0);
        signal L_DX    : std_logic_vector(15 downto 0);
        signal L_DY    : std_logic_vector(15 downto 0);
@@ -138,24 +138,24 @@ entity register_file is
                R_SP, S_FLAGS, L_ADR(6 downto 1))
        begin
             case L_ADR(6 downto 1) is
-                when "000000" => L_S <= R_R00;
-                when "000001" => L_S <= R_R02;
-                when "000010" => L_S <= R_R04;
-                when "000011" => L_S <= R_R06;
-                when "000100" => L_S <= R_R08;
-                when "000101" => L_S <= R_R10;
-                when "000110" => L_S <= R_R12;
-                when "000111" => L_S <= R_R14;
-                when "001000" => L_S <= R_R16;
-                when "001001" => L_S <= R_R18;
-                when "001010" => L_S <= R_R20;
-                when "001011" => L_S <= R_R22;
-                when "001100" => L_S <= R_R24;
-                when "001101" => L_S <= R_R26;
-                when "001110" => L_S <= R_R28;
+	            when "000000" => L_S <= R_R00;
+	            when "000001" => L_S <= R_R02;
+	            when "000010" => L_S <= R_R04;
+	            when "000011" => L_S <= R_R06;
+	            when "000100" => L_S <= R_R08;
+	            when "000101" => L_S <= R_R10;
+	            when "000110" => L_S <= R_R12;
+	            when "000111" => L_S <= R_R14;
+	            when "001000" => L_S <= R_R16;
+	            when "001001" => L_S <= R_R18;
+	            when "001010" => L_S <= R_R20;
+	            when "001011" => L_S <= R_R22;
+	            when "001100" => L_S <= R_R24;
+	            when "001101" => L_S <= R_R26;
+	            when "001110" => L_S <= R_R28;
                 when "001111" => L_S <= R_R30;
-                when "101111" => L_S <= R_SP(7 downto 0) & X"00";  --SPL
-                when "000000" => L_S <= S_FLAGS & R_SP(15 downto 8);  --SR/SPH
+	            when "101111" => L_S <= R_SP ( 7 downto 0) & X"00";     -- SPL
+	            when others   => L_S <= S_FLAGS & R_SP (15 downto 8);   -- SR/SPH
             end case;
        end process;
               
@@ -263,37 +263,37 @@ entity register_file is
        --I_WE_D(0) = '1' and I_DDDDD matches,
        --
        L_WE_D(0) <= I_WE_D(0) when (I_DDDDD = "00000") else '0';
-       L_WE_D(1) <= I_WE_D(1) when (I_DDDDD = "00001") else '0';
-       L_WE_D(2) <= I_WE_D(2) when (I_DDDDD = "00010") else '0';
-       L_WE_D(3) <= I_WE_D(3) when (I_DDDDD = "00011") else '0';
-       L_WE_D(4) <= I_WE_D(4) when (I_DDDDD = "00100") else '0';
-       L_WE_D(5) <= I_WE_D(5) when (I_DDDDD = "00101") else '0';
-       L_WE_D(6) <= I_WE_D(6) when (I_DDDDD = "00110") else '0';
-       L_WE_D(7) <= I_WE_D(7) when (I_DDDDD = "00111") else '0';
-       L_WE_D(8) <= I_WE_D(8) when (I_DDDDD = "01000") else '0';
-       L_WE_D(9) <= I_WE_D(9) when (I_DDDDD = "01001") else '0';
-       L_WE_D(10) <= I_WE_D(10) when (I_DDDDD = "01010") else '0';
-       L_WE_D(11) <= I_WE_D(11) when (I_DDDDD = "01011") else '0';
-       L_WE_D(12) <= I_WE_D(12) when (I_DDDDD = "01100") else '0';
-       L_WE_D(13) <= I_WE_D(13) when (I_DDDDD = "01101") else '0';
-       L_WE_D(14) <= I_WE_D(14) when (I_DDDDD = "01110") else '0';
-       L_WE_D(15) <= I_WE_D(15) when (I_DDDDD = "01111") else '0';
-       L_WE_D(16) <= I_WE_D(16) when (I_DDDDD = "10000") else '0';
-       L_WE_D(17) <= I_WE_D(17) when (I_DDDDD = "10001") else '0';
-       L_WE_D(18) <= I_WE_D(18) when (I_DDDDD = "10010") else '0';
-       L_WE_D(19) <= I_WE_D(19) when (I_DDDDD = "10011") else '0';
-       L_WE_D(20) <= I_WE_D(20) when (I_DDDDD = "10100") else '0';
-       L_WE_D(21) <= I_WE_D(21) when (I_DDDDD = "10101") else '0';
-       L_WE_D(22) <= I_WE_D(22) when (I_DDDDD = "10110") else '0';
-       L_WE_D(23) <= I_WE_D(23) when (I_DDDDD = "10111") else '0';
-       L_WE_D(24) <= I_WE_D(24) when (I_DDDDD = "11000") else '0';
-       L_WE_D(25) <= I_WE_D(25) when (I_DDDDD = "11001") else '0';
-       L_WE_D(26) <= I_WE_D(26) when (I_DDDDD = "11010") else '0';
-       L_WE_D(27) <= I_WE_D(27) when (I_DDDDD = "11011") else '0';
-       L_WE_D(28) <= I_WE_D(28) when (I_DDDDD = "11100") else '0';
-       L_WE_D(29) <= I_WE_D(29) when (I_DDDDD = "11101") else '0';
-       L_WE_D(30) <= I_WE_D(30) when (I_DDDDD = "11110") else '0';
-       L_WE_D(31) <= I_WE_D(31) when (I_DDDDD = "11111") else '0';
+       L_WE_D(1) <= I_WE_D(0) when (I_DDDDD = "00001") else '0';
+       L_WE_D(2) <= I_WE_D(0) when (I_DDDDD = "00010") else '0';
+       L_WE_D(3) <= I_WE_D(0) when (I_DDDDD = "00011") else '0';
+       L_WE_D(4) <= I_WE_D(0) when (I_DDDDD = "00100") else '0';
+       L_WE_D(5) <= I_WE_D(0) when (I_DDDDD = "00101") else '0';
+       L_WE_D(6) <= I_WE_D(0) when (I_DDDDD = "00110") else '0';
+       L_WE_D(7) <= I_WE_D(0) when (I_DDDDD = "00111") else '0';
+       L_WE_D(8) <= I_WE_D(0) when (I_DDDDD = "01000") else '0';
+       L_WE_D(9) <= I_WE_D(0) when (I_DDDDD = "01001") else '0';
+       L_WE_D(10) <= I_WE_D(0) when (I_DDDDD = "01010") else '0';
+       L_WE_D(11) <= I_WE_D(0) when (I_DDDDD = "01011") else '0';
+       L_WE_D(12) <= I_WE_D(0) when (I_DDDDD = "01100") else '0';
+       L_WE_D(13) <= I_WE_D(0) when (I_DDDDD = "01101") else '0';
+       L_WE_D(14) <= I_WE_D(0) when (I_DDDDD = "01110") else '0';
+       L_WE_D(15) <= I_WE_D(0) when (I_DDDDD = "01111") else '0';
+       L_WE_D(16) <= I_WE_D(0) when (I_DDDDD = "10000") else '0';
+       L_WE_D(17) <= I_WE_D(0) when (I_DDDDD = "10001") else '0';
+       L_WE_D(18) <= I_WE_D(0) when (I_DDDDD = "10010") else '0';
+       L_WE_D(19) <= I_WE_D(0) when (I_DDDDD = "10011") else '0';
+       L_WE_D(20) <= I_WE_D(0) when (I_DDDDD = "10100") else '0';
+       L_WE_D(21) <= I_WE_D(0) when (I_DDDDD = "10101") else '0';
+       L_WE_D(22) <= I_WE_D(0) when (I_DDDDD = "10110") else '0';
+       L_WE_D(23) <= I_WE_D(0) when (I_DDDDD = "10111") else '0';
+       L_WE_D(24) <= I_WE_D(0) when (I_DDDDD = "11000") else '0';
+       L_WE_D(25) <= I_WE_D(0) when (I_DDDDD = "11001") else '0';
+       L_WE_D(26) <= I_WE_D(0) when (I_DDDDD = "11010") else '0';
+       L_WE_D(27) <= I_WE_D(0) when (I_DDDDD = "11011") else '0';
+       L_WE_D(28) <= I_WE_D(0) when (I_DDDDD = "11100") else '0';
+       L_WE_D(29) <= I_WE_D(0) when (I_DDDDD = "11101") else '0';
+       L_WE_D(30) <= I_WE_D(0) when (I_DDDDD = "11110") else '0';
+       L_WE_D(31) <= I_WE_D(0) when (I_DDDDD = "11111") else '0';
          
          
        --

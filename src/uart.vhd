@@ -21,7 +21,7 @@ entity uart is
 			Q_TX_BUSY	: out std_logic);
 end uart;
 
-architecture Behavioral of uart_rx is
+architecture Behavioral of uart is
 	 
 component uart_rx
     PORT(   I_CLK       : in  std_logic;
@@ -41,24 +41,26 @@ component uart_tx
              I_FLAG      : in  std_logic;            -- toggle to send data
              Q_TX        : out std_logic;            -- Serial output line
              Q_FLAG      : out std_logic);           -- Transmitting Flag
- end uart_tx;
+ end component;
  
  signal high : std_logic;
 	 
 begin
 	high <= '1';
 	tx : uart_tx
-    port(   I_CLK       => I_CLK,    
+    port map (
+            I_CLK       => I_CLK,    
             I_CLR       => I_CLR,            -- RESET
             I_CE_1      => high,            -- BAUD rate clock enable
             I_DATA      => I_TX_DATA,   -- DATA to be sent
             I_FLAG      => I_WE,            -- toggle to send data
-            Q_TX        => Q_TX_DATA,            -- Serial output line
+            Q_TX        => Q_TX,            -- Serial output line
             Q_FLAG      => Q_TX_BUSY             -- Transmitting Flag
 	);
 
 	rx : uart_rx
-    PORT(   I_CLK       => I_CLK,
+    PORT map (   
+            I_CLK       => I_CLK,
             I_CLR       => I_CLR,
             I_CE_16     => I_RD,           -- 16 times baud rate 
             I_RX        => I_RX,           -- Serial input line
