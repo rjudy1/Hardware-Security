@@ -349,7 +349,7 @@ architecture Behavioral of alu is
         
         --Set data values
         L_D8 <= I_D(15 downto 8) when (I_D0 = '1') else I_D(7 downto 0);
-        L_D8 <= I_R(15 downto 8) when (I_R0 = '1') else I_R(7 downto 0);
+        L_R8 <= I_R(15 downto 8) when (I_R0 = '1') else I_R(7 downto 0);
         L_RI8 <= I_IMM           when (I_RSEL = RS_IMM) else L_R8;
               
         --individual ALU operations--actuall operations
