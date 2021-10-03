@@ -12,11 +12,11 @@ uint8_t buffer[0x10000];
 uint32_t
 get_byte(const char *  cp)
 {
-uint32_t value;
-const char cc[3] = { cp[0], cp[1], 0 };
-const int cnt = sscanf(cc, "%X", &value);
-assert(cnt == 1);
-return value;
+	uint32_t value;
+	const char cc[3] = { cp[0], cp[1], 0 };
+	const int cnt = sscanf(cc, "%X", &value);
+	assert(cnt == 1);
+	return value;
 }
 
 //-----------------------------------------------------------------------------
