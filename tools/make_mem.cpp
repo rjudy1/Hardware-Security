@@ -2,6 +2,7 @@
 #include "stdio.h"
 #include "stdint.h"
 #include "string.h"
+#include <iostream>
 
 const char * hex_file = 0;
 const char * vhdl_file = 0;
@@ -31,7 +32,7 @@ void read_file(FILE * in)
 		{
 			return;
 		}
-		assert(*s++ == ':');
+		assert(*s++ == ':' && "Hint: check for empty lines in hex file");
 		const uint32_t len     = get_byte(s);
 		const uint32_t ah      = get_byte(s + 2);
 		const uint32_t al      = get_byte(s + 4);
@@ -132,12 +133,18 @@ void write_file(FILE * out)
 //-----------------------------------------------------------------------------
 int	main(int argc, char * argv[])
 {
+	if (argc <= 1)
+	{
+		std::cout << "Usage: <hex_file.hex> [vhdl_output.vhd]" << std::endl;
+		return 1;
+	}
+
 	if (argc > 1)
 	{
 		hex_file = argv[1];
 	}
-	
-	if (argc > 2)   
+
+	if (argc > 2)
 	{
 		vhdl_file = argv[2];
 	}
@@ -147,7 +154,7 @@ int	main(int argc, char * argv[])
 	{
 		in = fopen(hex_file, "r");
 	}
-	
+
 	assert(in);
 	read_file(in);
 	fclose(in);
@@ -157,7 +164,7 @@ int	main(int argc, char * argv[])
 	{
 		out = fopen(vhdl_file, "w");
 	}
-	
+
 	write_file(out);
 	assert(out);
 }
