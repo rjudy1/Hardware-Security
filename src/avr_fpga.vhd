@@ -11,7 +11,7 @@
  
  entity avr_fpga is
      port (  I_CLK_100   : in  std_logic;
-             I_SWITCH    : in  std_logic_vector(9 downto 0);
+             I_SWITCH    : in  std_logic_vector(1 downto 0); --expected 10
              I_RX        : in  std_logic;
              Q_LEDS      : out std_logic_vector(3 downto 0);
              Q_7_SEGMENT : out std_logic_vector(6 downto 0);
@@ -39,6 +39,7 @@
   signal  C_DOUT          : std_logic_vector( 7 downto 0);
   signal  C_RD_IO         : std_logic;
   signal  C_WE_IO         : std_logic;
+  signal  EXTEND_SWITCH   : std_logic_vector(9 downto 0);
  
   component io
      port (  I_CLK       : in  std_logic;
@@ -81,6 +82,9 @@
   signal L_C2_N           : std_logic := '0';     -- switch debounce, active low
 	
   begin
+  
+    EXTEND_SWITCH  <= "00000000" & I_SWITCH;
+    
     cpu : cpu_core
     port map(   I_CLK       => L_CLK,
 				I_CLR       => L_CLR,
@@ -101,7 +105,7 @@
                 I_DIN       => C_DOUT,
                 I_RD_IO     => C_RD_IO,
                 I_RX        => I_RX,
-                I_SWITCH    => I_SWITCH(7 downto 0),
+                I_SWITCH    => EXTEND_SWITCH(7 downto 0),
                 I_WR_IO     => C_WE_IO,
 	
                 Q_7_SEGMENT => N_7_SEGMENT,
@@ -137,7 +141,7 @@
     begin
         if (rising_edge(L_CLK)) then
             -- switch debounce
-            if ((I_SWITCH(8) = '0') or (I_SWITCH(9) = '0')) then    -- pushed
+            if ((EXTEND_SWITCH(8) = '0') or (EXTEND_SWITCH(9) = '0')) then    -- pushed
                 L_CLR_N <= '0';
                 L_C2_N  <= '0';
                 L_C1_N  <= '0';
@@ -153,7 +157,7 @@
 	
     Q_LEDS(2) <= I_RX;
     Q_LEDS(3) <= N_TX;
-    Q_7_SEGMENT  <= N_7_SEGMENT when (I_SWITCH(7) = '1') else S_7_SEGMENT;
+    Q_7_SEGMENT  <= N_7_SEGMENT when (EXTEND_SWITCH(7) = '1') else S_7_SEGMENT;
     Q_TX <= N_TX;
 	
 end Behavioral;
