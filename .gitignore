@@ -16,3 +16,4 @@
 !*/*.cpp
 !*/*.c
 !Makefile
+!*.xdc
