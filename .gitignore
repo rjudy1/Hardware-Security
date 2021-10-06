@@ -1,11 +1,11 @@
 *
-*/*
+**/*
 !src/
 !simu/
 !test/
 !tools/
 !.gitignore
-!*/*.md
+!**/*.md
 !README.md
 !*/*.qar
 !*.qar
@@ -17,3 +17,4 @@
 !*/*.c
 !Makefile
 !*.xdc
+!src/design_1/*.bd

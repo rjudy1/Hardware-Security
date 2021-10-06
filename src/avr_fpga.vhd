@@ -74,12 +74,18 @@
  	
   signal S_7_SEGMENT      : std_logic_vector( 6 downto 0);
 	
+  signal L_LEDS           : std_logic_vector( 3 downto 0);
   signal L_CLK            : std_logic := '0';
   signal L_CLK_CNT        : std_logic_vector( 2 downto 0) := "000";
   signal L_CLR            : std_logic;            -- reset,  active low
   signal L_CLR_N          : std_logic := '0';     -- reset,  active low
   signal L_C1_N           : std_logic := '0';     -- switch debounce, active low
   signal L_C2_N           : std_logic := '0';     -- switch debounce, active low
+	
+  attribute mark_debug : string;
+  attribute mark_debug of C_PC : signal is "true";
+  attribute mark_debug of I_SWITCH : signal is "true";
+  
 	
   begin
   
@@ -111,7 +117,7 @@
                 Q_7_SEGMENT => N_7_SEGMENT,
                 Q_DOUT      => N_DOUT,
                 Q_INTVEC    => N_INTVEC,
-                Q_LEDS      => Q_LEDS(1 downto 0),
+                Q_LEDS      => L_LEDS(1 downto 0),
                 Q_TX        => N_TX);
 
     seg : segment7
@@ -155,8 +161,9 @@
 	
     L_CLR <= not L_CLR_N;
 	
-    Q_LEDS(2) <= I_RX;
-    Q_LEDS(3) <= N_TX;
+    L_LEDS(2) <= I_RX;
+    L_LEDS(3) <= N_TX;
+    Q_LEDS(3 downto 0) <= N_7_SEGMENT(3 downto 0);-- L_LEDS;
     Q_7_SEGMENT  <= N_7_SEGMENT when (EXTEND_SWITCH(7) = '1') else S_7_SEGMENT;
     Q_TX <= N_TX;
 	

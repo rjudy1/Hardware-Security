@@ -134,6 +134,9 @@ architecture behavior of cpu_core is
 	--
 	signal L_DIN            : std_logic_vector( 7 downto 0);
 	signal L_INTVEC_5       : std_logic;
+
+    attribute mark_debug : string;
+    attribute mark_debug of F_OPC : signal is "true";
 	
 	begin
 	
