@@ -11,10 +11,11 @@
 !*.qar
 !src/*.bd
 !src/*.vhd
+!src/design_1/
+!src/design_1/design_1.bd
 !*.vhd
 !*.xlsx
 !*/*.cpp
 !*/*.c
 !Makefile
 !*.xdc
-!src/design_1/*.bd
