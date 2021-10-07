@@ -10,8 +10,8 @@
       "validated": "true"
     },
     "design_tree": {
-      "clk_div_0": "",
-      "avr_fpga_0": ""
+      "avr_fpga_0": "",
+      "clk_div_0": ""
     },
     "ports": {
       "sysclk": {
@@ -79,11 +79,67 @@
       }
     },
     "components": {
+      "avr_fpga_0": {
+        "vlnv": "xilinx.com:module_ref:avr_fpga:1.0",
+        "xci_name": "design_1_avr_fpga_0_0",
+        "xci_path": "ip\\design_1_avr_fpga_0_0_2\\design_1_avr_fpga_0_0.xci",
+        "inst_hier_path": "avr_fpga_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "avr_fpga",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "I_CLK_100": {
+            "direction": "I",
+            "parameters": {
+              "FREQ_HZ": {
+                "value": "125000000",
+                "value_src": "user_prop"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "default_prop"
+              },
+              "CLK_DOMAIN": {
+                "value": "design_1_clk_div_0_0_clock_output",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "I_SWITCH": {
+            "direction": "I",
+            "left": "1",
+            "right": "0"
+          },
+          "I_RX": {
+            "direction": "I"
+          },
+          "Q_LEDS": {
+            "direction": "O",
+            "left": "3",
+            "right": "0"
+          },
+          "Q_7_SEGMENT": {
+            "direction": "O",
+            "left": "6",
+            "right": "0"
+          },
+          "Q_TX": {
+            "direction": "O"
+          }
+        }
+      },
       "clk_div_0": {
         "vlnv": "xilinx.com:module_ref:clk_div:1.0",
         "xci_name": "design_1_clk_div_0_0",
         "xci_path": "ip\\design_1_clk_div_0_0_1\\design_1_clk_div_0_0.xci",
         "inst_hier_path": "clk_div_0",
+        "parameters": {
+          "divider": {
+            "value": "125000"
+          }
+        },
         "reference_info": {
           "ref_type": "hdl",
           "ref_name": "clk_div",
@@ -110,60 +166,14 @@
               }
             }
           },
-          "clock_out": {
+          "clock_output": {
             "type": "clk",
-            "direction": "O"
-          }
-        }
-      },
-      "avr_fpga_0": {
-        "vlnv": "xilinx.com:module_ref:avr_fpga:1.0",
-        "xci_name": "design_1_avr_fpga_0_0",
-        "xci_path": "ip\\design_1_avr_fpga_0_0_2\\design_1_avr_fpga_0_0.xci",
-        "inst_hier_path": "avr_fpga_0",
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "avr_fpga",
-          "boundary_crc": "0x0"
-        },
-        "ports": {
-          "I_CLK_100": {
-            "direction": "I",
+            "direction": "O",
             "parameters": {
               "FREQ_HZ": {
-                "value": "100000000",
-                "value_src": "default_prop"
-              },
-              "PHASE": {
-                "value": "0.0",
-                "value_src": "default_prop"
-              },
-              "CLK_DOMAIN": {
-                "value": "design_1_clk_div_0_0_clock_out",
-                "value_src": "default_prop"
+                "value": "125000000"
               }
             }
-          },
-          "I_SWITCH": {
-            "direction": "I",
-            "left": "1",
-            "right": "0"
-          },
-          "I_RX": {
-            "direction": "I"
-          },
-          "Q_LEDS": {
-            "direction": "O",
-            "left": "3",
-            "right": "0"
-          },
-          "Q_7_SEGMENT": {
-            "direction": "O",
-            "left": "6",
-            "right": "0"
-          },
-          "Q_TX": {
-            "direction": "O"
           }
         }
       }
@@ -207,7 +217,7 @@
       },
       "clk_div_0_clock_out": {
         "ports": [
-          "clk_div_0/clock_out",
+          "clk_div_0/clock_output",
           "avr_fpga_0/I_CLK_100"
         ]
       },
