@@ -13,6 +13,8 @@
 !src/*.vhd
 !src/design_1/
 !src/design_1/design_1.bd
+!src/extra/
+!src/extra/*.vhd
 !*.vhd
 !*.xlsx
 !*/*.cpp
