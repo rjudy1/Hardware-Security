@@ -4,20 +4,20 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity io is
-    port ( I_CLK       : in  std_logic;
-           I_CLR       : in  std_logic;
-           I_ADR_IO    : in  std_logic_vector( 7 downto 0);
-           I_DIN       : in  std_logic_vector( 7 downto 0);
-           I_SWITCH    : in  std_logic_vector( 7 downto 0);
-           I_RD_IO     : in  std_logic;
-           I_RX        : in  std_logic;
-           I_WR_IO     : in  std_logic;
-    
-           Q_7_SEGMENT : out std_logic_vector( 6 downto 0);
-           Q_DOUT      : out std_logic_vector( 7 downto 0);
-           Q_INTVEC    : out std_logic_vector( 5 downto 0);
-           Q_LEDS      : out std_logic_vector( 1 downto 0);
-           Q_TX        : out std_logic);
+    port ( I_CLK       : in  std_logic;                             --Same clock as CPU
+           I_CLR       : in  std_logic;                             --When set, I/O componenets will be reset
+           I_ADR_IO    : in  std_logic_vector(7 downto 0);          --The address of an I/O register
+           I_DIN       : in  std_logic_vector(7 downto 0);          --Data input to register specified by ADR_IO when WR_IO signaled
+           I_SWITCH    : in  std_logic_vector(7 downto 0);          --Board DIP switch
+           I_RD_IO     : in  std_logic;                             --Read strobe, set when need to read from ADR_IO
+           I_RX        : in  std_logic;                             --RX for UART (UART serial input, active low)
+           I_WR_IO     : in  std_logic;                             --Write strobe, set when need to write to ADR_IO with value on DIN
+
+           Q_7_SEGMENT : out std_logic_vector(6 downto 0);
+           Q_DOUT      : out std_logic_vector(7 downto 0);          --Data output from register designated by ADR_IO when RD_IO is high
+           Q_INTVEC    : out std_logic_vector(5 downto 0);          --Interrupt vector output. MSB = 1 means valid interrupt is pending
+           Q_LEDS      : out std_logic_vector(1 downto 0);          --LED outputs
+           Q_TX        : out std_logic);                            --UART TX (active low)
 end io;
 
 architecture behavior of io is
@@ -115,7 +115,7 @@ begin
             if(I_CLR = '1') then                --Check if there is a clear signal, and if there is
                 L_RX_INT_ENABLED <= '0';                --RX_INT_ENABLED is cleared
 --              L_TX_INT_ENABLED <= '0';                --TX_INT_ENABLED is cleared - multiple drivers for this
-            elsif (I_WR_IO = '1') then          --if there isn't a clear signal and write is enabled,
+            elsif (I_WR_IO = '1') then          --if there isn't a clear signal and write strobe,
                 case I_ADR_IO is
                     when X"38" =>   Q_7_SEGMENT <= I_DIN(6 downto 0);       --PORTB
                                     L_LEDS <= not L_LEDS;
