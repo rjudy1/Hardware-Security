@@ -3,7 +3,7 @@
  -- Description:     top level of a CPU
  --
  -------------------------------------------------------------------------------
- 	
+    
  library IEEE;
  use IEEE.STD_LOGIC_1164.ALL;
  use IEEE.STD_LOGIC_ARITH.ALL;
@@ -32,7 +32,7 @@
              Q_RD_IO     : out std_logic;
              Q_WE_IO     : out std_logic);
   end component;
- 	
+    
   signal  C_PC            : std_logic_vector(15 downto 0);
   signal  C_OPC           : std_logic_vector(15 downto 0);
   signal  C_ADR_IO        : std_logic_vector( 7 downto 0);
@@ -62,7 +62,7 @@
   signal N_DOUT           : std_logic_vector( 7 downto 0);
   signal N_TX             : std_logic;
   signal N_7_SEGMENT      : std_logic_vector( 6 downto 0);
- 	
+    
   component segment7
      port ( I_CLK        : in  std_logic;
             I_CLR        : in  std_logic;
@@ -71,9 +71,9 @@
  
             Q_7_SEGMENT  : out std_logic_vector( 6 downto 0));
   end component;
- 	
+    
   signal S_7_SEGMENT      : std_logic_vector( 6 downto 0);
-	
+    
   signal L_LEDS           : std_logic_vector( 3 downto 0);
   signal L_CLK            : std_logic := '0';
   signal L_CLK_CNT        : std_logic_vector( 2 downto 0) := "000";
@@ -81,19 +81,19 @@
   signal L_CLR_N          : std_logic := '0';     -- reset,  active low
   signal L_C1_N           : std_logic := '0';     -- switch debounce, active low
   signal L_C2_N           : std_logic := '0';     -- switch debounce, active low
-	
+    
   attribute mark_debug : string;
   attribute mark_debug of C_PC : signal is "true";
   attribute mark_debug of I_SWITCH : signal is "true";
   
-	
+    
   begin
   
     EXTEND_SWITCH  <= "00000000" & I_SWITCH;
     
     cpu : cpu_core
     port map(   I_CLK       => L_CLK,
-				I_CLR       => L_CLR,
+                I_CLR       => L_CLR,
                 I_DIN       => N_DOUT,
                 I_INTVEC    => N_INTVEC,
 
@@ -103,7 +103,7 @@
                 Q_PC        => C_PC,
                 Q_RD_IO     => C_RD_IO,
                 Q_WE_IO     => C_WE_IO);
-	
+    
     ino : io
     port map(   I_CLK       => L_CLK,
                 I_CLR       => L_CLR,
@@ -113,7 +113,7 @@
                 I_RX        => I_RX,
                 I_SWITCH    => EXTEND_SWITCH(7 downto 0),
                 I_WR_IO     => C_WE_IO,
-	
+    
                 Q_7_SEGMENT => N_7_SEGMENT,
                 Q_DOUT      => N_DOUT,
                 Q_INTVEC    => N_INTVEC,
@@ -125,13 +125,13 @@
                 I_CLR       => L_CLR,
                 I_OPC       => C_OPC,
                 I_PC        => C_PC,
-	
+    
                 Q_7_SEGMENT => S_7_SEGMENT);
-	    
-	    -- input clock scaler
-	    --
-	    clk_div : process(I_CLK_100)
-	    begin
+        
+        -- input clock scaler
+        --
+        clk_div : process(I_CLK_100)
+        begin
         if (rising_edge(I_CLK_100)) then
             L_CLK_CNT <= L_CLK_CNT + "001";
             if (L_CLK_CNT = "001") then
@@ -140,7 +140,7 @@
             end if;
         end if;
     end process;
-	    
+        
     -- reset button debounce process
     --
     deb : process(L_CLK)
@@ -158,13 +158,13 @@
             end if;
         end if;
     end process;
-	
+    
     L_CLR <= not L_CLR_N;
-	
+    
     L_LEDS(2) <= I_RX;
     L_LEDS(3) <= N_TX;
     Q_LEDS(0 downto 0) <= N_7_SEGMENT(3 downto 0);-- L_LEDS;
     Q_7_SEGMENT  <= N_7_SEGMENT when (EXTEND_SWITCH(7) = '1') else S_7_SEGMENT;
     Q_TX <= N_TX;
-	
+    
 end Behavioral;

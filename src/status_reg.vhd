@@ -31,7 +31,7 @@ entity status_reg is
      begin
          if (rising_edge(I_CLK)) then
             if (I_WE_F = '1') then          -- write flags (from ALU)
- 	                L <= I_FLAGS;
+                    L <= I_FLAGS;
             elsif (I_WE_SR = '1') then      -- write I/O
                 L <= I_DIN;
             end if;

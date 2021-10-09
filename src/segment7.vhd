@@ -24,34 +24,34 @@ end segment7;
 --      SEG_LED(6)  U4  G
 --
 architecture Behavioral of segment7 is
-	function lmap(VAL: std_logic_vector( 3 downto 0))
-  	      return std_logic_vector is
- 	begin
- 	    case VAL is         --      6543210
- 	        when "0000" =>  return "0111111";   -- 0
- 	        when "0001" =>  return "0000110";   -- 1
- 	        when "0010" =>  return "1011011";   -- 2
- 	        when "0011" =>  return "1001111";   -- 3
- 	        when "0100" =>  return "1100110";   -- 4    ----A----       ----0----
- 	        when "0101" =>  return "1101101";   -- 5    |       |       |       |
- 	        when "0110" =>  return "1111101";   -- 6    F       B       5       1
- 	        when "0111" =>  return "0000111";   -- 7    |       |       |       |
- 	        when "1000" =>  return "1111111";   -- 8    +---G---+       +---6---+
- 	        when "1001" =>  return "1101111";   -- 9    |       |       |       |
- 	        when "1010" =>  return "1110111";   -- A    E       C       4       2
- 	        when "1011" =>  return "1111100";   -- b    |       |       |       |
- 	        when "1100" =>  return "0111001";   -- C    ----D----       ----3----
- 	        when "1101" =>  return "1011110";   -- d
- 	        when "1110" =>  return "1111001";   -- E
- 	        when others =>  return "1110001";   -- F
- 	    end case;
- 	end;
- 	
- 	signal L_CNT            : std_logic_vector(27 downto 0);
- 	signal L_OPC            : std_logic_vector(15 downto 0);
- 	signal L_PC             : std_logic_vector(15 downto 0);
- 	signal L_POS            : std_logic_vector( 3 downto 0);
- 	
+    function lmap(VAL: std_logic_vector( 3 downto 0))
+          return std_logic_vector is
+    begin
+        case VAL is         --      6543210
+            when "0000" =>  return "0111111";   -- 0
+            when "0001" =>  return "0000110";   -- 1
+            when "0010" =>  return "1011011";   -- 2
+            when "0011" =>  return "1001111";   -- 3
+            when "0100" =>  return "1100110";   -- 4    ----A----       ----0----
+            when "0101" =>  return "1101101";   -- 5    |       |       |       |
+            when "0110" =>  return "1111101";   -- 6    F       B       5       1
+            when "0111" =>  return "0000111";   -- 7    |       |       |       |
+            when "1000" =>  return "1111111";   -- 8    +---G---+       +---6---+
+            when "1001" =>  return "1101111";   -- 9    |       |       |       |
+            when "1010" =>  return "1110111";   -- A    E       C       4       2
+            when "1011" =>  return "1111100";   -- b    |       |       |       |
+            when "1100" =>  return "0111001";   -- C    ----D----       ----3----
+            when "1101" =>  return "1011110";   -- d
+            when "1110" =>  return "1111001";   -- E
+            when others =>  return "1110001";   -- F
+        end case;
+    end;
+    
+    signal L_CNT            : std_logic_vector(27 downto 0);
+    signal L_OPC            : std_logic_vector(15 downto 0);
+    signal L_PC             : std_logic_vector(15 downto 0);
+    signal L_POS            : std_logic_vector( 3 downto 0);
+    
  begin
  
      process(I_CLK)    -- 20 MHz
@@ -99,5 +99,5 @@ architecture Behavioral of segment7 is
             end if;
         end if;
     end process;
-	    
+        
 end Behavioral;

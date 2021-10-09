@@ -138,24 +138,24 @@ entity register_file is
                R_SP, S_FLAGS, L_ADR(6 downto 1))
        begin
             case L_ADR(6 downto 1) is
-	            when "000000" => L_S <= R_R00;
-	            when "000001" => L_S <= R_R02;
-	            when "000010" => L_S <= R_R04;
-	            when "000011" => L_S <= R_R06;
-	            when "000100" => L_S <= R_R08;
-	            when "000101" => L_S <= R_R10;
-	            when "000110" => L_S <= R_R12;
-	            when "000111" => L_S <= R_R14;
-	            when "001000" => L_S <= R_R16;
-	            when "001001" => L_S <= R_R18;
-	            when "001010" => L_S <= R_R20;
-	            when "001011" => L_S <= R_R22;
-	            when "001100" => L_S <= R_R24;
-	            when "001101" => L_S <= R_R26;
-	            when "001110" => L_S <= R_R28;
+                when "000000" => L_S <= R_R00;
+                when "000001" => L_S <= R_R02;
+                when "000010" => L_S <= R_R04;
+                when "000011" => L_S <= R_R06;
+                when "000100" => L_S <= R_R08;
+                when "000101" => L_S <= R_R10;
+                when "000110" => L_S <= R_R12;
+                when "000111" => L_S <= R_R14;
+                when "001000" => L_S <= R_R16;
+                when "001001" => L_S <= R_R18;
+                when "001010" => L_S <= R_R20;
+                when "001011" => L_S <= R_R22;
+                when "001100" => L_S <= R_R24;
+                when "001101" => L_S <= R_R26;
+                when "001110" => L_S <= R_R28;
                 when "001111" => L_S <= R_R30;
-	            when "101111" => L_S <= R_SP ( 7 downto 0) & X"00";     -- SPL
-	            when others   => L_S <= S_FLAGS & R_SP (15 downto 8);   -- SR/SPH
+                when "101111" => L_S <= R_SP ( 7 downto 0) & X"00";     -- SPL
+                when others   => L_S <= S_FLAGS & R_SP (15 downto 8);   -- SR/SPH
             end case;
        end process;
               

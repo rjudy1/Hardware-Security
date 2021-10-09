@@ -12,17 +12,17 @@ entity uart_rx is
             Q_DATA      : out std_logic_vector(7 downto 0);
             Q_FLAG      : out std_logic);       -- toggle on every byte received
 end uart_rx;
-	 
+     
 architecture Behavioral of uart_rx is
-	 
-	signal L_POSITION       : std_logic_vector(7 downto 0);     --  sample position
+     
+    signal L_POSITION       : std_logic_vector(7 downto 0);     --  sample position
     signal L_BUF            : std_logic_vector(9 downto 0); 
-	signal L_FLAG           : std_logic; 
-	signal L_SERIN          : std_logic;                -- double clock the input
-	signal L_SER_HOT        : std_logic;                -- double clock the input
-	 
+    signal L_FLAG           : std_logic; 
+    signal L_SERIN          : std_logic;                -- double clock the input
+    signal L_SER_HOT        : std_logic;                -- double clock the input
+     
 begin
-	 
+     
     -- double clock the input data...
     --
     process(I_CLK)
@@ -37,12 +37,12 @@ begin
            end if;
         end if;
     end process;
- 	 
+     
     process(I_CLK, L_POSITION)
         variable START_BIT : boolean;
         variable STOP_BIT  : boolean;
         variable STOP_POS  : boolean;
-	 
+     
     begin
     START_BIT := L_POSITION(7 downto 4) = X"0";
     STOP_BIT  := L_POSITION(7 downto 4) = X"9";
@@ -59,7 +59,7 @@ begin
                     L_BUF  <= "1111111111";
                     if (L_SER_HOT = '0')  then          -- start bit received
                         L_POSITION <= X"01";
- 	                 end if;
+                     end if;
             else
                     L_POSITION <= L_POSITION + X"01";
                     if (L_POSITION(3 downto 0) = "0111") then       -- 1/2 bit

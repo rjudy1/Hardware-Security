@@ -67,7 +67,7 @@ architecture Behavioral of alu is
     signal L_ASR_D   : std_logic_vector( 7 downto 0);   --(signed D) >> 1
     signal L_D8      : std_logic_vector( 7 downto 0);   --D(7 downto 0)
     signal L_DEC_D   : std_logic_vector( 7 downto 0);   --D-1
-	signal L_DOUT    : std_logic_vector(15 downto 0);   
+    signal L_DOUT    : std_logic_vector(15 downto 0);   
     signal L_INC_D   : std_logic_vector( 7 downto 0);   --D+1
     signal L_LSR_D   : std_logic_vector( 7 downto 0);   --(unsigned) D >> 1
     signal L_MASK_I  : std_logic_vector( 7 downto 0);   --1 << IMM
