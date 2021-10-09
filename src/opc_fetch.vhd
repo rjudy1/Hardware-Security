@@ -15,7 +15,7 @@ entity opc_fetch is
             I_INTVEC    : in  std_logic_vector(5 downto 0);         --Interrupt vector number to take (if MSB is 1) 
             I_LOAD_PC   : in  std_logic;                            --If set, load the value on NEW_PC to the PC
             I_NEW_PC    : in  std_logic_vector(15 downto 0);        --Load this PC if LOAD_PC is set
-            I_PM_ADR    : in  std_logic_vector(11 downto 0);
+            I_PM_ADR    : in  std_logic_vector(11 downto 0);        --Program memory address
             I_SKIP      : in  std_logic;                            --Comes from execution stage, invalidates part of the pipeline
     
             Q_OPC       : out std_logic_vector(31 downto 0);
