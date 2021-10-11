@@ -24,7 +24,7 @@ begin
     if(reset='1') then
         count<=1;
         tmp<='0';
-    elsif(clk'event and rising_edge(clk)) then
+    elsif(rising_edge(clk)) then
         count <=count+1;
         if (count = divider) then
             tmp <= NOT tmp;
