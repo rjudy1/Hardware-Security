@@ -112,6 +112,7 @@ architecture Behavioral of alu is
                 I_R, L_RI8, L_RBIT, L_ROR_D, L_SBIW_D, L_SUB_DR, L_SBC_DR,
                 L_SIGN_D, L_SIGN_R, L_SWAP_D, L_XOR_DR)
         begin 
+          --Q_FLAGS <= "00" & I_FLAGS;
             Q_FLAGS(9) <= L_RBIT xor not I_BIT(3);        --DIN[BIT]=BIT[3]
             Q_FLAGS(8) <= ze(L_SUB_DR);                  --D == R for CPSE 
             Q_FLAGS(7 downto 0) <= I_FLAGS;
