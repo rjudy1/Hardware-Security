@@ -31,7 +31,7 @@ generic(    clock_freq  : std_logic_vector(31 downto 0);
             I_CLR       : in  std_logic;
             Q_CE_1      : out std_logic;    -- baud x  1 clock enable
             Q_CE_16     : out std_logic);   -- baud x 16 clock enable
-end component
+end component;
      
 component uart_rx
     port(   I_CLK       : in  std_logic;
@@ -58,7 +58,7 @@ begin
     generic map (
             clock_freq  => "25000000",               --Clock frequency, can be adjusted
             baud_rate   => "38400"                  --baud rate for UART (can be changed)
-    );
+    )
     port map (
             I_CLK       => I_CLK,
             I_CLR       => I_CLR,
