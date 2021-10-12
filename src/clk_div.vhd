@@ -26,7 +26,7 @@ begin
         tmp<='0';
     elsif(rising_edge(clk)) then
         count <=count+1;
-        if (count = divider) then
+        if (count = divider/2) then
             tmp <= NOT tmp;
             count <= 1;
         end if;

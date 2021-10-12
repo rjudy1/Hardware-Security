@@ -163,7 +163,8 @@
     
     L_LEDS(2) <= I_RX;
     L_LEDS(3) <= N_TX;
-    Q_LEDS(3 downto 0) <= N_7_SEGMENT(3 downto 0);-- L_LEDS;
+    Q_LEDS(2 downto 0) <= N_7_SEGMENT(2 downto 0);-- L_LEDS;
+    Q_LEDS(3) <= I_CLK_100;
     Q_7_SEGMENT  <= N_7_SEGMENT when (EXTEND_SWITCH(7) = '1') else S_7_SEGMENT;
     Q_TX <= N_TX;
     
