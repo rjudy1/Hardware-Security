@@ -1,0 +1,68 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0x4F83D0FC4F83D0FC",
+      "device": "xc7z020clg400-1",
+      "gen_directory": "../../../../Blink_Lights.gen/sources_1/bd/MainDesign",
+      "name": "MainDesign",
+      "rev_ctrl_bd_flag": "RevCtrlBdOff",
+      "synth_flow_mode": "Hierarchical",
+      "tool_version": "2021.1",
+      "validated": "true"
+    },
+    "design_tree": {
+      "BasicLEDController_0": ""
+    },
+    "ports": {
+      "LD": {
+        "direction": "O",
+        "left": "3",
+        "right": "0"
+      },
+      "BTN": {
+        "direction": "I",
+        "left": "3",
+        "right": "0"
+      }
+    },
+    "components": {
+      "BasicLEDController_0": {
+        "vlnv": "xilinx.com:module_ref:BasicLEDController:1.0",
+        "xci_name": "MainDesign_BasicLEDController_0_0",
+        "xci_path": "ip\\MainDesign_BasicLEDController_0_0\\MainDesign_BasicLEDController_0_0.xci",
+        "inst_hier_path": "BasicLEDController_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "BasicLEDController",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "BTN": {
+            "direction": "I",
+            "left": "3",
+            "right": "0"
+          },
+          "LD": {
+            "direction": "O",
+            "left": "3",
+            "right": "0"
+          }
+        }
+      }
+    },
+    "nets": {
+      "BTN_1": {
+        "ports": [
+          "BTN",
+          "BasicLEDController_0/BTN"
+        ]
+      },
+      "BasicLEDController_0_LD": {
+        "ports": [
+          "BasicLEDController_0/LD",
+          "LD"
+        ]
+      }
+    }
+  }
+}

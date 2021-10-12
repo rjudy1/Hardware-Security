@@ -1,0 +1,68 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0x193B57D1193B57D1",
+      "device": "xc7z020clg400-1",
+      "gen_directory": "../../../../Seven_Seg_test.gen/sources_1/bd/Seven_Seg_Main",
+      "name": "Seven_Seg_Main",
+      "rev_ctrl_bd_flag": "RevCtrlBdOff",
+      "synth_flow_mode": "Hierarchical",
+      "tool_version": "2021.1",
+      "validated": "true"
+    },
+    "design_tree": {
+      "Seven_Seg_Driver_0": ""
+    },
+    "ports": {
+      "LED": {
+        "direction": "O",
+        "left": "6",
+        "right": "0"
+      },
+      "BTN": {
+        "direction": "I",
+        "left": "3",
+        "right": "0"
+      }
+    },
+    "components": {
+      "Seven_Seg_Driver_0": {
+        "vlnv": "xilinx.com:module_ref:Seven_Seg_Driver:1.0",
+        "xci_name": "Seven_Seg_Main_Seven_Seg_Driver_0_0",
+        "xci_path": "ip\\Seven_Seg_Main_Seven_Seg_Driver_0_0\\Seven_Seg_Main_Seven_Seg_Driver_0_0.xci",
+        "inst_hier_path": "Seven_Seg_Driver_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "Seven_Seg_Driver",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "Data_in": {
+            "direction": "I",
+            "left": "3",
+            "right": "0"
+          },
+          "LED": {
+            "direction": "O",
+            "left": "6",
+            "right": "0"
+          }
+        }
+      }
+    },
+    "nets": {
+      "BTN_1": {
+        "ports": [
+          "BTN",
+          "Seven_Seg_Driver_0/Data_in"
+        ]
+      },
+      "Seven_Seg_Driver_0_LED": {
+        "ports": [
+          "Seven_Seg_Driver_0/LED",
+          "LED"
+        ]
+      }
+    }
+  }
+}
