@@ -2,6 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.numeric_std.ALL;
 
 entity uart is
     generic(CLOCK_FREQ  : std_logic_vector(31 downto 0);
@@ -56,8 +57,8 @@ end component;
 begin
     bg : baudgen
     generic map (
-            clock_freq  => "25000000",               --Clock frequency, can be adjusted
-            baud_rate   => "38400"                  --baud rate for UART (can be changed)
+            clock_freq  => CLOCK_FREQ,              --Clock frequency, can be adjusted
+            baud_rate   => BAUD_RATE               --baud rate for UART (can be changed)
     )
     port map (
             I_CLK       => I_CLK,
