@@ -84,7 +84,8 @@
     
   attribute mark_debug : string;
   attribute mark_debug of C_PC : signal is "true";
-  attribute mark_debug of I_SWITCH : signal is "true";
+  attribute mark_debug of Q_LEDS : signal is "true";
+  attribute mark_debug of Q_7_Segment : signal is "true";
   
     
   begin
@@ -163,8 +164,9 @@
     
     L_LEDS(2) <= I_RX;
     L_LEDS(3) <= N_TX;
-    Q_LEDS(2 downto 0) <= N_7_SEGMENT(2 downto 0);-- L_LEDS;
-    Q_LEDS(3) <= I_CLK_100;
+    Q_LEDS(1 downto 0) <= N_7_SEGMENT(1 downto 0);-- L_LEDS;
+    Q_LEDS(3) <= C_PC(0);
+    Q_LEDS(2) <= I_CLK_100;
     Q_7_SEGMENT  <= N_7_SEGMENT when (EXTEND_SWITCH(7) = '1') else S_7_SEGMENT;
     Q_TX <= N_TX;
     
