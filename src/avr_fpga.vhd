@@ -90,7 +90,7 @@
     
   begin
   
-    EXTEND_SWITCH  <= "00000000" & I_SWITCH;
+    EXTEND_SWITCH  <= "11000000" & I_SWITCH;
     
     cpu : cpu_core
     port map(   I_CLK       => L_CLK,
@@ -164,10 +164,10 @@
     
     L_LEDS(2) <= I_RX;
     L_LEDS(3) <= N_TX;
-    Q_LEDS(1 downto 0) <= N_7_SEGMENT(1 downto 0);-- L_LEDS;
-    Q_LEDS(3) <= C_PC(0);
-    Q_LEDS(2) <= I_CLK_100;
-    Q_7_SEGMENT  <= N_7_SEGMENT when (EXTEND_SWITCH(7) = '1') else S_7_SEGMENT;
+    Q_LEDS(1 downto 0) <= L_LEDS(1 downto 0);
+    Q_LEDS(2) <= C_PC(0);
+    Q_LEDS(3) <= I_CLK_100;
+    Q_7_SEGMENT  <= N_7_SEGMENT when (EXTEND_SWITCH(0) = '1') else S_7_SEGMENT;
     Q_TX <= N_TX;
     
 end Behavioral;

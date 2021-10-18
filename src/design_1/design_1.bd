@@ -1,18 +1,17 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x9DA5C026F6FFB7A9",
+      "boundary_crc": "0x8AAE2ADE0CD4F27",
       "device": "xc7z020clg400-1",
       "name": "design_1",
       "rev_ctrl_bd_flag": "RevCtrlBdOff",
       "synth_flow_mode": "Hierarchical",
-      "tool_version": "2021.1"
+      "tool_version": "2021.1",
+      "validated": "true"
     },
     "design_tree": {
-      "clk_div_0": "",
-      "xlslice_0": "",
-      "xlslice_1": "",
-      "avr_fpga_0": ""
+      "avr_fpga_0": "",
+      "clk_div_0": ""
     },
     "ports": {
       "sysclk": {
@@ -22,8 +21,24 @@
           "ASSOCIATED_RESET": {
             "value": "sw"
           },
+          "CLK_DOMAIN": {
+            "value": "design_1_sysclk",
+            "value_src": "default"
+          },
           "FREQ_HZ": {
             "value": "125000000"
+          },
+          "FREQ_TOLERANCE_HZ": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "INSERT_VIP": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "PHASE": {
+            "value": "0.0",
+            "value_src": "default"
           }
         }
       },
@@ -45,101 +60,11 @@
       },
       "sw": {
         "direction": "I",
-        "left": "3",
+        "left": "1",
         "right": "0"
       }
     },
     "components": {
-      "clk_div_0": {
-        "vlnv": "xilinx.com:module_ref:clk_div:1.0",
-        "xci_name": "design_1_clk_div_0_0",
-        "xci_path": "ip\\design_1_clk_div_0_0\\design_1_clk_div_0_0.xci",
-        "inst_hier_path": "clk_div_0",
-        "parameters": {
-          "divider": {
-            "value": "125000000"
-          }
-        },
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "clk_div",
-          "boundary_crc": "0x0"
-        },
-        "ports": {
-          "clk": {
-            "type": "clk",
-            "direction": "I",
-            "parameters": {
-              "FREQ_HZ": {
-                "value": "125000000"
-              },
-              "CLK_DOMAIN": {
-                "value": "design_1_clk_0",
-                "value_src": "default_prop"
-              }
-            }
-          },
-          "reset": {
-            "type": "rst",
-            "direction": "I",
-            "parameters": {
-              "POLARITY": {
-                "value": "ACTIVE_LOW",
-                "value_src": "user_prop"
-              }
-            }
-          },
-          "clock_output": {
-            "type": "clk",
-            "direction": "O",
-            "parameters": {
-              "FREQ_HZ": {
-                "value": "1"
-              }
-            }
-          }
-        }
-      },
-      "xlslice_0": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "xci_name": "design_1_xlslice_0_0",
-        "xci_path": "ip\\design_1_xlslice_0_0\\design_1_xlslice_0_0.xci",
-        "inst_hier_path": "xlslice_0",
-        "parameters": {
-          "DIN_FROM": {
-            "value": "2"
-          },
-          "DIN_TO": {
-            "value": "2"
-          },
-          "DIN_WIDTH": {
-            "value": "4"
-          },
-          "DOUT_WIDTH": {
-            "value": "1"
-          }
-        }
-      },
-      "xlslice_1": {
-        "vlnv": "xilinx.com:ip:xlslice:1.0",
-        "xci_name": "design_1_xlslice_1_0",
-        "xci_path": "ip\\design_1_xlslice_1_0\\design_1_xlslice_1_0.xci",
-        "inst_hier_path": "xlslice_1",
-        "parameters": {
-          "DIN_FROM": {
-            "value": "1"
-          },
-          "DIN_TO": {
-            "value": "0"
-          },
-          "DIN_WIDTH": {
-            "value": "4"
-          },
-          "DOUT_WIDTH": {
-            "value": "2"
-          }
-        }
-      },
       "avr_fpga_0": {
         "vlnv": "xilinx.com:module_ref:avr_fpga:1.0",
         "xci_name": "design_1_avr_fpga_0_0",
@@ -152,7 +77,21 @@
         },
         "ports": {
           "I_CLK_100": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "FREQ_HZ": {
+                "value": "10",
+                "value_src": "user_prop"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "default_prop"
+              },
+              "CLK_DOMAIN": {
+                "value": "design_1_clk_div_0_0_clock_output",
+                "value_src": "default_prop"
+              }
+            }
           },
           "I_SWITCH": {
             "direction": "I",
@@ -176,20 +115,59 @@
             "direction": "O"
           }
         }
+      },
+      "clk_div_0": {
+        "vlnv": "xilinx.com:module_ref:clk_div:1.0",
+        "xci_name": "design_1_clk_div_0_0",
+        "xci_path": "ip\\design_1_clk_div_0_0\\design_1_clk_div_0_0.xci",
+        "inst_hier_path": "clk_div_0",
+        "parameters": {
+          "divider": {
+            "value": "12500000"
+          }
+        },
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "clk_div",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "FREQ_HZ": {
+                "value": "125000000"
+              },
+              "CLK_DOMAIN": {
+                "value": "design_1_sysclk",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "clock_output": {
+            "type": "clk",
+            "direction": "O",
+            "parameters": {
+              "FREQ_HZ": {
+                "value": "10"
+              }
+            }
+          }
+        }
       }
     },
     "nets": {
-      "Din_0_1": {
-        "ports": [
-          "sw",
-          "xlslice_0/Din",
-          "xlslice_1/Din"
-        ]
-      },
       "I_RX_0_1": {
         "ports": [
           "rx",
           "avr_fpga_0/I_RX"
+        ]
+      },
+      "I_SWITCH_0_1": {
+        "ports": [
+          "sw",
+          "avr_fpga_0/I_SWITCH"
         ]
       },
       "avr_fpga_0_Q_7_SEGMENT": {
@@ -220,18 +198,6 @@
         "ports": [
           "clk_div_0/clock_output",
           "avr_fpga_0/I_CLK_100"
-        ]
-      },
-      "xlslice_0_Dout": {
-        "ports": [
-          "xlslice_0/Dout",
-          "clk_div_0/reset"
-        ]
-      },
-      "xlslice_1_Dout": {
-        "ports": [
-          "xlslice_1/Dout",
-          "avr_fpga_0/I_SWITCH"
         ]
       }
     }

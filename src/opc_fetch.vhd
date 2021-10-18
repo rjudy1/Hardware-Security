@@ -33,7 +33,7 @@ component prog_mem
 
             I_WAIT      : in  std_logic;
             I_PC        : in  std_logic_vector (15 downto 0);
-           I_PM_ADR    : in  std_logic_vector (11 downto 0);
+            I_PM_ADR    : in  std_logic_vector (11 downto 0);
             Q_OPC       : out std_logic_vector (31 downto 0);
             Q_PC        : out std_logic_vector (15 downto 0);
             Q_PM_DOUT   : out std_logic_vector ( 7 downto 0));
@@ -51,7 +51,6 @@ signal L_WAIT           : std_logic;
 	
 	attribute mark_debug : string;
 	attribute mark_debug of L_NEXT_PC : signal is "true";
-	attribute mark_debug of P_OPC : signal is "true";
 	attribute mark_debug of I_CLR : signal is "true";
 	
 begin

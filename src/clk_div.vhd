@@ -7,7 +7,8 @@ generic (
     divider : integer
     );
 port ( 
-    clk,reset: in std_logic;
+    clk : in std_logic;
+    --reset: in std_logic;
     clock_output: out std_logic
     );
 end clk_div;
@@ -19,12 +20,12 @@ signal tmp : std_logic := '0';
   
 begin
   
-process(clk,reset)
+process(clk)
 begin
-    if(reset='1') then
-        count<=1;
-        tmp<='0';
-    elsif(rising_edge(clk)) then
+--    if(reset='1') then
+--        count<=1;
+--        tmp<='0';
+    if(rising_edge(clk)) then
         count <=count+1;
         if (count = divider/2) then
             tmp <= NOT tmp;
