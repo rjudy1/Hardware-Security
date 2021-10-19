@@ -15,18 +15,19 @@ end segment7;
 
 --      Signal      Loc Alt
 ---------------------------
---      SEG_LED(0)  V3  A
---      SEG_LED(1)  V4  B
---      SEG_LED(2)  W3  C
---      SEG_LED(3)  T4  D
---      SEG_LED(4)  T3  E
---      SEG_LED(5)  U3  F
---      SEG_LED(6)  U4  G
+--      SEG_LED(0)  W10  A
+--      SEG_LED(1)  Y16  B
+--      SEG_LED(2)  Y19  C
+--      SEG_LED(3)  U18  D
+--      SEG_LED(4)  W8  E
+--      SEG_LED(5)  Y8  F
+--      SEG_LED(6)  W9  G
 --
 architecture Behavioral of segment7 is
     function lmap(VAL: std_logic_vector( 3 downto 0))
           return std_logic_vector is
     begin
+        --Seven Segment decoder, 1 on, 0 off
         case VAL is         --      6543210
             when "0000" =>  return "0111111";   -- 0
             when "0001" =>  return "0000110";   -- 1
@@ -57,24 +58,27 @@ architecture Behavioral of segment7 is
      process(I_CLK)    -- 20 MHz
      begin
          if (rising_edge(I_CLK)) then
+             --reset/clear
              if (I_CLR = '1') then
                  L_POS <= "0000";
                  L_CNT <= X"0000000";
-                 Q_7_SEGMENT <= "1111111";
+                 Q_7_SEGMENT <= "1111111"; --blank
+             --Updates Seven Seg
              else
-                 L_CNT <= L_CNT + X"0000001";
-                 if (L_CNT =  X"0C00000") then
+                 L_CNT <= L_CNT + X"0000001";    --increments count
+                 if (L_CNT =  X"0C00000") then   --clears value
                      Q_7_SEGMENT <= "1111111";      -- blank
-                 elsif (L_CNT =  X"1000000") then
+                 elsif (L_CNT =  X"1000000") then  --sets new value
                      L_CNT <= X"0000000";
                      L_POS <= L_POS + "0001";
+                     --rotates through program counter hex digits
                      case L_POS is
                         when "0000" =>  -- blank
                             Q_7_SEGMENT <= "1111111";
                         when "0001" =>
                             L_PC <= I_PC;       -- sample PC
                             L_OPC <= I_OPC;     -- sample OPC
-                            Q_7_SEGMENT <= not lmap(L_PC(15 downto 12));
+                            Q_7_SEGMENT <= not lmap(L_PC(15 downto 12)); --has to not because common +
                         when "0010" =>
                             Q_7_SEGMENT <= not lmap(L_PC(11 downto  8));
                         when "0011" =>
