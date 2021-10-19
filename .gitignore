@@ -21,3 +21,4 @@
 !*/*.c
 !Makefile
 !*.xdc
+!*.docx
