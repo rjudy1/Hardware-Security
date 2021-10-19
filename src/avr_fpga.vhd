@@ -12,6 +12,7 @@
  entity avr_fpga is
      port (  I_CLK_100   : in  std_logic;
              I_SWITCH    : in  std_logic_vector(1 downto 0); --expected 10
+             I_BUTTONS   : in  std_logic_vector(3 downto 0);
              I_RX        : in  std_logic;
              Q_LEDS      : out std_logic_vector(3 downto 0);
              Q_7_SEGMENT : out std_logic_vector(6 downto 0);
@@ -50,6 +51,7 @@
              I_WR_IO     : in  std_logic;
              I_SWITCH    : in  std_logic_vector( 7 downto 0);
              I_RX        : in  std_logic;
+             I_BUTTONS   : in  std_logic(3 downto 0);
              Q_7_SEGMENT : out std_logic_vector( 6 downto 0);
              Q_DOUT      : out std_logic_vector( 7 downto 0);
              Q_INTVEC    : out std_logic_vector(5 downto 0);
@@ -114,6 +116,7 @@
                 I_RX        => I_RX,
                 I_SWITCH    => EXTEND_SWITCH(7 downto 0),
                 I_WR_IO     => C_WE_IO,
+                I_BUTTONS   => I_BUTTONS,
     
                 Q_7_SEGMENT => N_7_SEGMENT,
                 Q_DOUT      => N_DOUT,

@@ -12,6 +12,7 @@ entity io is
            I_RD_IO     : in  std_logic;                             --Read strobe, set when need to read from ADR_IO
            I_RX        : in  std_logic;                             --RX for UART (UART serial input, active low)
            I_WR_IO     : in  std_logic;                             --Write strobe, set when need to write to ADR_IO with value on DIN
+           I_BUTTONS   : in  std_logic_vector(3 downto 0);
 
            Q_7_SEGMENT : out std_logic_vector(6 downto 0);
            Q_DOUT      : out std_logic_vector(7 downto 0);          --Data output from register designated by ADR_IO when RD_IO is high
@@ -104,6 +105,8 @@ begin
             
             when X"36"  =>  Q_DOUT  <= I_SWITCH;                    --PINB
             
+            when X"35"  =>  Q_DOUT <= "0000" & I_BUTTONS;                    -- port c tied to buttons
+            
             when others =>  Q_DOUT  <= X"AA";                       --For any invalid address, AA is returned
         end case;
     end process;
@@ -127,6 +130,7 @@ begin
                     when X"43"  =>  L_RX_INT_ENABLED <= I_DIN(0);
                                     L_TX_INT_ENABLED <= I_DIN(1);
                                     
+                    
                     when others =>  --Intentionally blank
                 end case;
             end if;
