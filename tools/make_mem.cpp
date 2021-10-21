@@ -1,7 +1,7 @@
 #include "assert.h"
 #include "stdio.h"
-#include "stdint.h"
-#include "string.h"
+#include <stdint.h>
+#include <string.h>
 #include <iostream>
 
 const char * hex_file = 0;

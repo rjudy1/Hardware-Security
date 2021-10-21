@@ -51,7 +51,7 @@
              I_WR_IO     : in  std_logic;
              I_SWITCH    : in  std_logic_vector( 7 downto 0);
              I_RX        : in  std_logic;
-             I_BUTTONS   : in  std_logic(3 downto 0);
+             I_BUTTONS   : in  std_logic_vector(3 downto 0);
              Q_7_SEGMENT : out std_logic_vector( 6 downto 0);
              Q_DOUT      : out std_logic_vector( 7 downto 0);
              Q_INTVEC    : out std_logic_vector(5 downto 0);

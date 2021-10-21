@@ -16,6 +16,8 @@
 int main(void)
 {
 	DDRB = 0b11111111;					//PORTB is set to write (set as output)
+	DDRC = 0b00000000;					// PORTB is set as input
+	if (PORTC) {
 	while(1)
     {
 		PORTB = 0b00000000;				//PORTB is all low
@@ -23,4 +25,5 @@ int main(void)
 		PORTB = 0b11111111;				//PORTB is all high
 		_delay_ms(40);					//Pause for 40 ms
     }
+	}
 }

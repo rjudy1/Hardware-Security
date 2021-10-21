@@ -129,7 +129,6 @@ begin
                     
                     when X"43"  =>  L_RX_INT_ENABLED <= I_DIN(0);
                                     L_TX_INT_ENABLED <= I_DIN(1);
-                                    
                     
                     when others =>  --Intentionally blank
                 end case;
