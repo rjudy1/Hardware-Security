@@ -19,7 +19,7 @@ int main(void)
 	DDRB = 0b11111111;					//PORTB is set to write (set as output)
 	while(1)
     {
-		for(int i = 0; i <= 128; i=i*2)
+		for(int i = 1; i <= 128; i=i*2)
 		{
 					PORTB = i;				//PORTB is all low
 					_delay_ms(60);					//Pause for 40 ms
