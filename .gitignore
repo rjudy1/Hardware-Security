@@ -23,7 +23,9 @@
 !**/**/**/*.c
 !**/**/**/*.cpp
 !test/C_Programs/
-!test/C_Programs/*/*.vhd
+!test/C_Programs/AddPortTest/
+!test/C_Programs/AddPortTest/*.vhd
+!test/C_Programs/HelloWorld/
 !Makefile
 !*.xdc
 !*.docx
