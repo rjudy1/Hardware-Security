@@ -73,6 +73,8 @@ begin
     iord: process(I_ADR_IO, I_SWITCH, U_RX_DATA, U_RX_READY, L_RX_INT_ENABLED, U_TX_BUSY, L_TX_INT_ENABLED)
     begin
         case I_ADR_IO is
+            when X"35"  =>  Q_DOUT <= "0000" & I_BUTTONS;                    -- port c tied to buttons
+        
             when X"2A"  => Q_DOUT   <=                              --UCSRB:        (Note: Look at CPU register UCSRB in AVR datasheet for explaination)
                                         L_RX_INT_ENABLED            --RX complete int enabled
                                         & L_TX_INT_ENABLED          --TX complete int enabled
@@ -105,7 +107,6 @@ begin
             
             when X"36"  =>  Q_DOUT  <= I_SWITCH;                    --PINB
             
-            when X"35"  =>  Q_DOUT <= "0000" & I_BUTTONS;                    -- port c tied to buttons
             
             when others =>  Q_DOUT  <= X"AA";                       --For any invalid address, AA is returned
         end case;

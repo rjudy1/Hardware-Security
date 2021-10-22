@@ -4,6 +4,7 @@
 !simu/
 !test/
 !tools/
+!tools/make_mem.exe
 !.gitignore
 !**/*.md
 !README.md
@@ -17,8 +18,12 @@
 !src/extra/*.vhd
 !*.vhd
 !*.xlsx
-!*/*.cpp
-!*/*.c
+!**/*.cpp
+!**/*.c
+!**/**/**/*.c
+!**/**/**/*.cpp
+!test/C_Programs/
+!test/C_Programs/*/*.vhd
 !Makefile
 !*.xdc
 !*.docx

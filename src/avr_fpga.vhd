@@ -83,11 +83,15 @@
   signal L_CLR_N          : std_logic := '0';     -- reset,  active low
   signal L_C1_N           : std_logic := '0';     -- switch debounce, active low
   signal L_C2_N           : std_logic := '0';     -- switch debounce, active low
+  signal L_BUTTONS        : std_logic_vector(3 downto 0);
+  signal L_CLR_BN, L_C1_BN, L_C2_BN : std_logic := '0';
     
   attribute mark_debug : string;
   attribute mark_debug of C_PC : signal is "true";
   attribute mark_debug of Q_LEDS : signal is "true";
   attribute mark_debug of Q_7_Segment : signal is "true";
+  attribute mark_debug of I_BUTTONS : signal is "true";
+  attribute mark_debug of L_BUTTONS : signal is "true";
   
     
   begin
@@ -116,7 +120,7 @@
                 I_RX        => I_RX,
                 I_SWITCH    => EXTEND_SWITCH(7 downto 0),
                 I_WR_IO     => C_WE_IO,
-                I_BUTTONS   => I_BUTTONS,
+                I_BUTTONS   => L_BUTTONS,
     
                 Q_7_SEGMENT => N_7_SEGMENT,
                 Q_DOUT      => N_DOUT,
@@ -163,11 +167,28 @@
         end if;
     end process;
     
+    deb1 : process(L_CLK)
+    begin
+        if (rising_edge(L_CLK)) then
+            -- switch debounce
+            if (I_BUTTONS(3 downto 0) /= "0000") then    -- pushed
+                L_CLR_BN <= '0';
+                L_C1_BN  <= '0';
+                L_C2_BN  <= '0';
+            else                                                    -- released
+                L_CLR_BN <= L_C2_BN;
+                L_C2_BN  <= L_C1_BN;
+                L_C1_BN  <= '1';
+            end if;
+        end if;
+    end process;
+    
     L_CLR <= not L_CLR_N;
     
+    L_BUTTONS <= "000" & not L_CLR_BN;
     L_LEDS(2) <= I_RX;
     L_LEDS(3) <= N_TX;
-    Q_LEDS(1 downto 0) <= L_LEDS(1 downto 0);
+    Q_LEDS(1 downto 0) <= I_BUTTONS(1 downto 0);
     Q_LEDS(2) <= C_PC(0);
     Q_LEDS(3) <= I_CLK_100;
     Q_7_SEGMENT  <= N_7_SEGMENT when (EXTEND_SWITCH(0) = '1') else S_7_SEGMENT;
