@@ -49,6 +49,7 @@ entity status_reg is
               when "101" => Q_CC <= L(5) xor I_COND(3);
               when "110" => Q_CC <= L(6) xor I_COND(3);
               when "111" => Q_CC <= L(7) xor I_COND(3);
+              when others => -- Do nothing. This line is only here to make the simulator happy.
           end case;
       end process;
             
