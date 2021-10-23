@@ -22,7 +22,7 @@ int main(void)
 		for(int i = 1; i <= 128; i=i*2)
 		{
 					PORTB = i;				//PORTB is all low
-					_delay_ms(60);					//Pause for 40 ms
+					_delay_ms(60);					//Pause for 60 ms
 		}
     }
 }
