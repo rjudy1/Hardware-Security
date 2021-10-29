@@ -66,7 +66,6 @@ set_property -dict {PACKAGE_PIN T11 IOSTANDARD LVCMOS33} [get_ports {tx}];
 
 ##Other Pins possibly needed for UART
 set_property -dict {PACKAGE_PIN W14 IOSTANDARD LVCMOS33} [get_ports {DTR}];
-set_property -dict {PACKAGE_PIN T10 IOSTANDARD LVCMOS33} [get_ports {FiveV}];
 
 ##Pmod Header JA
 
