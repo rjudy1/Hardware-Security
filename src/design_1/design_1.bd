@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x859956FEC36FFB53",
+      "boundary_crc": "0x354781BA592D4550",
       "device": "xc7z020clg400-1",
       "name": "design_1",
       "rev_ctrl_bd_flag": "RevCtrlBdOff",
@@ -11,7 +11,7 @@
     },
     "design_tree": {
       "clk_wiz_0": "",
-      "avr_fpga_0": ""
+      "avr_fpga_1": ""
     },
     "ports": {
       "sysclk": {
@@ -67,6 +67,11 @@
         "direction": "I",
         "left": "3",
         "right": "0"
+      },
+      "SSSel": {
+        "direction": "O",
+        "left": "3",
+        "right": "0"
       }
     },
     "components": {
@@ -111,11 +116,11 @@
           }
         }
       },
-      "avr_fpga_0": {
+      "avr_fpga_1": {
         "vlnv": "xilinx.com:module_ref:avr_fpga:1.0",
-        "xci_name": "design_1_avr_fpga_0_0",
-        "xci_path": "ip\\design_1_avr_fpga_0_0\\design_1_avr_fpga_0_0.xci",
-        "inst_hier_path": "avr_fpga_0",
+        "xci_name": "design_1_avr_fpga_1_0",
+        "xci_path": "ip\\design_1_avr_fpga_1_0\\design_1_avr_fpga_1_0.xci",
+        "inst_hier_path": "avr_fpga_1",
         "reference_info": {
           "ref_type": "hdl",
           "ref_name": "avr_fpga",
@@ -157,6 +162,11 @@
             "left": "3",
             "right": "0"
           },
+          "Q_7_SEG_SEL": {
+            "direction": "O",
+            "left": "3",
+            "right": "0"
+          },
           "Q_7_SEGMENT": {
             "direction": "O",
             "left": "6",
@@ -169,46 +179,52 @@
       }
     },
     "nets": {
-      "I_BUTTONS_0_1": {
+      "avr_fpga_1_Q_7_SEGMENT": {
         "ports": [
-          "btn",
-          "avr_fpga_0/I_BUTTONS"
-        ]
-      },
-      "I_RX_0_1": {
-        "ports": [
-          "rx",
-          "avr_fpga_0/I_RX"
-        ]
-      },
-      "I_SWITCH_0_1": {
-        "ports": [
-          "sw",
-          "avr_fpga_0/I_SWITCH"
-        ]
-      },
-      "avr_fpga_0_Q_7_SEGMENT": {
-        "ports": [
-          "avr_fpga_0/Q_7_SEGMENT",
+          "avr_fpga_1/Q_7_SEGMENT",
           "SevenSeg"
         ]
       },
-      "avr_fpga_0_Q_LEDS": {
+      "avr_fpga_1_Q_7_SEG_SEL": {
         "ports": [
-          "avr_fpga_0/Q_LEDS",
+          "avr_fpga_1/Q_7_SEG_SEL",
+          "SSSel"
+        ]
+      },
+      "avr_fpga_1_Q_LEDS": {
+        "ports": [
+          "avr_fpga_1/Q_LEDS",
           "led"
         ]
       },
-      "avr_fpga_0_Q_TX": {
+      "avr_fpga_1_Q_TX": {
         "ports": [
-          "avr_fpga_0/Q_TX",
+          "avr_fpga_1/Q_TX",
           "tx"
+        ]
+      },
+      "btn_1": {
+        "ports": [
+          "btn",
+          "avr_fpga_1/I_BUTTONS"
         ]
       },
       "clk_wiz_0_clk_out1": {
         "ports": [
           "clk_wiz_0/clk_out1",
-          "avr_fpga_0/I_CLK_100"
+          "avr_fpga_1/I_CLK_100"
+        ]
+      },
+      "rx_1": {
+        "ports": [
+          "rx",
+          "avr_fpga_1/I_RX"
+        ]
+      },
+      "sw_1": {
+        "ports": [
+          "sw",
+          "avr_fpga_1/I_SWITCH"
         ]
       },
       "sysclk_1": {

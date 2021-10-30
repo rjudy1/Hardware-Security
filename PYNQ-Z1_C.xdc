@@ -42,10 +42,10 @@ set_property PACKAGE_PIN Y16 [get_ports {SevenSeg[1]}]
 set_property PACKAGE_PIN W10 [get_ports {SevenSeg[0]}]
 
 ##Seven Seg Select
-#set_property -dict { PACKAGE_PIN F20   IOSTANDARD LVCMOS33 } [get_ports { SSSel[3] }]; #left
-#set_property -dict { PACKAGE_PIN F19   IOSTANDARD LVCMOS33 } [get_ports { SSSel[2] }]; #left middle
-#set_property -dict { PACKAGE_PIN U19   IOSTANDARD LVCMOS33 } [get_ports { SSSel[1] }]; #right middle
-#set_property -dict { PACKAGE_PIN Y17   IOSTANDARD LVCMOS33 } [get_ports { SSSel[0] }]; #right
+set_property -dict { PACKAGE_PIN F20   IOSTANDARD LVCMOS33 } [get_ports { SSSel[3] }]; #left
+set_property -dict { PACKAGE_PIN F19   IOSTANDARD LVCMOS33 } [get_ports { SSSel[2] }]; #left middle
+set_property -dict { PACKAGE_PIN U19   IOSTANDARD LVCMOS33 } [get_ports { SSSel[1] }]; #right middle
+set_property -dict { PACKAGE_PIN Y17   IOSTANDARD LVCMOS33 } [get_ports { SSSel[0] }]; #right
 
 ##LEDs
 

@@ -2,6 +2,7 @@ project_1/
 
 src/design_1/
 !src/design_1/*.bd
+!src/*vhd
 
 test/AES
 !test/AES/AtmelAes/AtmelAes/*.c

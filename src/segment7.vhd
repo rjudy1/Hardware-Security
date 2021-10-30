@@ -10,7 +10,8 @@ entity segment7 is
            I_OPC        : in  std_logic_vector(15 downto 0);
            I_PC         : in  std_logic_vector(15 downto 0);
 
-           Q_7_SEGMENT : out std_logic_vector( 6 downto 0));
+           Q_7_SEG_SEL  : out std_logic_vector(3 downto 0);
+           Q_7_SEGMENT  : out std_logic_vector( 6 downto 0));
 end segment7;
 
 --      Signal      Loc Alt
@@ -78,22 +79,30 @@ architecture Behavioral of segment7 is
                         when "0001" =>
                             L_PC <= I_PC;       -- sample PC
                             L_OPC <= I_OPC;     -- sample OPC
+                            Q_7_SEG_SEL <= "1000";
                             Q_7_SEGMENT <= not lmap(L_PC(15 downto 12)); --has to not because common +
                         when "0010" =>
+                            Q_7_SEG_SEL <= "0100";
                             Q_7_SEGMENT <= not lmap(L_PC(11 downto  8));
                         when "0011" =>
+                            Q_7_SEG_SEL <= "0010";
                             Q_7_SEGMENT <= not lmap(L_PC( 7 downto  4));
                         when "0100" =>
+                            Q_7_SEG_SEL <= "0001";
                             Q_7_SEGMENT <= not lmap(L_PC( 3 downto  0));
                         when "0101" =>  -- minus
                             Q_7_SEGMENT <= "0111111";
                         when "0110" =>
+                            Q_7_SEG_SEL <= "1000";
                             Q_7_SEGMENT <= not lmap(L_OPC(15 downto 12));
                         when "0111" =>
+                            Q_7_SEG_SEL <= "0100";
                             Q_7_SEGMENT <= not lmap(L_OPC(11 downto  8));
                         when "1000" =>
+                            Q_7_SEG_SEL <= "0010";
                             Q_7_SEGMENT <= not lmap(L_OPC( 7 downto  4));
                         when "1001" =>
+                            Q_7_SEG_SEL <= "0001";
                             Q_7_SEGMENT <= not lmap(L_OPC( 3 downto  0));
                             L_POS <= "0000";
                         when others =>

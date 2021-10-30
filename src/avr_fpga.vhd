@@ -15,6 +15,7 @@
              I_BUTTONS   : in  std_logic_vector(3 downto 0);
              I_RX        : in  std_logic;
              Q_LEDS      : out std_logic_vector(3 downto 0);
+             Q_7_SEG_SEL : out std_logic_vector(3 downto 0);
              Q_7_SEGMENT : out std_logic_vector(6 downto 0);
              Q_TX        : out std_logic);
  end avr_fpga;
@@ -52,6 +53,7 @@
              I_SWITCH    : in  std_logic_vector( 7 downto 0);
              I_RX        : in  std_logic;
              I_BUTTONS   : in  std_logic_vector(3 downto 0);
+             Q_7_SEG_SEL : out std_logic_vector(3 downto 0);
              Q_7_SEGMENT : out std_logic_vector( 6 downto 0);
              Q_DOUT      : out std_logic_vector( 7 downto 0);
              Q_INTVEC    : out std_logic_vector(5 downto 0);
@@ -70,7 +72,8 @@
             I_CLR        : in  std_logic;
             I_OPC        : in  std_logic_vector(15 downto 0);
             I_PC         : in  std_logic_vector(15 downto 0);
- 
+            
+            Q_7_SEG_SEL  : out std_logic_vector( 3 downto 0);
             Q_7_SEGMENT  : out std_logic_vector( 6 downto 0));
   end component;
     
@@ -84,13 +87,17 @@
   signal L_C1_N           : std_logic := '0';     -- switch debounce, active low
   signal L_C2_N           : std_logic := '0';     -- switch debounce, active low
   signal L_BUTTONS        : std_logic_vector(3 downto 0);
-  signal L_CLR_BN, L_C1_BN, L_C2_BN : std_logic := '0';
+  signal L_CLR_BN3, L_C1_BN3, L_C2_BN3 : std_logic := '0';
+  signal L_CLR_BN2, L_C1_BN2, L_C2_BN2 : std_logic := '0';
+  signal L_CLR_BN1, L_C1_BN1, L_C2_BN1 : std_logic := '0';
+  signal L_CLR_BN0, L_C1_BN0, L_C2_BN0 : std_logic := '0';
+  signal L_7_SEL          : std_logic_vector(3 downto 0);
+  signal S_7_SEL          : std_logic_vector(3 downto 0);
     
   attribute mark_debug : string;
   attribute mark_debug of C_PC : signal is "true";
   attribute mark_debug of Q_LEDS : signal is "true";
   attribute mark_debug of Q_7_Segment : signal is "true";
-  attribute mark_debug of I_BUTTONS : signal is "true";
   attribute mark_debug of L_BUTTONS : signal is "true";
   
     
@@ -121,7 +128,7 @@
                 I_SWITCH    => EXTEND_SWITCH(7 downto 0),
                 I_WR_IO     => C_WE_IO,
                 I_BUTTONS   => L_BUTTONS,
-    
+                Q_7_SEG_SEL => L_7_SEL,
                 Q_7_SEGMENT => N_7_SEGMENT,
                 Q_DOUT      => N_DOUT,
                 Q_INTVEC    => N_INTVEC,
@@ -133,7 +140,8 @@
                 I_CLR       => L_CLR,
                 I_OPC       => C_OPC,
                 I_PC        => C_PC,
-    
+            
+                Q_7_SEG_SEL => S_7_SEL,
                 Q_7_SEGMENT => S_7_SEGMENT);
         
         -- input clock scaler
@@ -167,30 +175,79 @@
         end if;
     end process;
     
+    deb3 : process(L_CLK)
+    begin
+        if (rising_edge(L_CLK)) then
+            -- switch debounce
+            if (I_BUTTONS(3) /= '0') then    -- pushed
+                L_CLR_BN3 <= '0';
+                L_C1_BN3  <= '0';
+                L_C2_BN3  <= '0';
+            else                                         -- released
+                L_CLR_BN3 <= L_C2_BN3;
+                L_C2_BN3  <= L_C1_BN3;
+                L_C1_BN3  <= '1';
+            end if;
+        end if;
+    end process;
+    
+    deb2 : process(L_CLK)
+    begin
+        if (rising_edge(L_CLK)) then
+            -- switch debounce
+            if (I_BUTTONS(2) /= '0') then    -- pushed
+                L_CLR_BN2 <= '0';
+                L_C1_BN2  <= '0';
+                L_C2_BN2  <= '0';
+            else                                         -- released
+                L_CLR_BN2 <= L_C2_BN2;
+                L_C2_BN2  <= L_C1_BN2;
+                L_C1_BN2  <= '1';
+            end if;
+        end if;
+    end process;
+    
     deb1 : process(L_CLK)
     begin
         if (rising_edge(L_CLK)) then
             -- switch debounce
-            if (I_BUTTONS(3 downto 0) /= "0000") then    -- pushed
-                L_CLR_BN <= '0';
-                L_C1_BN  <= '0';
-                L_C2_BN  <= '0';
-            else                                                    -- released
-                L_CLR_BN <= L_C2_BN;
-                L_C2_BN  <= L_C1_BN;
-                L_C1_BN  <= '1';
+            if (I_BUTTONS(1) /= '0') then    -- pushed
+                L_CLR_BN1 <= '0';
+                L_C1_BN1  <= '0';
+                L_C2_BN1  <= '0';
+            else                                         -- released
+                L_CLR_BN1 <= L_C2_BN1;
+                L_C2_BN1  <= L_C1_BN1;
+                L_C1_BN1  <= '1';
+            end if;
+        end if;
+    end process;
+    
+    deb0 : process(L_CLK)
+    begin
+        if (rising_edge(L_CLK)) then
+            -- switch debounce
+            if (I_BUTTONS(0) /= '0') then    -- pushed
+                L_CLR_BN0 <= '0';
+                L_C1_BN0  <= '0';
+                L_C2_BN0  <= '0';
+            else                                         -- released
+                L_CLR_BN0 <= L_C2_BN0;
+                L_C2_BN0  <= L_C1_BN0;
+                L_C1_BN0  <= '1';
             end if;
         end if;
     end process;
     
     L_CLR <= not L_CLR_N;
     
-    L_BUTTONS <= "000" & not L_CLR_BN;
+    L_BUTTONS <= not L_CLR_BN3 & not L_CLR_BN2 & not L_CLR_BN1 & not L_CLR_BN0;
     L_LEDS(2) <= I_RX;
     L_LEDS(3) <= N_TX;
-    Q_LEDS(1 downto 0) <= I_BUTTONS(1 downto 0);
+    Q_LEDS(1 downto 0) <= L_LEDS(1 downto 0);
     Q_LEDS(2) <= C_PC(0);
     Q_LEDS(3) <= I_CLK_100;
+    Q_7_SEG_SEL <= L_7_SEL when (EXTEND_SWITCH(0) = '1') else S_7_SEL;
     Q_7_SEGMENT  <= N_7_SEGMENT when (EXTEND_SWITCH(0) = '1') else S_7_SEGMENT;
     Q_TX <= N_TX;
     
