@@ -120,7 +120,7 @@ begin
         if(rising_edge(I_CLK)) then         --On a rising clock,
             if(I_CLR = '1') then                --Check if there is a clear signal, and if there is
                 L_RX_INT_ENABLED <= '0';                --RX_INT_ENABLED is cleared
---              L_TX_INT_ENABLED <= '0';                --TX_INT_ENABLED is cleared - multiple drivers for this
+                L_TX_INT_ENABLED <= '0';                --TX_INT_ENABLED is cleared - multiple drivers for this
             elsif (I_WR_IO = '1') then          --if there isn't a clear signal and write strobe,
                 case I_ADR_IO is
                     when X"35" =>   Q_7_SEG_SEL <= I_DIN(7 downto 4);

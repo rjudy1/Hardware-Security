@@ -10,25 +10,25 @@
 int main(void)
 {
 	DDRB = 0b11111111;					//PORTB is set to write (set as output)
-	DDRC = 0b11110000;					// PORTB is set as input
+	DDRC = 0b11110000;					// PORTC is set as input
 	while(1)
 	{
-		if (PORTC != (0x0F & 0b00000000))
+		if (PORTC !=  0b00000000)
 		{
-			PORTC = PORTC & 0b11111000;
+			PORTC = (PORTC&0b00001111) | 0b10000000;
 			PORTB = 0b10001000;
-			_delay_ms(40);					//Pause for 40 ms
-			PORTC = PORTC & 0b11110100;
+			_delay_ms(400);					//Pause for 400 ms
+			PORTC = (PORTC & 0b00001111) | 0b01000000;
 			PORTB = 0b01000100;
-			_delay_ms(40);					//Pause for 40 ms
-			PORTC = PORTC & 0b11110010;
+			_delay_ms(400);					//Pause for 400 ms
+			PORTC = (PORTC & 0b00001111) | 0b00100000;
 			PORTB = 0b00100010;
-			_delay_ms(40);					//Pause for 40 ms			
-			PORTC = PORTC & 0b11111001;
+			_delay_ms(400);					//Pause for 400 ms			
+			PORTC = (PORTC & 0b00001111) | 0b00010000;
 			PORTB = 0b00010001;
-			_delay_ms(40);					//Pause for 40 ms
+			_delay_ms(400);					//Pause for 400 ms
 //			PORTB = 0b11111111;				//PORTB is all high
-//			_delay_ms(40);					//Pause for 40 ms
+//			_delay_ms(40);					//Pause for 400 ms
 			printf("test");
 		} else {
 			PORTB = 0b1111111;
