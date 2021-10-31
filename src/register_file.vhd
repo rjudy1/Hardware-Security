@@ -227,16 +227,18 @@ entity register_file is
               
        --the value of the X/Y/Z/SP register after a potnetial PRE-decremetn
        --(by 1 or 2) and POST-incrament (by 1 or 2)
+       --the identifiers are from common.vhd 
+       --and represent address offsets
        --
        process(I_AMOD(5 downto 3), I_IMM)
        begin
             case I_AMOD(5 downto 3) is
-                when AO_0    => L_PRE <= X"0000"; L_POST <= X"0000";
-                when AO_i  => L_PRE <= X"0000"; L_POST <= X"0001";
-                when AO_ii => L_PRE <= X"0000"; L_POST <= X"0002";
-                when AO_q  => L_PRE <= I_IMM; L_POST <= X"0000";
-                when AO_d  => L_PRE <= X"FFFF"; L_POST <= X"FFFF";
-                when AO_dd => L_PRE <= X"FFFE"; L_POST <= X"FFFE";
+                when AO_0    => L_PRE <= X"0000"; L_POST <= X"0000"; -- as is
+                when AO_i  => L_PRE <= X"0000"; L_POST <= X"0001";   -- +q
+                when AO_ii => L_PRE <= X"0000"; L_POST <= X"0002";   -- +1
+                when AO_q  => L_PRE <= I_IMM; L_POST <= X"0000";     -- +2
+                when AO_d  => L_PRE <= X"FFFF"; L_POST <= X"FFFF";   -- -1
+                when AO_dd => L_PRE <= X"FFFE"; L_POST <= X"FFFE";   -- -2
                 when others => L_PRE <= X"0000"; L_POST <= X"0000";
             end case;
        end process;      
