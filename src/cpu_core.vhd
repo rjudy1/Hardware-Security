@@ -192,7 +192,7 @@ architecture behavior of cpu_core is
                     I_JADR      => D_JADR,
                     I_OPC       => D_OPC,
                     I_PC        => D_PC,
-                I_PC_OP     => D_PC_OP,
+                    I_PC_OP     => D_PC_OP,
                     I_PMS       => D_PMS,
                     I_RD_M      => D_RD_M,
                     I_RRRRR     => D_RRRRR,

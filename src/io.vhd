@@ -53,6 +53,11 @@ signal L_WE_UART        : std_logic;
 
 signal L_DOUT           : std_logic_vector(7 downto 0);
 
+attribute mark_debug : string;
+attribute mark_debug of Q_7_SEG_SEL : signal is "true";
+attribute mark_debug of I_ADR_IO : signal is "true";
+attribute mark_debug of I_DIN : signal is "true";
+
 begin
     urt: uart
     generic map(CLOCK_FREQ  => std_logic_vector(conv_unsigned(16000000, 32)),
@@ -75,7 +80,7 @@ begin
     iord: process(I_ADR_IO, I_SWITCH, U_RX_DATA, U_RX_READY, L_RX_INT_ENABLED, U_TX_BUSY, L_TX_INT_ENABLED)
     begin
         case I_ADR_IO is
-            when X"35"  =>  L_DOUT <= L_DOUT(7 downto 4) & I_BUTTONS;                    -- port c tied to buttons
+            when X"35"  =>  L_DOUT <= "0000" & I_BUTTONS;                    -- port c tied to buttons
         
             when X"2A"  => L_DOUT   <=                              --UCSRB:        (Note: Look at CPU register UCSRB in AVR datasheet for explaination)
                                         L_RX_INT_ENABLED            --RX complete int enabled
@@ -123,7 +128,7 @@ begin
                 L_TX_INT_ENABLED <= '0';                --TX_INT_ENABLED is cleared - multiple drivers for this
             elsif (I_WR_IO = '1') then          --if there isn't a clear signal and write strobe,
                 case I_ADR_IO is
-                    when X"35" =>   Q_7_SEG_SEL <= I_DIN(7 downto 4);
+                    when X"35" =>   Q_7_SEG_SEL <= not I_DIN(7 downto 4); -- invert because of flipping on input
                 
                     when X"38" =>   Q_7_SEGMENT <= I_DIN(6 downto 0);       --PORTB
                                     L_LEDS <= not L_LEDS;

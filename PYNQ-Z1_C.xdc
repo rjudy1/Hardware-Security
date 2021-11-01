@@ -42,10 +42,10 @@ set_property PACKAGE_PIN Y16 [get_ports {SevenSeg[1]}]
 set_property PACKAGE_PIN W10 [get_ports {SevenSeg[0]}]
 
 ##Seven Seg Select
-set_property -dict { PACKAGE_PIN F20   IOSTANDARD LVCMOS33 } [get_ports { SSSel[3] }]; #left
-set_property -dict { PACKAGE_PIN F19   IOSTANDARD LVCMOS33 } [get_ports { SSSel[2] }]; #left middle
-set_property -dict { PACKAGE_PIN U19   IOSTANDARD LVCMOS33 } [get_ports { SSSel[1] }]; #right middle
-set_property -dict { PACKAGE_PIN Y17   IOSTANDARD LVCMOS33 } [get_ports { SSSel[0] }]; #right
+set_property -dict {PACKAGE_PIN F20 IOSTANDARD LVCMOS33} [get_ports {SSSel[3]}]
+set_property -dict {PACKAGE_PIN F19 IOSTANDARD LVCMOS33} [get_ports {SSSel[2]}]
+set_property -dict {PACKAGE_PIN U19 IOSTANDARD LVCMOS33} [get_ports {SSSel[1]}]
+set_property -dict {PACKAGE_PIN Y17 IOSTANDARD LVCMOS33} [get_ports {SSSel[0]}]
 
 ##LEDs
 
@@ -61,8 +61,8 @@ set_property -dict {PACKAGE_PIN L20 IOSTANDARD LVCMOS33} [get_ports {btn[2]}]
 set_property -dict {PACKAGE_PIN L19 IOSTANDARD LVCMOS33} [get_ports {btn[3]}]
 
 ## RX/TX UART--from PMODB
-set_property -dict {PACKAGE_PIN Y14 IOSTANDARD LVCMOS33} [get_ports {rx}];
-set_property -dict {PACKAGE_PIN T11 IOSTANDARD LVCMOS33} [get_ports {tx}];
+set_property -dict {PACKAGE_PIN Y14 IOSTANDARD LVCMOS33} [get_ports rx]
+set_property -dict {PACKAGE_PIN T11 IOSTANDARD LVCMOS33} [get_ports tx]
 
 ##Other Pins possibly needed for UART
 set_property -dict {PACKAGE_PIN W14 IOSTANDARD LVCMOS33} [get_ports {DTR}];
@@ -220,3 +220,47 @@ set_property -dict {PACKAGE_PIN W14 IOSTANDARD LVCMOS33} [get_ports {DTR}];
 #set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { crypto_sda }]; #IO_25_35 Sch=crypto_sda
 
 
+
+
+create_debug_core u_ila_0 ila
+set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
+set_property ALL_PROBE_SAME_MU_CNT 4 [get_debug_cores u_ila_0]
+set_property C_ADV_TRIGGER true [get_debug_cores u_ila_0]
+set_property C_DATA_DEPTH 1024 [get_debug_cores u_ila_0]
+set_property C_EN_STRG_QUAL false [get_debug_cores u_ila_0]
+set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0]
+set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
+set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
+set_property port_width 1 [get_debug_ports u_ila_0/clk]
+connect_debug_port u_ila_0/clk [get_nets [list design_1_i/clk_wiz_0/inst/clk_out1]]
+set_property PROBE_TYPE DATA [get_debug_ports u_ila_0/probe0]
+set_property port_width 16 [get_debug_ports u_ila_0/probe0]
+connect_debug_port u_ila_0/probe0 [get_nets [list {design_1_i/avr_fpga_1/U0/C_PC[0]} {design_1_i/avr_fpga_1/U0/C_PC[1]} {design_1_i/avr_fpga_1/U0/C_PC[2]} {design_1_i/avr_fpga_1/U0/C_PC[3]} {design_1_i/avr_fpga_1/U0/C_PC[4]} {design_1_i/avr_fpga_1/U0/C_PC[5]} {design_1_i/avr_fpga_1/U0/C_PC[6]} {design_1_i/avr_fpga_1/U0/C_PC[7]} {design_1_i/avr_fpga_1/U0/C_PC[8]} {design_1_i/avr_fpga_1/U0/C_PC[9]} {design_1_i/avr_fpga_1/U0/C_PC[10]} {design_1_i/avr_fpga_1/U0/C_PC[11]} {design_1_i/avr_fpga_1/U0/C_PC[12]} {design_1_i/avr_fpga_1/U0/C_PC[13]} {design_1_i/avr_fpga_1/U0/C_PC[14]} {design_1_i/avr_fpga_1/U0/C_PC[15]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA [get_debug_ports u_ila_0/probe1]
+set_property port_width 4 [get_debug_ports u_ila_0/probe1]
+connect_debug_port u_ila_0/probe1 [get_nets [list {design_1_i/avr_fpga_1/U0/L_BUTTONS[0]} {design_1_i/avr_fpga_1/U0/L_BUTTONS[1]} {design_1_i/avr_fpga_1/U0/L_BUTTONS[2]} {design_1_i/avr_fpga_1/U0/L_BUTTONS[3]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA [get_debug_ports u_ila_0/probe2]
+set_property port_width 32 [get_debug_ports u_ila_0/probe2]
+connect_debug_port u_ila_0/probe2 [get_nets [list {design_1_i/avr_fpga_1/U0/cpu/F_OPC[0]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[1]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[2]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[3]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[4]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[5]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[6]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[7]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[8]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[9]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[10]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[11]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[12]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[13]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[14]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[15]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[16]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[17]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[18]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[19]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[20]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[21]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[22]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[23]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[24]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[25]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[26]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[27]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[28]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[29]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[30]} {design_1_i/avr_fpga_1/U0/cpu/F_OPC[31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA [get_debug_ports u_ila_0/probe3]
+set_property port_width 8 [get_debug_ports u_ila_0/probe3]
+connect_debug_port u_ila_0/probe3 [get_nets [list {design_1_i/avr_fpga_1/U0/ino/I_ADR_IO[0]} {design_1_i/avr_fpga_1/U0/ino/I_ADR_IO[1]} {design_1_i/avr_fpga_1/U0/ino/I_ADR_IO[2]} {design_1_i/avr_fpga_1/U0/ino/I_ADR_IO[3]} {design_1_i/avr_fpga_1/U0/ino/I_ADR_IO[4]} {design_1_i/avr_fpga_1/U0/ino/I_ADR_IO[5]} {design_1_i/avr_fpga_1/U0/ino/I_ADR_IO[6]} {design_1_i/avr_fpga_1/U0/ino/I_ADR_IO[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA [get_debug_ports u_ila_0/probe4]
+set_property port_width 4 [get_debug_ports u_ila_0/probe4]
+connect_debug_port u_ila_0/probe4 [get_nets [list {design_1_i/avr_fpga_1/U0/ino/Q_7_SEG_SEL[0]} {design_1_i/avr_fpga_1/U0/ino/Q_7_SEG_SEL[1]} {design_1_i/avr_fpga_1/U0/ino/Q_7_SEG_SEL[2]} {design_1_i/avr_fpga_1/U0/ino/Q_7_SEG_SEL[3]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA [get_debug_ports u_ila_0/probe5]
+set_property port_width 8 [get_debug_ports u_ila_0/probe5]
+connect_debug_port u_ila_0/probe5 [get_nets [list {design_1_i/avr_fpga_1/U0/ino/I_DIN[0]} {design_1_i/avr_fpga_1/U0/ino/I_DIN[1]} {design_1_i/avr_fpga_1/U0/ino/I_DIN[2]} {design_1_i/avr_fpga_1/U0/ino/I_DIN[3]} {design_1_i/avr_fpga_1/U0/ino/I_DIN[4]} {design_1_i/avr_fpga_1/U0/ino/I_DIN[5]} {design_1_i/avr_fpga_1/U0/ino/I_DIN[6]} {design_1_i/avr_fpga_1/U0/ino/I_DIN[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe6]
+set_property port_width 1 [get_debug_ports u_ila_0/probe6]
+connect_debug_port u_ila_0/probe6 [get_nets [list design_1_i/avr_fpga_1/U0/cpu/opcf/I_CLR]]
+set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+connect_debug_port dbg_hub/clk [get_nets led_OBUF[3]]

@@ -91,15 +91,12 @@
   signal L_CLR_BN2, L_C1_BN2, L_C2_BN2 : std_logic := '0';
   signal L_CLR_BN1, L_C1_BN1, L_C2_BN1 : std_logic := '0';
   signal L_CLR_BN0, L_C1_BN0, L_C2_BN0 : std_logic := '0';
-  signal L_7_SEL          : std_logic_vector(3 downto 0);
+  signal N_7_SEL          : std_logic_vector(3 downto 0);
   signal S_7_SEL          : std_logic_vector(3 downto 0);
     
   attribute mark_debug : string;
   attribute mark_debug of C_PC : signal is "true";
-  attribute mark_debug of Q_LEDS : signal is "true";
-  attribute mark_debug of Q_7_Segment : signal is "true";
   attribute mark_debug of L_BUTTONS : signal is "true";
-  
     
   begin
   
@@ -128,7 +125,7 @@
                 I_SWITCH    => EXTEND_SWITCH(7 downto 0),
                 I_WR_IO     => C_WE_IO,
                 I_BUTTONS   => L_BUTTONS,
-                Q_7_SEG_SEL => L_7_SEL,
+                Q_7_SEG_SEL => N_7_SEL,
                 Q_7_SEGMENT => N_7_SEGMENT,
                 Q_DOUT      => N_DOUT,
                 Q_INTVEC    => N_INTVEC,
@@ -247,7 +244,7 @@
     Q_LEDS(1 downto 0) <= L_LEDS(1 downto 0);
     Q_LEDS(2) <= C_PC(0);
     Q_LEDS(3) <= I_CLK_100;
-    Q_7_SEG_SEL <= L_7_SEL when (EXTEND_SWITCH(0) = '1') else S_7_SEL;
+    Q_7_SEG_SEL <= N_7_SEL when (EXTEND_SWITCH(0) = '1') else S_7_SEL;
     Q_7_SEGMENT  <= N_7_SEGMENT when (EXTEND_SWITCH(0) = '1') else S_7_SEGMENT;
     Q_TX <= N_TX;
     
