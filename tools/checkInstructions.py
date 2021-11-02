@@ -1,5 +1,5 @@
 import sys
-validInstruction = ["ADC", "ADD", "ADIW", "AND", "ANDI", "ASR", "BCLR", "BLD", "BRBS", "BRBC", "BSET", "BST", "CALL", "CBI", "CBR", "CLR", "COM", "CP", "CPC", "CPI", "CPSE", "DEC", "ELPM", "EOR", "FMUL", "FMULS", "FMULSU", "ICALL", "IN", "INC", "IJMP", "JMP", "LDD", "LDI", "LDS", "LPM", "LSL", "LSR", "MOV", "MOVW", "MULSU", "MULS", "NEG", "NOP", "NOT", "OR", "ORI", "OUT", "POP", "PUSH", "RCALL", "RET", "RETI", "ROR", "RJMP", "ROL", "SBC", "SBCI", "SBI", "SBIC", "SBIS", "SBIW", "SBRC", "SBRS", "SDS", "SDD", "SER", "SPM", "STD", "STS", "SUB", "SUBI", "SWAP", "WDR"]
+validInstruction = ["ADC", "ADD", "ADIW", "AND", "ANDI", "ASR", "BCLR", "BLD", "BRBS", "BREQ", "BRCS", "BRBC", "BRNE", "BRCC", "BSET", "BST", "CALL", "CBI", "CBR", "CLR", "COM", "CP", "CPC", "CPI", "CPSE", "DEC", "ELPM", "EOR", "FMUL", "FMULS", "FMULSU", "ICALL", "IN", "INC", "IJMP", "JMP", "LDD", "LDI", "LDS", "LPM", "LSL", "LSR", "MOV", "MOVW", "MULSU", "MULS", "NEG", "NOP", "NOT", "OR", "ORI", "OUT", "POP", "PUSH", "RCALL", "RET", "RETI", "ROR", "RJMP", "ROL", "SBC", "SBCI", "SBI", "SBIC", "SBIS", "SBIW", "SBRC", "SBRS", "SDS", "SDD", "SER", "SPM", "STD", "STS", "SUB", "SUBI", "SWAP", "WDR"]
 
 
 #Functions
