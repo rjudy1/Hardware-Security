@@ -10,7 +10,7 @@ package common is
         constant ALU_ADIW   : std_logic_vector(4 downto 0) := "00010";
         constant ALU_AND    : std_logic_vector(4 downto 0) := "00011";
         constant ALU_ASR    : std_logic_vector(4 downto 0) := "00100";
-      constant ALU_BLD    : std_logic_vector(4 downto 0) := "00101"; 
+        constant ALU_BLD    : std_logic_vector(4 downto 0) := "00101"; 
         constant ALU_BIT_CS : std_logic_vector(4 downto 0) := "00110";
         constant ALU_COM    : std_logic_vector(4 downto 0) := "00111";
         constant ALU_DEC    : std_logic_vector(4 downto 0) := "01000";
@@ -61,7 +61,7 @@ package common is
         -- address offset
         constant AO_0   : std_logic_vector(5 downto 3) := "000";     -- as is
         constant AO_Q   : std_logic_vector(5 downto 3) := "010";     -- +q
-      constant AO_i   : std_logic_vector(5 downto 3) := "001";     -- +1
+        constant AO_i   : std_logic_vector(5 downto 3) := "001";     -- +1
         constant AO_ii  : std_logic_vector(5 downto 3) := "011";     -- +2
         constant AO_d   : std_logic_vector(5 downto 3) := "101";     -- -1
         constant AO_dd  : std_logic_vector(5 downto 3) := "111";     -- -2
@@ -84,7 +84,7 @@ package common is
         constant AMOD_Y   : std_logic_vector(5 downto 0) := AO_0  & AS_Y;  -- (Y)
         constant AMOD_Yq  : std_logic_vector(5 downto 0) := AO_Q  & AS_Y;  -- (Y+q)
         constant AMOD_Yi  : std_logic_vector(5 downto 0) := AO_i  & AS_Y;  -- (Y++)
-      constant AMOD_dY  : std_logic_vector(5 downto 0) := AO_d  & AS_Y;  -- (--Y)
+        constant AMOD_dY  : std_logic_vector(5 downto 0) := AO_d  & AS_Y;  -- (--Y)
         constant AMOD_Z   : std_logic_vector(5 downto 0) := AO_0  & AS_Z;  -- (Z)
         constant AMOD_Zq  : std_logic_vector(5 downto 0) := AO_Q  & AS_Z;  -- (Z+q)
         constant AMOD_Zi  : std_logic_vector(5 downto 0) := AO_i  & AS_Z;  -- (Z++)

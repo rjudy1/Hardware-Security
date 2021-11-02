@@ -17,5 +17,6 @@ If you get a pin error--will be for the button, open the schematic -> I/O Ports 
 
 Software Ports
 PORTB: seven segment values output
-PORTC: bits 7 downto 4 set which of the seven seg output (priority encoder style), bits 3 downto 0 input buttons
+PORTC: bits 7 downto 4 set which of the seven seg output (priority encoder style)
+PORTD: bits 3 downto 0 input buttons
 Address 40 and 41 allocate to UART - should change

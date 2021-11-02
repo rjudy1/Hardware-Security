@@ -37,34 +37,41 @@ int convert_to_byte(int a) {
 int main(void)
 {
 	DDRB = 0b11111111;					//PORTB is set to write (set as output)
-	DDRC = 0b11110000;					// PORTC is set as input
-	int go = 1;
+	DDRC = 0b11110000;					// PORTC is set as output
+	DDRD = 0b00000000;					// PORT D for buttons
+	int go = 0;
+
 	while(1)
 	{
-		if (PORTC & 0b00001111 !=  0b00000000)
-			go = 1;
-			
-		if (go)
-		{
-			PORTC = (PORTC&0b00001111) | 0b10000000;
-			PORTB = convert_to_byte(0);
+		PORTC = 0b10000000;
+		PORTB = convert_to_byte(0);
+		_delay_ms(400);					//Pause for 400 ms
+		PORTC = 0b01000000;
+		PORTB = convert_to_byte(3);
+		_delay_ms(400);					//Pause for 400 ms
+		PORTC = 0b00100000;
+		PORTB = convert_to_byte(6);
+		_delay_ms(400);					//Pause for 400 ms			
+		PORTC = 0b00010000;
+		PORTB = convert_to_byte(7);
+		_delay_ms(400);					//Pause for 400 ms
+//		putchar('y');
+//		} else {
+//			PORTC = 0b01100000;
+//			PORTB = 0b1111111;
+//			_delay_ms(400);					//Pause for 400 ms
+//			PORTB = 0b00000000;
+//			_delay_ms(400);					//Pause for 400 ms
+//			putchar('n');
+//		}
+		if (PORTD != 0) {
+			PORTC = 0b10010000;
+			PORTB = convert_to_byte(2);
 			_delay_ms(400);					//Pause for 400 ms
-			PORTC = (PORTC & 0b00001111) | 0b01000000;
-			PORTB = convert_to_byte(3);
-			_delay_ms(400);					//Pause for 400 ms
-			PORTC = (PORTC & 0b00001111) | 0b00100000;
-			PORTB = convert_to_byte(6);
-			_delay_ms(400);					//Pause for 400 ms			
-			PORTC = (PORTC & 0b00001111) | 0b00010000;
-			PORTB = convert_to_byte(7);
-			_delay_ms(400);					//Pause for 400 ms
-			printf("test");
-		} else {
-			PORTC = (PORTC & 0b00001111) | 0b01100000;
-			PORTB = 0b1111111;
-			_delay_ms(400);					//Pause for 400 ms
+
+			putchar('b');
+			printf("hi");
 		}
-		_delay_ms(100);					//Pause for 100 ms
 
 	}
 }
