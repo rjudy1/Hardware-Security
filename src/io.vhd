@@ -134,9 +134,9 @@ begin
                                     L_LEDS <= not L_LEDS;
                     
                     when X"40"  =>  --handled by UART
-                        Q_tx <= I_DIN(0);
+                        
                     when X"41"  =>  --handled by UART
-                        Q_tx <= I_DIN(0);
+                        
                     when X"43"  =>  L_RX_INT_ENABLED <= I_DIN(0);
                                     L_TX_INT_ENABLED <= I_DIN(1);
                     
