@@ -128,9 +128,9 @@ begin
                 L_TX_INT_ENABLED <= '0';                --TX_INT_ENABLED is cleared - multiple drivers for this
             elsif (I_WR_IO = '1') then          --if there isn't a clear signal and write strobe,
                 case I_ADR_IO is
-                    when X"35" =>   Q_7_SEG_SEL <= not I_DIN(7 downto 4); -- invert because of flipping on input
+                    when X"35" =>   Q_7_SEG_SEL <= I_DIN(7 downto 4); -- invert because of flipping on input
                 
-                    when X"38" =>   Q_7_SEGMENT <= I_DIN(6 downto 0);       --PORTB
+                    when X"38" =>   Q_7_SEGMENT <= not I_DIN(6 downto 0);       --PORTB
                                     L_LEDS <= not L_LEDS;
                     
                     when X"40"  =>  --handled by UART
