@@ -16,8 +16,10 @@
 int main(void)
 {
 	DDRB = 0b11111111;					//PORTB is set to write (set as output)
+	DDRC = 0b11110000;
 	while(1)
     {
+		PORTC = 0b11110000;
 		PORTB = 0b00000000;				//PORTB is all low
 		_delay_ms(40);					//Pause for 40 ms
 		PORTB = 0b11111111;				//PORTB is all high
