@@ -40,26 +40,30 @@ int main(void)
 	DDRC = 0b11110000;					// PORTC is set as output (top four for select)
 	DDRD = 0b00000000;					// PORT D for buttons
 	int x = 0;
-	int y = 4;
+	int y = 8;
 	
 	while(1)
 	{
 		x++;
-		if (x % 8 > y) {
+		if (x > y) {
+			x = -2;
 			PORTC = 0b11000000;
 			PORTB = convert_to_byte(8);
-			_delay_ms(500);
+			_delay_ms(300);
 		}
-		if (x % 9 < y) {
-			PORTC = 0b11000000;
-			PORTB = convert_to_byte(9);
-			_delay_ms(500);
-		}
-		if (x % 5 == y) {
+		if (x < 5) {
 			PORTC = 0b11000000;
 			PORTB = convert_to_byte(5);
-			_delay_ms(500);
+			_delay_ms(300);
 		}
+		if (x  == y) {
+			PORTC = 0b11000000;
+			PORTB = convert_to_byte(1);
+			_delay_ms(300);
+		}
+		PORTC = 0b11110000;
+		PORTB = 0x10000000;
+		_delay_ms(200);
 		
 	}
 }
