@@ -17,8 +17,10 @@
 int main(void)
 {
 	DDRB = 0b11111111;					//PORTB is set to write (set as output)
+	DDRC = 0b11110000;
 	while(1)
     {
+		PORTC = 0b11110000;
 		for(int i = 1; i <= 128; i=i*2)
 		{
 					PORTB = i;				//PORTB is all low
