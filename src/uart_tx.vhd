@@ -27,6 +27,10 @@
     signal L_TODO           : std_logic_vector(3 downto 0);     -- bits to send
     signal L_FLAG           : std_logic;
   
+  attribute mark_debug : string;
+  attribute mark_debug of I_CE_1 : signal is "true";
+  attribute mark_debug of Q_TX : signal is "true";
+    
  begin
      
     process(I_CLK)
@@ -34,22 +38,22 @@
             if (rising_edge(I_CLK)) then
                 if (I_CLR = '1') then
                     Q_TX   <= '1';
-                   L_BUF  <= "11111111";
-                 L_TODO <= "0000";
-                 L_FLAG <= I_FLAG;                   -- idle
-            elsif (I_CE_1 = '1') then
-                 if (L_TODO /= "0000") then          -- transmitting
+                    L_BUF  <= "11111111";
+                    L_TODO <= "0000";
+                    L_FLAG <= I_FLAG;                   -- idle
+                elsif (I_CE_1 = '1') then
+                   if (L_TODO /= "0000") then          -- transmitting
                         Q_TX <= L_BUF(0);               -- next bit
                         L_BUF     <= '1' & L_BUF(7 downto 1);
                         if (L_TODO = "0001") then
                             L_FLAG <= I_FLAG;
                         end if;
                         L_TODO <= L_TODO - "0001";
-                    elsif (L_FLAG /= I_FLAG) then       -- new byte
+                   elsif (L_FLAG /= I_FLAG) then       -- new byte
                         Q_TX <= '0';                    -- start bit
-                     L_BUF <= I_DATA;                -- data bits
+                        L_BUF <= I_DATA;                -- data bits
                         L_TODO <= "1001";
-                    end if;
+                   end if;
                 end if;
             end if;
         end process; 

@@ -45,25 +45,21 @@ int main(void)
 	while(1)
 	{
 		x++;
-		if (x > y) {
+		if (x == y) {
 			x = -2;
 			PORTC = 0b11000000;
 			PORTB = convert_to_byte(8);
 			_delay_ms(300);
 		}
-		if (x < 5) {
+		else if (x >= 5) {
 			PORTC = 0b11000000;
 			PORTB = convert_to_byte(5);
 			_delay_ms(300);
-		}
-		if (x  == y) {
-			PORTC = 0b11000000;
-			PORTB = convert_to_byte(1);
+		} else if (x < 5) {
+			PORTC = 0b11110000;
+			PORTB = 0x00000000;
 			_delay_ms(300);
 		}
-		PORTC = 0b11110000;
-		PORTB = 0x10000000;
-		_delay_ms(200);
 		
 	}
 }

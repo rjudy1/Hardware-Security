@@ -54,9 +54,10 @@ signal L_WE_UART        : std_logic;
 signal L_DOUT           : std_logic_vector(7 downto 0);
 
 attribute mark_debug : string;
-attribute mark_debug of Q_7_SEG_SEL : signal is "true";
 attribute mark_debug of I_ADR_IO : signal is "true";
 attribute mark_debug of I_DIN : signal is "true";
+attribute mark_debug of L_WE_UART : signal is "true";
+attribute mark_debug of I_CLR : signal is "true";
 
 begin
     urt: uart

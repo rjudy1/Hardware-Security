@@ -50,8 +50,6 @@ signal L_T0             : std_logic;
 signal L_WAIT           : std_logic;
 	
 	attribute mark_debug : string;
-	attribute mark_debug of L_NEXT_PC : signal is "true";
-	attribute mark_debug of I_CLR : signal is "true";
 	
 begin
  	

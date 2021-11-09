@@ -241,9 +241,9 @@
     L_BUTTONS <= not L_CLR_BN3 & not L_CLR_BN2 & not L_CLR_BN1 & not L_CLR_BN0;
     L_LEDS(2) <= I_RX;
     L_LEDS(3) <= N_TX;
-    Q_LEDS(1 downto 0) <= L_LEDS(1 downto 0);
-    Q_LEDS(2) <= C_PC(0);
-    Q_LEDS(3) <= I_CLK_100;
+    Q_LEDS <= L_LEDS;
+--    Q_LEDS(2) <= C_PC(0);
+--    Q_LEDS(3) <= I_CLK_100;
     Q_7_SEG_SEL <= N_7_SEL when (EXTEND_SWITCH(0) = '1') else S_7_SEL;
     Q_7_SEGMENT  <= N_7_SEGMENT when (EXTEND_SWITCH(0) = '1') else S_7_SEGMENT;
     Q_TX <= N_TX;
