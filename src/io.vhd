@@ -60,7 +60,7 @@ attribute mark_debug of I_CLR : signal is "true";
 
 begin
     urt: uart
-    generic map(CLOCK_FREQ  => std_logic_vector(conv_unsigned(16000000, 32)),
+    generic map(CLOCK_FREQ  => std_logic_vector(conv_unsigned(25000000, 32)),
                 BAUD_RATE   => std_logic_vector(conv_unsigned(38400, 28)))
                 
     port map(   I_CLK       => I_CLK,
