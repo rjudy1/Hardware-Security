@@ -53,7 +53,9 @@ component uart_tx
             Q_TX        : out std_logic;            -- Serial output line
             Q_FLAG      : out std_logic);           -- Transmitting Flag
 end component;
-
+  attribute mark_debug : string;
+  attribute mark_debug of L_CE_1 : signal is "true";
+  attribute mark_debug of L_CE_16 : signal is "true";
 begin
     bg : baudgen
     generic map (
