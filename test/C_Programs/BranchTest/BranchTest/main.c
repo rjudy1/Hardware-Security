@@ -44,22 +44,25 @@ int main(void)
 	
 	while(1)
 	{
-		x++;
+		PORTC = 0b00010000;
+		PORTB = convert_to_byte(x);
+		_delay_ms(1000);
 		if (x == y) {
-			x = -2;
-			PORTC = 0b11000000;
+			x = 0;
+			PORTC = 0b10000000;
 			PORTB = convert_to_byte(8);
 			_delay_ms(300);
 		}
 		else if (x >= 5) {
-			PORTC = 0b11000000;
+			x = x + 1;
+			PORTC = 0b10000000;
 			PORTB = convert_to_byte(5);
 			_delay_ms(300);
 		} else if (x < 5) {
-			PORTC = 0b11110000;
-			PORTB = 0x00000000;
+			x = x + 1;
+			PORTC = 0b10000000;
+			PORTB = 0b01000000;			//Show a dash
 			_delay_ms(300);
 		}
-		
 	}
 }
