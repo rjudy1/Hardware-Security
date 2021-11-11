@@ -33,6 +33,8 @@
   attribute mark_debug of L_FLAG : signal is "true";
   attribute mark_debug of I_FLAG : signal is "true";
   attribute mark_debug of L_BUF : signal is "true";
+  attribute mark_debug of I_CLK : signal is "true";
+ 
     
  begin
      
@@ -48,7 +50,7 @@
                    if (L_TODO = "1001") then
                         Q_TX <= '0';
                         L_TODO <= L_TODO - "0001";
-                   elsif (L_TODO /= "0000") then          -- transmitting
+                   elsif (L_TODO /= "1111") then          -- transmitting
                         Q_TX <= L_BUF(0);               -- next bit
                         L_BUF     <= '1' & L_BUF(7 downto 1);
                         if (L_TODO = "0001") then
@@ -63,7 +65,7 @@
                  -- might require a sufficient delay to work
                  if (L_FLAG /= I_FLAG) then           -- new byte
 --                        Q_TX <= '0';                -- start bit
-                      L_BUF <= I_DATA;                -- data bits
+                      L_BUF <= NOT(I_DATA);                -- data bits
                       L_TODO <= "1001";
                  end if;
             end if;

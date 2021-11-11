@@ -17,7 +17,8 @@
              Q_LEDS      : out std_logic_vector(3 downto 0);
              Q_7_SEG_SEL : out std_logic_vector(3 downto 0);
              Q_7_SEGMENT : out std_logic_vector(6 downto 0);
-             Q_TX        : out std_logic);
+             Q_TX        : out std_logic;
+             Q_CLK       : out std_logic );
  end avr_fpga;
  
  architecture Behavioral of avr_fpga is
@@ -247,5 +248,6 @@
     Q_7_SEG_SEL <= N_7_SEL when (EXTEND_SWITCH(0) = '1') else S_7_SEL;
     Q_7_SEGMENT  <= N_7_SEGMENT when (EXTEND_SWITCH(0) = '1') else S_7_SEGMENT;
     Q_TX <= N_TX;
+    Q_CLK <= I_CLK_100;
     
 end Behavioral;
