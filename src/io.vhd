@@ -56,12 +56,11 @@ signal L_DOUT           : std_logic_vector(7 downto 0);
 attribute mark_debug : string;
 attribute mark_debug of I_ADR_IO : signal is "true";
 attribute mark_debug of I_DIN : signal is "true";
-attribute mark_debug of L_WE_UART : signal is "true";
 attribute mark_debug of I_CLR : signal is "true";
 
 begin
     urt: uart
-    generic map(CLOCK_FREQ  => std_logic_vector(conv_unsigned(16000000, 32)),
+    generic map(CLOCK_FREQ  => std_logic_vector(conv_unsigned(25000000, 32)),
                 BAUD_RATE   => std_logic_vector(conv_unsigned(38400, 28)))
                 
     port map(   I_CLK       => I_CLK,

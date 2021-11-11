@@ -1,6 +1,5 @@
 #include <avr/io.h>
 #undef F_CPU
-#define F_CPU 16000000
 
 // from https://atmega32-avr.com/establish-uart-communication-atmega8-arduino-uno/
 // two way: https://circuitdigest.com/microcontroller-projects/uart-communication-between-two-atmega8-microcontrollers
@@ -11,7 +10,7 @@
 
 //header to enable data flow control over pins
 
-#define F_CPU 16000000 //telling controller crystal frequency attached
+#define F_CPU 25000000 //telling controller crystal frequency attached
 
 #include <util/delay.h> //header to enable delay function in program
 
@@ -35,9 +34,11 @@ int main(void)
 	UCSRC = (1 << USBS) | (3 << UCSZ0);
 
 	while (1)	{
-		if ((PORTD & 0b00001111) != 0) {//once button is pressed, transmit
+		if (PORTD != 0) {//once button is pressed, transmit
 			while (! (UCSRA & (1 << UDRE)) );		
-			UDR = 0b10110100;//once transmitter is ready sent eight bit data
+			UDR = 0b10110100;//once transmitter is ready sent eight bit data // b4
+			_delay_ms(150);
+			UDR = 0b00011100; // 1C
 		}
 
 	_delay_ms(220);
