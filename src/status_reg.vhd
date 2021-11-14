@@ -25,16 +25,19 @@ entity status_reg is
   architecture Behavioral of status_reg is
       
      signal L : std_logic_vector(7 downto 0);
-
+   
   begin  
      process(I_CLK)
      begin
          if (rising_edge(I_CLK)) then
             if (I_WE_F = '1') then          -- write flags (from ALU)
-                    L <= I_FLAGS;
+                    L(7 downto 5) <= I_FLAGS(7 downto 5);
+                    L(3 downto 0) <= I_FLAGS(3 downto 0);
             elsif (I_WE_SR = '1') then      -- write I/O
-                L <= I_DIN;
+                L(7 downto 5) <= I_DIN(7 downto 5);
+                L(3 downto 0) <= I_DIN(3 downto 0);
             end if;
+            L(4) <= L(3) xor L(2);
         end if;
      end process;
 
@@ -52,7 +55,7 @@ entity status_reg is
               when others => -- Do nothing. This line is only here to make the simulator happy.
           end case;
       end process;
-            
+      
       Q <= L;
   end Behavioral;
                 
