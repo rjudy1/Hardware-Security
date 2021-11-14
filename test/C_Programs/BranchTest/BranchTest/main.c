@@ -61,7 +61,7 @@ int main(void)
 		} else if (x < 5) {
 			x = x + 1;
 			PORTC = 0b10000000;
-			PORTB = 0b01000000;			//Show a dash
+			PORTB = convert_to_byte(3);
 			_delay_ms(300);
 		}
 	}
