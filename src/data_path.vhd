@@ -20,7 +20,7 @@ entity data_path is
          I_JADR      : in std_logic_vector(15 downto 0);
          I_OPC       : in std_logic_vector(15 downto 0);
          I_PC        : in std_logic_vector(15 downto 0);
-         I_PC_OP     : in std_logic_vector(2 downto 0);
+         I_PC_OP     : in std_logic_vector(2 downto 0);             --Comes from opc_deco
          I_PMS       : in std_logic;            --program memory select
          I_RD_M      : in std_logic;
          I_RRRRR     : in std_logic_vector(4 downto 0);

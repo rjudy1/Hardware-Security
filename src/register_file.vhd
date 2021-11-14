@@ -103,7 +103,7 @@ entity register_file is
        signal L_XYZS  : std_logic_vector(15 downto 0);
        
        attribute mark_debug : string;
-       attribute mark_debug of R_R28 : signal is "true";
+       attribute mark_debug of R_R24 : signal is "true";
        attribute mark_debug of S_FLAGS : signal is "true";
 
 
