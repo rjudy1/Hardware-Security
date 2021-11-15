@@ -27,6 +27,7 @@ entity status_reg is
      signal L : std_logic_vector(7 downto 0);
    
   begin  
+     L(4) <= L(3) xor L(2);
      process(I_CLK)
      begin
          if (rising_edge(I_CLK)) then
@@ -37,7 +38,6 @@ entity status_reg is
                 L(7 downto 5) <= I_DIN(7 downto 5);
                 L(3 downto 0) <= I_DIN(3 downto 0);
             end if;
-            L(4) <= L(3) xor L(2);
         end if;
      end process;
 
