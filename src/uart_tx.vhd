@@ -24,6 +24,9 @@ architecture Behavioral of uart_tx is
 signal L_BUF            : std_logic_vector(8 downto 0);
 signal L_FLAG           : std_logic;
 signal L_TODO           : std_logic_vector(3 downto 0);     -- bits to send
+
+ attribute mark_debug : string;
+ attribute mark_debug of L_TODO : signal is "true";
  
 begin
  
