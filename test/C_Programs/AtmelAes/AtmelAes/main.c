@@ -13,8 +13,8 @@
 
 #include <xc.h>
 #include <util/delay.h>
-#include <iostream>
-#include <cstdlib>
+//#include <iostream>
+//#include <cstdlib>
 #include "aes.h"
 
 
@@ -44,15 +44,15 @@ int main(void)
 	
 	while(1)
 	{
-		if (PORTD == 0x80) // top button
+		if (PORTD != 0x00) // top button
 		{
 			
 			aes_cipher(aes_text, intermediate_output);
 			
-			for (int i = 0; i < sizeof(aes_text)/sizeof(aes_text[0]); i++ {
+			for (int i = 0; i < sizeof(aes_text)/sizeof(aes_text[0]); i++) {
 				while (! (UCSRA & (1 << UDRE)) );		
 				UDR = intermediate_output[i];//once transmitter is ready sent eight bit data // b4
-				_delay_ms(150);
+				_delay_ms(100);
 			}
 		}
 		_delay_ms(100);					//Pause for 40 ms

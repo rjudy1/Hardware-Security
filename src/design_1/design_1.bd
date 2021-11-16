@@ -58,7 +58,12 @@
       },
       "Q_CLK": {
         "type": "clk",
-        "direction": "O"
+        "direction": "O",
+        "parameters": {
+          "FREQ_HZ": {
+            "value": "25000000"
+          }
+        }
       }
     },
     "components": {
