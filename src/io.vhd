@@ -137,8 +137,14 @@ begin
                         
                     when X"41"  =>  --handled by UART
                         
-                    when X"43"  =>  L_RX_INT_ENABLED <= I_DIN(0);
-                                    L_TX_INT_ENABLED <= I_DIN(1);
+--                    when X"43"  =>  L_RX_INT_ENABLED <= I_DIN(0);
+--                                    L_TX_INT_ENABLED <= I_DIN(1);
+                    when X"2A"  => -- UCSRB
+                                   L_RX_INT_ENABLED <= I_DIN(7);
+                                   L_TX_INT_ENABLED <= I_DIN(6);
+                    when X"2B"  => -- UCSRA:       handled by uart
+                    when X"2C"  => -- UDR:         handled by uart
+
                     
                     when others =>  --Intentionally blank
                 end case;
@@ -154,17 +160,41 @@ begin
 --              L_TX_INT_ENABLED <= '0';                                --TX_INT_ENABLED is cleared
                 L_INTVEC <= "000000";                                   --Interrupt vector is invalid (MSB is 0) and clear (all bits are 0)
             else                                                --If there was no clear,
-                if(L_RX_INT_ENABLED and U_RX_READY) = '1' then          --If RX is ready and enabled
-                    if(L_INTVEC(5) = '0') then                              --If there is no interrupt pending
-                        L_INTVEC <= "101011";                                   --Generate Interrupt, vector 11
-                    end if;
-                elsif(L_TX_INT_ENABLED and not U_TX_BUSY) = '1' then    --else if TX is enabled and not busy (ready)
-                    if(L_INTVEC(5) = '0') then                              --If there is no interrupt pending
-                        L_INTVEC <= "101011";                                   --Generate Interrupt, vector 12
-                    end if;
-                else
-                    L_INTVEC <= "000000";                               --else clear interrupt vector and make invalid
-                end if;
+                case L_INTVEC is
+                    when "101011" => -- vector 11 interrupt pending.
+                        if (L_RX_INT_ENABLED and U_RX_READY) = '0' then
+                            L_INTVEC <= "000000";
+                        end if;
+
+                    when "101100" => -- vector 12 interrupt pending.
+                        if (L_TX_INT_ENABLED and not U_TX_BUSY) = '0' then
+                            L_INTVEC <= "000000";
+                        end if;
+
+                    when others   =>
+                        -- no interrupt is pending.
+                        -- We accept a new interrupt.
+                        --
+                        if    (L_RX_INT_ENABLED and U_RX_READY) = '1' then
+                            L_INTVEC <= "101011";            -- _VECTOR(11)
+                        elsif (L_TX_INT_ENABLED and not U_TX_BUSY) = '1' then
+                            L_INTVEC <= "101100";            -- _VECTOR(12)
+                        else
+                            L_INTVEC <= "000000";            -- no interrupt
+                        end if;
+                end case;
+
+--                if(L_RX_INT_ENABLED and U_RX_READY) = '1' then          --If RX is ready and enabled
+--                    if(L_INTVEC(5) = '0') then                              --If there is no interrupt pending
+--                        L_INTVEC <= "101011";                                   --Generate Interrupt, vector 11
+--                    end if;
+--                elsif(L_TX_INT_ENABLED and not U_TX_BUSY) = '1' then    --else if TX is enabled and not busy (ready)
+--                    if(L_INTVEC(5) = '0') then                              --If there is no interrupt pending
+--                        L_INTVEC <= "101011";                                   --Generate Interrupt, vector 12
+--                    end if;
+--                else
+--                    L_INTVEC <= "000000";                               --else clear interrupt vector and make invalid
+--                end if;
             end if;
         end if;
     end process;
