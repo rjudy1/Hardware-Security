@@ -91,6 +91,10 @@ signal L_RX_OLD_FLAG    : std_logic;
 signal L_RX_READY       : std_logic;
 signal L_TX_FLAG        : std_logic;
 signal L_TX_DATA        : std_logic_vector(7 downto 0);
+
+ attribute mark_debug : string;
+ attribute mark_debug of Q_TX : signal is "true";
+ attribute mark_debug of L_TX_FLAG : signal is "true";
  
 begin
  
