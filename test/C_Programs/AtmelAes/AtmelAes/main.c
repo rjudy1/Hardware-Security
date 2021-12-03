@@ -17,6 +17,33 @@
 //#include <cstdlib>
 #include "aes.h"
 
+int convert_to_byte(int a) {
+	switch (a) {
+		case 0:
+		return 0b0111111;
+		case 1:
+		return 0b00000110;
+		case 2:
+		return 0b01011011;
+		case 3:
+		return 0b01001111;
+		case 4:
+		return 0b01100110;
+		case 5:
+		return 0b01101101;
+		case 6:
+		return 0b01111101;
+		case 7:
+		return 0b00000111;
+		case 8:
+		return 0b01111111;
+		case 9:
+		return 0b01101111;
+		default:
+		return 0b11001100;
+	}
+}
+
 
 int main(void)
 {
@@ -53,18 +80,23 @@ int main(void)
 		{
 			
 			aes_cipher(aes_text, intermediate_output);
-			
+			PORTB = 0x11000000;
+			PORTC = 0x01011010; // use as start flag
+			intermediate_output[0] = 0x4a;
+			intermediate_output[1] = 0x4b;
 			for (int i = 0; i < sizeof(aes_text)/sizeof(aes_text[0]); i++) {
 //				while (! (UCSRA & (1 << UDRE)) );		
-				UDR = intermediate_output[i];//once transmitter is ready sent eight bit data // b4
 				PORTB = 0x10000000;
-				PORTC = intermediate_output[i];
+				PORTC = convert_to_byte(intermediate_output[i]&0xF0);
 				_delay_ms(200);
+				PORTB = 0x01000000;
+				PORTC = convert_to_byte(intermediate_output[i]&0x0F);
+				_delay_ms(200);
+				UDR = intermediate_output[i];//once transmitter is ready sent eight bit data // b4
 			}
 			
-			response = UDR;
-			PORTB = 0x11000000;
-			PORTC = response;
+//			response = UDR;
+
 			_delay_ms(200);
 			
 		}

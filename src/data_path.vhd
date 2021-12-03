@@ -177,7 +177,7 @@ entity data_path is
             end if;
         end process;
               
-        --whether PC shall be loaded wiht NEW_PC or not.
+        --whether PC shall be loaded with NEW_PC or not.
         --I.e. if a branch shall be taken or not
         --
               
