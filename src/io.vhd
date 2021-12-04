@@ -137,11 +137,11 @@ begin
                         
                     when X"41"  =>  --handled by UART
                         
---                    when X"43"  =>  L_RX_INT_ENABLED <= I_DIN(0);
---                                    L_TX_INT_ENABLED <= I_DIN(1);
+                    when X"43"  =>  L_RX_INT_ENABLED <= I_DIN(0);
+                                    L_TX_INT_ENABLED <= I_DIN(1);
                     when X"2A"  => -- UCSRB
-                                   L_RX_INT_ENABLED <= I_DIN(7);
-                                   L_TX_INT_ENABLED <= I_DIN(6);
+                                   L_RX_INT_ENABLED <= I_DIN(4);
+                                   L_TX_INT_ENABLED <= I_DIN(3);
                     when X"2B"  => -- UCSRA:       handled by uart
                     when X"2C"  => -- UDR:         handled by uart
 
