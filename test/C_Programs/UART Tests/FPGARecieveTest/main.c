@@ -17,14 +17,15 @@
 int main(void)
 
 {
+	DDRB = 0b11111111; //seven seg
+	DDRC = 0b11110000; //seven seg select
 	DDRD = 0b00000000; // button inputs
-//	DDRB =0;//PORTB is set as INPUT // needs to be D for buttons unless that's taken, then switch buttons onto A?
-//	DDRD |= 1 << PIND1;//pin1 of portD as OUTPUT
-//	DDRD &= ~(1 << PIND0);//pin0 of portD as INPUT
-//	PORTD |= 1 << PIND0;
+	//	DDRB =0;//PORTB is set as INPUT // needs to be D for buttons unless that's taken, then switch buttons onto A?
+		DDRD |= 1 << PIND1;//pin1 of portD as OUTPUT
+		DDRD &= ~(1 << PIND0);//pin0 of portD as INPUT
+	//	PORTD |= 1 << PIND0;
 
 	int UBBRValue = 25;//AS described before setting baud rate 38400baud(BPS)
-	int8_t input_uart;
 	//Put the upper part of the baud number here (bits 8 to 11)
 	UBRRH = (unsigned char) (UBBRValue >> 8);
 	//Put the remaining part of the baud number here
@@ -33,17 +34,27 @@ int main(void)
 	UCSRB = (1 << RXEN) | (1 << TXEN);
 	//Set 2 stop bits and data bit length is 8-bit
 	UCSRC = (1 << USBS) | (3 << UCSZ0);
+	
+	unsigned char receiveData;
 
 	while (1)	{
-		if (PORTD != 0) {//once button is pressed, transmit
-			while (! (UCSRA & (1 << UDRE)) );		
+		if (PORTD == 0x08) {//once button is pressed, transmit
+			while (! (UCSRA & (1 << UDRE)) );
 			UDR = 0b10110100;//once transmitter is ready sent eight bit data // b4
 			_delay_ms(150);
-			
-			input_uart = UDR; // 1C
+			UDR = 0b00011100; // 1C
 		}
+		
+		 while (! (UCSRA & (1 << RXC)) );
 
-	_delay_ms(220);
+		 receiveData = UDR;
+		 
+		 if (PORTD == 0x04){
+			 PORTC = 0xF0;
+			 PORTB = receiveData;
+		 }
+
+		_delay_ms(220);
 
 	}
 }
