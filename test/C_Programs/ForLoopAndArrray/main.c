@@ -47,9 +47,9 @@ int convert_to_byte(int a) {
 
 int main(void)
 {
-	DDRB = 0b00000000;
-	DDRC = 0b00000000;
-	DDRD = 0b00001111;					// PORTD is set as input for buttons
+	DDRB = 0b11111111;
+	DDRC = 0b11110000;
+	DDRD = 0b00000000;					// PORTD is set as input for buttons
 	
 	// 	int UBBRValue = 25;//AS described before setting baud rate 38400baud(BPS)
 	// 	//Put the upper part of the baud number here (bits 8 to 11)
@@ -67,16 +67,17 @@ int main(void)
 
 	while (1) {
 		if (PORTD != 0)
-		for (int i = 0; i < sizeof(aes_text) / sizeof(aes_text[0]); i++) {
-			UDR = aes_text[i];
+			for (int i = 0; i < 16; i++) {
+				while (! (UCSRA & (1 << UDRE)) );
+				UDR = aes_text[i];
 			
-			PORTB = 0x10000000;
-			PORTC = convert_to_byte(aes_text[i]&0xF0);
-			_delay_ms(100);
-			PORTB = 0x01000000;
-			PORTC = convert_to_byte(aes_text[i]&0x0F);
-			_delay_ms(200);
-		}
+				PORTB = 0x10000000;
+				PORTC = convert_to_byte(aes_text[i]&0xF0);
+				_delay_ms(100);
+				PORTB = 0x01000000;
+				PORTC = convert_to_byte(aes_text[i]&0x0F);
+				_delay_ms(200);
+			}
 	}
 	/*
 	DDRB = 0b00000000;
