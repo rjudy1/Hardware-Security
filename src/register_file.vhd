@@ -102,11 +102,6 @@ entity register_file is
        signal L_WE_SR : std_logic;
        signal L_XYZS  : std_logic_vector(15 downto 0);
        
-       attribute mark_debug : string;
-       attribute mark_debug of R_R24 : signal is "true";
-       attribute mark_debug of S_FLAGS : signal is "true";
-
-
  begin
        --creating the 16 double registers and the sp register
        r00: reg_16 port map(I_CLK => I_CLK, I_WE => L_WE(1 downto 0),   I_D => I_DIN, Q => R_R00);

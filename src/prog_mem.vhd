@@ -30,8 +30,12 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
     
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
 -- the content of the program memory.
 use work.prog_mem_content.all;
+
 
 entity prog_mem is
      port (  I_CLK       : in  std_logic;
@@ -96,7 +100,7 @@ architecture Behavioral of prog_mem is
     
     begin
 
-        pe_0 : RAMB4_S4_S4 ---------------------------------------------------------
+    pe_0 : RAMB4_S4_S4 ---------------------------------------------------------
     generic map(INIT_00 => pe_0_00, INIT_01 => pe_0_01, INIT_02 => pe_0_02, 
                 INIT_03 => pe_0_03, INIT_04 => pe_0_04, INIT_05 => pe_0_05,
                 INIT_06 => pe_0_06, INIT_07 => pe_0_07, INIT_08 => pe_0_08,

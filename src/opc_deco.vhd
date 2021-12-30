@@ -81,6 +81,7 @@ begin
                                 Q_PC_OP <= PC_LD_I;
                                 Q_WE_F <= '1';
                                 Q_WE_M <= "11";
+                                Q_WE_XYZS <= '1'; 
                 end if;
 
                     when "01" =>

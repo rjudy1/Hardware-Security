@@ -1,0 +1,217 @@
+
+XC8Application1.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000007e  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00000132  000001a6  2**0
+                  ALLOC, LOAD, DATA
+  2 .comment      0000002f  00000000  00000000  000001a6  2**0
+                  CONTENTS, READONLY
+  3 .debug_aranges 00000038  00000000  00000000  000001d5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   00000971  00000000  00000000  0000020d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 000005d1  00000000  00000000  00000b7e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   00000306  00000000  00000000  0000114f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  00000088  00000000  00000000  00001458  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    0000017a  00000000  00000000  000014e0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_loc    00000320  00000000  00000000  0000165a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 00000028  00000000  00000000  0000197a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .text         00000002  00000110  00000110  00000184  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 12 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000019a4  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .text.uart_putc 0000000a  00000106  00000106  0000017a  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 14 .rodata       00000020  00800060  00000112  00000186  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+ 15 .text.main    00000088  0000007e  0000007e  000000f2  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	16 c0       	rjmp	.+44     	; 0x2e <__ctors_end>
+   2:	86 c0       	rjmp	.+268    	; 0x110 <__bad_interrupt>
+   4:	85 c0       	rjmp	.+266    	; 0x110 <__bad_interrupt>
+   6:	84 c0       	rjmp	.+264    	; 0x110 <__bad_interrupt>
+   8:	83 c0       	rjmp	.+262    	; 0x110 <__bad_interrupt>
+   a:	82 c0       	rjmp	.+260    	; 0x110 <__bad_interrupt>
+   c:	81 c0       	rjmp	.+258    	; 0x110 <__bad_interrupt>
+   e:	80 c0       	rjmp	.+256    	; 0x110 <__bad_interrupt>
+  10:	7f c0       	rjmp	.+254    	; 0x110 <__bad_interrupt>
+  12:	7e c0       	rjmp	.+252    	; 0x110 <__bad_interrupt>
+  14:	7d c0       	rjmp	.+250    	; 0x110 <__bad_interrupt>
+  16:	7c c0       	rjmp	.+248    	; 0x110 <__bad_interrupt>
+  18:	7b c0       	rjmp	.+246    	; 0x110 <__bad_interrupt>
+  1a:	7a c0       	rjmp	.+244    	; 0x110 <__bad_interrupt>
+  1c:	79 c0       	rjmp	.+242    	; 0x110 <__bad_interrupt>
+  1e:	78 c0       	rjmp	.+240    	; 0x110 <__bad_interrupt>
+  20:	77 c0       	rjmp	.+238    	; 0x110 <__bad_interrupt>
+  22:	76 c0       	rjmp	.+236    	; 0x110 <__bad_interrupt>
+  24:	75 c0       	rjmp	.+234    	; 0x110 <__bad_interrupt>
+
+00000026 <.dinit>:
+  26:	00 60       	ori	r16, 0x00	; 0
+  28:	00 80       	ld	r0, Z
+  2a:	00 01       	movw	r0, r0
+  2c:	12 00       	.word	0x0012	; ????
+
+0000002e <__ctors_end>:
+  2e:	11 24       	eor	r1, r1
+  30:	1f be       	out	0x3f, r1	; 63
+  32:	cf e5       	ldi	r28, 0x5F	; 95
+  34:	d4 e0       	ldi	r29, 0x04	; 4
+  36:	de bf       	out	0x3e, r29	; 62
+  38:	cd bf       	out	0x3d, r28	; 61
+
+0000003a <__do_copy_data>:
+  3a:	e6 e2       	ldi	r30, 0x26	; 38
+  3c:	f0 e0       	ldi	r31, 0x00	; 0
+  3e:	40 e0       	ldi	r20, 0x00	; 0
+  40:	17 c0       	rjmp	.+46     	; 0x70 <__do_clear_bss+0x8>
+  42:	b5 91       	lpm	r27, Z+
+  44:	a5 91       	lpm	r26, Z+
+  46:	35 91       	lpm	r19, Z+
+  48:	25 91       	lpm	r18, Z+
+  4a:	05 91       	lpm	r16, Z+
+  4c:	07 fd       	sbrc	r16, 7
+  4e:	0c c0       	rjmp	.+24     	; 0x68 <__do_clear_bss>
+  50:	95 91       	lpm	r25, Z+
+  52:	85 91       	lpm	r24, Z+
+  54:	ef 01       	movw	r28, r30
+  56:	f9 2f       	mov	r31, r25
+  58:	e8 2f       	mov	r30, r24
+  5a:	05 90       	lpm	r0, Z+
+  5c:	0d 92       	st	X+, r0
+  5e:	a2 17       	cp	r26, r18
+  60:	b3 07       	cpc	r27, r19
+  62:	d9 f7       	brne	.-10     	; 0x5a <__SREG__+0x1b>
+  64:	fe 01       	movw	r30, r28
+  66:	04 c0       	rjmp	.+8      	; 0x70 <__do_clear_bss+0x8>
+
+00000068 <__do_clear_bss>:
+  68:	1d 92       	st	X+, r1
+  6a:	a2 17       	cp	r26, r18
+  6c:	b3 07       	cpc	r27, r19
+  6e:	e1 f7       	brne	.-8      	; 0x68 <__do_clear_bss>
+  70:	ed 32       	cpi	r30, 0x2D	; 45
+  72:	f4 07       	cpc	r31, r20
+  74:	31 f7       	brne	.-52     	; 0x42 <__SREG__+0x3>
+  76:	03 d0       	rcall	.+6      	; 0x7e <_etext>
+  78:	00 c0       	rjmp	.+0      	; 0x7a <_exit>
+
+0000007a <_exit>:
+  7a:	f8 94       	cli
+
+0000007c <__stop_program>:
+  7c:	ff cf       	rjmp	.-2      	; 0x7c <__stop_program>
+
+Disassembly of section .text:
+
+00000110 <__bad_interrupt>:
+ 110:	77 cf       	rjmp	.-274    	; 0x0 <__vectors>
+
+Disassembly of section .text.uart_putc:
+
+00000106 <uart_putc>:
+		return 0b11001100;
+	}
+}
+
+uint8_t uart_putc(uint8_t cc)	{
+	while ((UCSRA & (1 << UDRE)) == 0)		;
+ 106:	5d 9b       	sbis	0x0b, 5	; 11
+ 108:	fe cf       	rjmp	.-4      	; 0x106 <uart_putc>
+	UDR = cc;
+ 10a:	8c b9       	out	0x0c, r24	; 12
+	return 1;
+}
+ 10c:	81 e0       	ldi	r24, 0x01	; 1
+ 10e:	08 95       	ret
+
+Disassembly of section .text.main:
+
+0000007e <main>:
+		case 9:
+		return 0b01101111;
+		default:
+		return 0b11001100;
+	}
+}
+  7e:	cf 93       	push	r28
+  80:	df 93       	push	r29
+  82:	cd b7       	in	r28, 0x3d	; 61
+  84:	de b7       	in	r29, 0x3e	; 62
+  86:	a0 97       	sbiw	r28, 0x20	; 32
+  88:	0f b6       	in	r0, 0x3f	; 63
+  8a:	f8 94       	cli
+  8c:	de bf       	out	0x3e, r29	; 62
+  8e:	0f be       	out	0x3f, r0	; 63
+  90:	cd bf       	out	0x3d, r28	; 61
+  92:	80 e2       	ldi	r24, 0x20	; 32
+  94:	e0 e6       	ldi	r30, 0x60	; 96
+  96:	f0 e0       	ldi	r31, 0x00	; 0
+  98:	de 01       	movw	r26, r28
+  9a:	11 96       	adiw	r26, 0x01	; 1
+  9c:	01 90       	ld	r0, Z+
+  9e:	0d 92       	st	X+, r0
+  a0:	8a 95       	dec	r24
+  a2:	e1 f7       	brne	.-8      	; 0x9c <main+0x1e>
+  a4:	8f ef       	ldi	r24, 0xFF	; 255
+  a6:	87 bb       	out	0x17, r24	; 23
+  a8:	80 ef       	ldi	r24, 0xF0	; 240
+  aa:	84 bb       	out	0x14, r24	; 20
+  ac:	11 ba       	out	0x11, r1	; 17
+  ae:	88 e1       	ldi	r24, 0x18	; 24
+  b0:	8a b9       	out	0x0a, r24	; 10
+  b2:	8e e0       	ldi	r24, 0x0E	; 14
+  b4:	80 bd       	out	0x20, r24	; 32
+  b6:	82 b3       	in	r24, 0x12	; 18
+  b8:	88 30       	cpi	r24, 0x08	; 8
+  ba:	99 f4       	brne	.+38     	; 0xe2 <main+0x64>
+  bc:	88 e3       	ldi	r24, 0x38	; 56
+  be:	23 d0       	rcall	.+70     	; 0x106 <uart_putc>
+  c0:	10 e0       	ldi	r17, 0x00	; 0
+  c2:	0d c0       	rjmp	.+26     	; 0xde <main+0x60>
+  c4:	e1 e0       	ldi	r30, 0x01	; 1
+  c6:	f0 e0       	ldi	r31, 0x00	; 0
+  c8:	ec 0f       	add	r30, r28
+  ca:	fd 1f       	adc	r31, r29
+  cc:	e1 0f       	add	r30, r17
+  ce:	f1 1d       	adc	r31, r1
+  d0:	17 fd       	sbrc	r17, 7
+  d2:	fa 95       	dec	r31
+  d4:	80 81       	ld	r24, Z
+  d6:	87 bb       	out	0x17, r24	; 23
+  d8:	80 81       	ld	r24, Z
+  da:	15 d0       	rcall	.+42     	; 0x106 <uart_putc>
+  dc:	1f 5f       	subi	r17, 0xFF	; 255
+  de:	10 32       	cpi	r17, 0x20	; 32
+  e0:	8c f3       	brlt	.-30     	; 0xc4 <main+0x46>
+  e2:	9c b1       	in	r25, 0x0c	; 12
+  e4:	82 b3       	in	r24, 0x12	; 18
+  e6:	84 30       	cpi	r24, 0x04	; 4
+  e8:	21 f4       	brne	.+8      	; 0xf2 <main+0x74>
+  ea:	80 ef       	ldi	r24, 0xF0	; 240
+  ec:	85 bb       	out	0x15, r24	; 21
+  ee:	98 bb       	out	0x18, r25	; 24
+  f0:	9c 83       	std	Y+4, r25	; 0x04
+  f2:	2f e3       	ldi	r18, 0x3F	; 63
+  f4:	82 e4       	ldi	r24, 0x42	; 66
+  f6:	9f e0       	ldi	r25, 0x0F	; 15
+  f8:	21 50       	subi	r18, 0x01	; 1
+  fa:	80 40       	sbci	r24, 0x00	; 0
+  fc:	90 40       	sbci	r25, 0x00	; 0
+  fe:	e1 f7       	brne	.-8      	; 0xf8 <main+0x7a>
+ 100:	00 c0       	rjmp	.+0      	; 0x102 <main+0x84>
+ 102:	00 00       	nop
+ 104:	d8 cf       	rjmp	.-80     	; 0xb6 <main+0x38>
