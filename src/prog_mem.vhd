@@ -49,8 +49,35 @@ entity prog_mem is
 end prog_mem;
     
 architecture Behavioral of prog_mem is
+
+    COMPONENT dual_port_rom16
+      PORT (
+        clka : IN STD_LOGIC;
+        ena : IN STD_LOGIC;
+        addra : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+        douta : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+        clkb : IN STD_LOGIC;
+        enb : IN STD_LOGIC;
+        addrb : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+        doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+      );
+    END COMPONENT;
+   
+    COMPONENT rom16_odd
+      PORT (
+        clka : IN STD_LOGIC;
+        ena : IN STD_LOGIC;
+        addra : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+        douta : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+        clkb : IN STD_LOGIC;
+        enb : IN STD_LOGIC;
+        addrb : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+        doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+      );
+    END COMPONENT;
+    
     constant zero_256 : bit_vector := X"00000000000000000000000000000000"
-                                    & X"00000000000000000000000000000000";
+                                    & X"00000000000000000000000000000000";                                      
     component RAMB4_S4_S4
         generic(INIT_00 : bit_vector := zero_256;
                 INIT_01 : bit_vector := zero_256;
@@ -100,124 +127,149 @@ architecture Behavioral of prog_mem is
     
     begin
 
-    pe_0 : RAMB4_S4_S4 ---------------------------------------------------------
-    generic map(INIT_00 => pe_0_00, INIT_01 => pe_0_01, INIT_02 => pe_0_02, 
-                INIT_03 => pe_0_03, INIT_04 => pe_0_04, INIT_05 => pe_0_05,
-                INIT_06 => pe_0_06, INIT_07 => pe_0_07, INIT_08 => pe_0_08,
-                INIT_09 => pe_0_09, INIT_0A => pe_0_0A, INIT_0B => pe_0_0B, 
-                INIT_0C => pe_0_0C, INIT_0D => pe_0_0D, INIT_0E => pe_0_0E,
-                INIT_0F => pe_0_0F)
-    port map(ADDRA => L_PC_E,                   ADDRB => I_PM_ADR(11 downto 2),
-                CLKA  => I_CLK,                    CLKB  => I_CLK,
-                DIA   => "0000",                   DIB   => "0000",
-                ENA   => L_WAIT_N,                 ENB   => '1',
-                RSTA  => '0',                      RSTB  => '0',
-                WEA   => '0',                      WEB   => '0',
-                DOA   => M_OPC_E(3 downto 0),      DOB   => M_PMD_E(3 downto 0));
-    pe_1 : RAMB4_S4_S4 ---------------------------------------------------------
-    generic map(INIT_00 => pe_1_00, INIT_01 => pe_1_01, INIT_02 => pe_1_02,
-                INIT_03 => pe_1_03, INIT_04 => pe_1_04, INIT_05 => pe_1_05,
-                INIT_06 => pe_1_06, INIT_07 => pe_1_07, INIT_08 => pe_1_08,
-                INIT_09 => pe_1_09, INIT_0A => pe_1_0A, INIT_0B => pe_1_0B,
-                INIT_0C => pe_1_0C, INIT_0D => pe_1_0D, INIT_0E => pe_1_0E,
-                INIT_0F => pe_1_0F)
-    port map(ADDRA => L_PC_E,                   ADDRB => I_PM_ADR(11 downto 2),
-             CLKA  => I_CLK,                    CLKB  => I_CLK,
-             DIA   => "0000",                   DIB   => "0000",
-             ENA   => L_WAIT_N,                 ENB   => '1',
-                 RSTA  => '0',                      RSTB  => '0',
-                 WEA   => '0',                      WEB   => '0',
-                 DOA   => M_OPC_E(7 downto 4),      DOB   => M_PMD_E(7 downto 4));
+    pe : dual_port_rom16
+    PORT MAP (
+    clka => I_CLK,
+    ena => L_WAIT_N,
+    addra => L_PC_E,
+    douta => M_OPC_E,
+    clkb => I_CLK,
+    enb => '1',
+    addrb => I_PM_ADR(11 downto 2),
+    doutb => M_PMD_E
+    );
+--    pe_0 : RAMB4_S4_S4 ---------------------------------------------------------
+--    generic map(INIT_00 => pe_0_00, INIT_01 => pe_0_01, INIT_02 => pe_0_02, 
+--                INIT_03 => pe_0_03, INIT_04 => pe_0_04, INIT_05 => pe_0_05,
+--                INIT_06 => pe_0_06, INIT_07 => pe_0_07, INIT_08 => pe_0_08,
+--                INIT_09 => pe_0_09, INIT_0A => pe_0_0A, INIT_0B => pe_0_0B, 
+--                INIT_0C => pe_0_0C, INIT_0D => pe_0_0D, INIT_0E => pe_0_0E,
+--                INIT_0F => pe_0_0F)
+--    port map(ADDRA => L_PC_E,                   ADDRB => I_PM_ADR(11 downto 2),
+--                CLKA  => I_CLK,                    CLKB  => I_CLK,
+--                DIA   => "0000",                   DIB   => "0000",
+--                ENA   => L_WAIT_N,                 ENB   => '1',
+--                RSTA  => '0',                      RSTB  => '0',
+--                WEA   => '0',                      WEB   => '0',
+--                DOA   => M_OPC_E(3 downto 0),      DOB   => M_PMD_E(3 downto 0));
+--    pe_1 : RAMB4_S4_S4 ---------------------------------------------------------
+--    generic map(INIT_00 => pe_1_00, INIT_01 => pe_1_01, INIT_02 => pe_1_02,
+--                INIT_03 => pe_1_03, INIT_04 => pe_1_04, INIT_05 => pe_1_05,
+--                INIT_06 => pe_1_06, INIT_07 => pe_1_07, INIT_08 => pe_1_08,
+--                INIT_09 => pe_1_09, INIT_0A => pe_1_0A, INIT_0B => pe_1_0B,
+--                INIT_0C => pe_1_0C, INIT_0D => pe_1_0D, INIT_0E => pe_1_0E,
+--                INIT_0F => pe_1_0F)
+--    port map(ADDRA => L_PC_E,                   ADDRB => I_PM_ADR(11 downto 2),
+--             CLKA  => I_CLK,                    CLKB  => I_CLK,
+--             DIA   => "0000",                   DIB   => "0000",
+--             ENA   => L_WAIT_N,                 ENB   => '1',
+--             RSTA  => '0',                      RSTB  => '0',
+--             WEA   => '0',                      WEB   => '0',
+--             DOA   => M_OPC_E(7 downto 4),      DOB   => M_PMD_E(7 downto 4));
      
-    pe_2 : RAMB4_S4_S4 ---------------------------------------------------------
-    generic map(INIT_00 => pe_2_00, INIT_01 => pe_2_01, INIT_02 => pe_2_02,
-                INIT_03 => pe_2_03, INIT_04 => pe_2_04, INIT_05 => pe_2_05,
-                INIT_06 => pe_2_06, INIT_07 => pe_2_07, INIT_08 => pe_2_08,
-                    INIT_09 => pe_2_09, INIT_0A => pe_2_0A, INIT_0B => pe_2_0B,
-                    INIT_0C => pe_2_0C, INIT_0D => pe_2_0D, INIT_0E => pe_2_0E,
-                    INIT_0F => pe_2_0F)
-    port map(ADDRA => L_PC_E,                   ADDRB => I_PM_ADR(11 downto 2),
-             CLKA  => I_CLK,                    CLKB  => I_CLK,
-             DIA   => "0000",                   DIB   => "0000",
-                 ENA   => L_WAIT_N,                 ENB   => '1',
-                 RSTA  => '0',                      RSTB  => '0',
-                 WEA   => '0',                      WEB   => '0',
-                 DOA   => M_OPC_E(11 downto 8),     DOB   => M_PMD_E(11 downto 8));
+--    pe_2 : RAMB4_S4_S4 ---------------------------------------------------------
+--    generic map(INIT_00 => pe_2_00, INIT_01 => pe_2_01, INIT_02 => pe_2_02,
+--                INIT_03 => pe_2_03, INIT_04 => pe_2_04, INIT_05 => pe_2_05,
+--                INIT_06 => pe_2_06, INIT_07 => pe_2_07, INIT_08 => pe_2_08,
+--                INIT_09 => pe_2_09, INIT_0A => pe_2_0A, INIT_0B => pe_2_0B,
+--                INIT_0C => pe_2_0C, INIT_0D => pe_2_0D, INIT_0E => pe_2_0E,
+--                INIT_0F => pe_2_0F)
+--    port map(ADDRA => L_PC_E,                   ADDRB => I_PM_ADR(11 downto 2),
+--             CLKA  => I_CLK,                    CLKB  => I_CLK,
+--             DIA   => "0000",                   DIB   => "0000",
+--                 ENA   => L_WAIT_N,                 ENB   => '1',
+--                 RSTA  => '0',                      RSTB  => '0',
+--                 WEA   => '0',                      WEB   => '0',
+--                 DOA   => M_OPC_E(11 downto 8),     DOB   => M_PMD_E(11 downto 8));
      
-    pe_3 : RAMB4_S4_S4 ---------------------------------------------------------
-    generic map(INIT_00 => pe_3_00, INIT_01 => pe_3_01, INIT_02 => pe_3_02,
-                    INIT_03 => pe_3_03, INIT_04 => pe_3_04, INIT_05 => pe_3_05,
-                    INIT_06 => pe_3_06, INIT_07 => pe_3_07, INIT_08 => pe_3_08,
-                    INIT_09 => pe_3_09, INIT_0A => pe_3_0A, INIT_0B => pe_3_0B,
-                    INIT_0C => pe_3_0C, INIT_0D => pe_3_0D, INIT_0E => pe_3_0E,
-                    INIT_0F => pe_3_0F)
-        port map(ADDRA => L_PC_E,                   ADDRB => I_PM_ADR(11 downto 2),
-                 CLKA  => I_CLK,                    CLKB  => I_CLK,
-                 DIA   => "0000",                   DIB   => "0000",
-                 ENA   => L_WAIT_N,                 ENB   => '1',
-                 RSTA  => '0',                      RSTB  => '0',
-                 WEA   => '0',                      WEB   => '0',
-                 DOA   => M_OPC_E(15 downto 12),    DOB   => M_PMD_E(15 downto 12));
+--    pe_3 : RAMB4_S4_S4 ---------------------------------------------------------
+--    generic map(INIT_00 => pe_3_00, INIT_01 => pe_3_01, INIT_02 => pe_3_02,
+--                INIT_03 => pe_3_03, INIT_04 => pe_3_04, INIT_05 => pe_3_05,
+--                INIT_06 => pe_3_06, INIT_07 => pe_3_07, INIT_08 => pe_3_08,
+--                INIT_09 => pe_3_09, INIT_0A => pe_3_0A, INIT_0B => pe_3_0B,
+--                INIT_0C => pe_3_0C, INIT_0D => pe_3_0D, INIT_0E => pe_3_0E,
+--                INIT_0F => pe_3_0F)
+--        port map(ADDRA => L_PC_E,                   ADDRB => I_PM_ADR(11 downto 2),
+--                 CLKA  => I_CLK,                    CLKB  => I_CLK,
+--                 DIA   => "0000",                   DIB   => "0000",
+--                 ENA   => L_WAIT_N,                 ENB   => '1',
+--                 RSTA  => '0',                      RSTB  => '0',
+--                 WEA   => '0',                      WEB   => '0',
+--                 DOA   => M_OPC_E(15 downto 12),    DOB   => M_PMD_E(15 downto 12));
      
-    po_0 : RAMB4_S4_S4 ---------------------------------------------------------
-    generic map(INIT_00 => po_0_00, INIT_01 => po_0_01, INIT_02 => po_0_02,
-                INIT_03 => po_0_03, INIT_04 => po_0_04, INIT_05 => po_0_05,
-                INIT_06 => po_0_06, INIT_07 => po_0_07, INIT_08 => po_0_08,
-                INIT_09 => po_0_09, INIT_0A => po_0_0A, INIT_0B => po_0_0B, 
-                INIT_0C => po_0_0C, INIT_0D => po_0_0D, INIT_0E => po_0_0E,
-                INIT_0F => po_0_0F)
-    port map(ADDRA => L_PC_O,                   ADDRB => I_PM_ADR(11 downto 2),
-             CLKA  => I_CLK,                    CLKB  => I_CLK,
-             DIA   => "0000",                   DIB   => "0000",
-             ENA   => L_WAIT_N,                 ENB   => '1',
-             RSTA  => '0',                      RSTB  => '0',
-             WEA   => '0',                      WEB   => '0',
-             DOA   => M_OPC_O(3 downto 0),      DOB   => M_PMD_O(3 downto 0));
      
-    po_1 : RAMB4_S4_S4 ---------------------------------------------------------
-    generic map(INIT_00 => po_1_00, INIT_01 => po_1_01, INIT_02 => po_1_02,
-                INIT_03 => po_1_03, INIT_04 => po_1_04, INIT_05 => po_1_05,
-                INIT_06 => po_1_06, INIT_07 => po_1_07, INIT_08 => po_1_08,
-                INIT_09 => po_1_09, INIT_0A => po_1_0A, INIT_0B => po_1_0B, 
-                INIT_0C => po_1_0C, INIT_0D => po_1_0D, INIT_0E => po_1_0E,
-                INIT_0F => po_1_0F)
-    port map(ADDRA => L_PC_O,                   ADDRB => I_PM_ADR(11 downto 2),
-             CLKA  => I_CLK,                    CLKB  => I_CLK,
-             DIA   => "0000",                   DIB   => "0000",
-             ENA   => L_WAIT_N,                 ENB   => '1',
-             RSTA  => '0',                      RSTB  => '0',
-             WEA   => '0',                      WEB   => '0',
-             DOA   => M_OPC_O(7 downto 4),      DOB   => M_PMD_O(7 downto 4));
+    po : rom16_odd
+    PORT MAP (
+        clka => I_CLK,
+        ena => L_WAIT_N,
+        addra => L_PC_O,
+        douta => M_OPC_O,
+        clkb => I_CLK,
+        enb => '1',
+        addrb => I_PM_ADR(11 downto 2),
+        doutb => M_PMD_O
+    );
+     
+--    po_0 : RAMB4_S4_S4 ---------------------------------------------------------
+--    generic map(INIT_00 => po_0_00, INIT_01 => po_0_01, INIT_02 => po_0_02,
+--                INIT_03 => po_0_03, INIT_04 => po_0_04, INIT_05 => po_0_05,
+--                INIT_06 => po_0_06, INIT_07 => po_0_07, INIT_08 => po_0_08,
+--                INIT_09 => po_0_09, INIT_0A => po_0_0A, INIT_0B => po_0_0B, 
+--                INIT_0C => po_0_0C, INIT_0D => po_0_0D, INIT_0E => po_0_0E,
+--                INIT_0F => po_0_0F)
+--    port map(ADDRA => L_PC_O,                   ADDRB => I_PM_ADR(11 downto 2),
+--             CLKA  => I_CLK,                    CLKB  => I_CLK,
+--             DIA   => "0000",                   DIB   => "0000",
+--             ENA   => L_WAIT_N,                 ENB   => '1',
+--             RSTA  => '0',                      RSTB  => '0',
+--             WEA   => '0',                      WEB   => '0',
+--             DOA   => M_OPC_O(3 downto 0),      DOB   => M_PMD_O(3 downto 0));
+     
+--    po_1 : RAMB4_S4_S4 ---------------------------------------------------------
+--    generic map(INIT_00 => po_1_00, INIT_01 => po_1_01, INIT_02 => po_1_02,
+--                INIT_03 => po_1_03, INIT_04 => po_1_04, INIT_05 => po_1_05,
+--                INIT_06 => po_1_06, INIT_07 => po_1_07, INIT_08 => po_1_08,
+--                INIT_09 => po_1_09, INIT_0A => po_1_0A, INIT_0B => po_1_0B, 
+--                INIT_0C => po_1_0C, INIT_0D => po_1_0D, INIT_0E => po_1_0E,
+--                INIT_0F => po_1_0F)
+--    port map(ADDRA => L_PC_O,                   ADDRB => I_PM_ADR(11 downto 2),
+--             CLKA  => I_CLK,                    CLKB  => I_CLK,
+--             DIA   => "0000",                   DIB   => "0000",
+--             ENA   => L_WAIT_N,                 ENB   => '1',
+--             RSTA  => '0',                      RSTB  => '0',
+--             WEA   => '0',                      WEB   => '0',
+--             DOA   => M_OPC_O(7 downto 4),      DOB   => M_PMD_O(7 downto 4));
  
-    po_2 : RAMB4_S4_S4 ---------------------------------------------------------
-    generic map(INIT_00 => po_2_00, INIT_01 => po_2_01, INIT_02 => po_2_02,
-                INIT_03 => po_2_03, INIT_04 => po_2_04, INIT_05 => po_2_05,
-                INIT_06 => po_2_06, INIT_07 => po_2_07, INIT_08 => po_2_08,
-                INIT_09 => po_2_09, INIT_0A => po_2_0A, INIT_0B => po_2_0B,
-                INIT_0C => po_2_0C, INIT_0D => po_2_0D, INIT_0E => po_2_0E,
-                INIT_0F => po_2_0F)
-    port map(ADDRA => L_PC_O,                   ADDRB => I_PM_ADR(11 downto 2),
-             CLKA  => I_CLK,                    CLKB  => I_CLK,
-             DIA   => "0000",                   DIB   => "0000",
-             ENA   => L_WAIT_N,                 ENB   => '1',
-             RSTA  => '0',                      RSTB  => '0',
-             WEA   => '0',                      WEB   => '0',
-             DOA   => M_OPC_O(11 downto 8),     DOB   => M_PMD_O(11 downto 8));
+--    po_2 : RAMB4_S4_S4 ---------------------------------------------------------
+--    generic map(INIT_00 => po_2_00, INIT_01 => po_2_01, INIT_02 => po_2_02,
+--                INIT_03 => po_2_03, INIT_04 => po_2_04, INIT_05 => po_2_05,
+--                INIT_06 => po_2_06, INIT_07 => po_2_07, INIT_08 => po_2_08,
+--                INIT_09 => po_2_09, INIT_0A => po_2_0A, INIT_0B => po_2_0B,
+--                INIT_0C => po_2_0C, INIT_0D => po_2_0D, INIT_0E => po_2_0E,
+--                INIT_0F => po_2_0F)
+--    port map(ADDRA => L_PC_O,                   ADDRB => I_PM_ADR(11 downto 2),
+--             CLKA  => I_CLK,                    CLKB  => I_CLK,
+--             DIA   => "0000",                   DIB   => "0000",
+--             ENA   => L_WAIT_N,                 ENB   => '1',
+--             RSTA  => '0',                      RSTB  => '0',
+--             WEA   => '0',                      WEB   => '0',
+--             DOA   => M_OPC_O(11 downto 8),     DOB   => M_PMD_O(11 downto 8));
      
-    po_3 : RAMB4_S4_S4 ---------------------------------------------------------
-    generic map(INIT_00 => po_3_00, INIT_01 => po_3_01, INIT_02 => po_3_02,
-                INIT_03 => po_3_03, INIT_04 => po_3_04, INIT_05 => po_3_05,
-                INIT_06 => po_3_06, INIT_07 => po_3_07, INIT_08 => po_3_08,
-                INIT_09 => po_3_09, INIT_0A => po_3_0A, INIT_0B => po_3_0B, 
-                INIT_0C => po_3_0C, INIT_0D => po_3_0D, INIT_0E => po_3_0E,
-                INIT_0F => po_3_0F)
-    port map(ADDRA => L_PC_O,                   ADDRB => I_PM_ADR(11 downto 2),
-             CLKA  => I_CLK,                    CLKB  => I_CLK,
-             DIA   => "0000",                   DIB   => "0000",
-             ENA   => L_WAIT_N,                 ENB   => '1',
-             RSTA  => '0',                      RSTB  => '0',
-             WEA   => '0',                      WEB   => '0',
-             DOA   => M_OPC_O(15 downto 12),    DOB   => M_PMD_O(15 downto 12));
+--    po_3 : RAMB4_S4_S4 ---------------------------------------------------------
+--    generic map(INIT_00 => po_3_00, INIT_01 => po_3_01, INIT_02 => po_3_02,
+--                INIT_03 => po_3_03, INIT_04 => po_3_04, INIT_05 => po_3_05,
+--                INIT_06 => po_3_06, INIT_07 => po_3_07, INIT_08 => po_3_08,
+--                INIT_09 => po_3_09, INIT_0A => po_3_0A, INIT_0B => po_3_0B, 
+--                INIT_0C => po_3_0C, INIT_0D => po_3_0D, INIT_0E => po_3_0E,
+--                INIT_0F => po_3_0F)
+--    port map(ADDRA => L_PC_O,                   ADDRB => I_PM_ADR(11 downto 2),
+--             CLKA  => I_CLK,                    CLKB  => I_CLK,
+--             DIA   => "0000",                   DIB   => "0000",
+--             ENA   => L_WAIT_N,                 ENB   => '1',
+--             RSTA  => '0',                      RSTB  => '0',
+--             WEA   => '0',                      WEB   => '0',
+--             DOA   => M_OPC_O(15 downto 12),    DOB   => M_PMD_O(15 downto 12));
+    
     
         -- remember I_PC0 and I_PM_ADR for the output mux.
         --

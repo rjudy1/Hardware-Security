@@ -1,7 +1,7 @@
 project_1/
-project_2/
+!project_1/project_1.gen/
 
-src/design_1/
+src/design_1
 !src/design_1/*.bd
 !src/*vhd
 

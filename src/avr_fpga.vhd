@@ -142,18 +142,7 @@
                 Q_7_SEG_SEL => S_7_SEL,
                 Q_7_SEGMENT => S_7_SEGMENT);
         
-        -- input clock scaler
-        --
-        clk_div : process(I_CLK_100)
-        begin
-        if (rising_edge(I_CLK_100)) then
-            L_CLK_CNT <= L_CLK_CNT + "001";
-            if (L_CLK_CNT = "001") then
-                L_CLK_CNT <= "000";
-                L_CLK <= not L_CLK;
-            end if;
-        end if;
-    end process;
+    L_CLK <= I_CLK_100;
         
     -- reset button debounce process
     --
