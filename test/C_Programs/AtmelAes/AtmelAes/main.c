@@ -46,8 +46,19 @@ int convert_to_byte(int a) {
 }
 
 uint8_t uart_putc(uint8_t cc)	{
-	while ((UCSRA & (1 << UDRE)) == 0)		;
+	while ((UCSRA & (1 << UDRE)) == 0);
 	UDR = cc;
+	return 1;
+}
+
+uint8_t uart_putcHex(uint8_t cc) {
+	char hex[] = "0123456789ABCDEF";
+	char firstChar  = hex[cc / 16];
+	char secondChar = hex[cc % 16];
+	while ((UCSRA & (1 << UDRE)) == 0);
+	UDR = firstChar;
+	while ((UCSRA & (1 << UDRE)) == 0);
+	UDR = secondChar;
 	return 1;
 }
 
@@ -105,7 +116,7 @@ int main(void)
 	while(true) {
 		uart_puts(PSTR("Main loop start\r\n"));
 		
-		if (PORTD == 0x08) {
+		if (true) {
 			
 			uart_puts(PSTR("Text to encrypt: "));
 			for (int8_t i = 0; i < 16; i++) {
@@ -116,10 +127,10 @@ int main(void)
 
 			aes_cipher(aes_unencrypted, aes_encrypted);
 			
-			uart_puts(PSTR("Encrypted text: "));
+			uart_puts(PSTR("Encrypted text (hexadecimal): "));
 			for (int8_t i = 0; i < 16; i++) {
-				DDRB = aes_encrypted[i];
-				uart_putc(aes_encrypted[i]);
+				DDRB = aes_encrypted[i];			//This line doesn't make sense
+				uart_putcHex(aes_encrypted[i]);
 			}
 			uart_puts(PSTR("\r\n"));
 			
