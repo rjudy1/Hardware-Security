@@ -91,7 +91,7 @@ int main(void)
 	//Enable the receiver and transmitter
 	UCSRB = (1 << RXEN) | (1 << TXEN);
 	//Set 2 stop bits and data bit length is 8-bit
-	UCSRC = (1 << USBS) | (3 << UCSZ0);
+	UCSRC = (1<<URSEL) | (1 << USBS) | (3 << UCSZ0);		//Different (added URSEL part)
 
 	aes_init(aes_key);
 	for (int8_t i = 0; i < 32; i++) {
