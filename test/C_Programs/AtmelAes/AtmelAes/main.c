@@ -71,8 +71,8 @@ int main(void)
 
 	uint8_t response = '8';
 	uint8_t aes_key[160] = { 'a','e','s','E','n','c','r','y','p','t','i','o','n','K','e','y' };
-	uint8_t aes_text[16] = 	{'h', 'e', 'l', 'l', 'o', ',',' ', 'w','o','r','l','d', '0', '0', '0', '0' };
-	uint8_t aes_result[16] = {0};
+	uint8_t aes_unencrypted[16] = 	{'h', 'e', 'l', 'l', 'o', ',',' ', 'w','o','r','l','d', '0', '0', '0', '0' };
+	uint8_t aes_encrypted[16] = {0};
 
 	
 	DDRB = 0b11111111; //seven seg
@@ -93,28 +93,35 @@ int main(void)
 	//Set 2 stop bits and data bit length is 8-bit
 	UCSRC = (1<<URSEL) | (1 << USBS) | (3 << UCSZ0);		//Different (added URSEL part)
 
+	uart_puts(PSTR("\r\nProgram start\r\n"));
+	
+	uart_puts(PSTR("AES Encryption key: "));
 	aes_init(aes_key);
 	for (int8_t i = 0; i < 32; i++) {
 		uart_putc(aes_key[i]);
 	}
+	uart_puts(PSTR("\r\n"));
 
-	for (;;) {
+	while(true) {
+		uart_puts(PSTR("Main loop start\r\n"));
+		
 		if (PORTD == 0x08) {
-			uart_putc(response); // test the uart
 			
+			uart_puts(PSTR("Text to encrypt: "));
 			for (int8_t i = 0; i < 16; i++) {
-				DDRB = aes_text[i];
-				uart_putc(aes_text[i]);
+				DDRB = aes_unencrypted[i];			//This line doesn't make sense
+				uart_putc(aes_unencrypted[i]);
 			}
+			uart_puts(PSTR("\r\n"));
 
-
-			uart_puts(PSTR("Hello, World!\r\n"));
-			aes_cipher(aes_text, aes_result);
+			aes_cipher(aes_unencrypted, aes_encrypted);
 			
+			uart_puts(PSTR("Encrypted text: "));
 			for (int8_t i = 0; i < 16; i++) {
-				DDRB = aes_result[i];
-				uart_putc(aes_result[i]);
+				DDRB = aes_encrypted[i];
+				uart_putc(aes_encrypted[i]);
 			}
+			uart_puts(PSTR("\r\n"));
 			
 //			for (int8_t i = 0; i < 16; i++) {
 //				uint8_t x = aes_text[i];
@@ -122,6 +129,7 @@ int main(void)
 //				uart_putc(x);
 //			}
 		}
+
 		receiveData = UDR;
 		 
 		if (PORTD == 0x04){
@@ -130,6 +138,8 @@ int main(void)
 //			 aes_key[3] = receiveData;
 		}
 		
+		uart_puts(PSTR("Main loop end\r\n"));
+		while(true);		//Stop after one iteration. This line can be removed if looping needs to happen
 		_delay_ms(200);
 	}
 }
