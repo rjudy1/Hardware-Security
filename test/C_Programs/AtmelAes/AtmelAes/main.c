@@ -130,7 +130,7 @@ int main(void)
 			aes_cipher(aes_unencrypted, aes_encrypted);
 			
 			uart_puts(PSTR("Encrypted text (hexadecimal): "));
-			for (int8_t i = 0; i < 32; i++) {
+			for (int8_t i = 0; i < 16; i++) {
 				DDRB = aes_encrypted[i];			//This line doesn't make sense
 				uart_putcHex(aes_encrypted[i]);
 			}
