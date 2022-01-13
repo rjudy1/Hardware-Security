@@ -83,7 +83,7 @@ int main(void)
 	uint8_t response = '8';
 	uint8_t aes_key[160] = { 'a','e','s','E','n','c','r','y','p','t','i','o','n','K','e','y' };
 	uint8_t aes_unencrypted[16] = 	{'h', 'e', 'l', 'l', 'o', ',',' ', 'w','o','r','l','d', '0', '0', '0', '0' };
-	uint8_t aes_encrypted[16] = {0};
+	uint8_t aes_encrypted[32] = {0};
 
 	
 	DDRB = 0b11111111; //seven seg
@@ -105,6 +105,8 @@ int main(void)
 	UCSRC = (1<<URSEL) | (1 << USBS) | (3 << UCSZ0);		//Different (added URSEL part)
 
 	uart_puts(PSTR("\r\nProgram start\r\n"));
+	uart_puts(PSTR(__TIMESTAMP__"\r\n"));							//Timestamp of compilation
+	
 	
 	uart_puts(PSTR("AES Encryption key: "));
 	aes_init(aes_key);
@@ -128,7 +130,7 @@ int main(void)
 			aes_cipher(aes_unencrypted, aes_encrypted);
 			
 			uart_puts(PSTR("Encrypted text (hexadecimal): "));
-			for (int8_t i = 0; i < 16; i++) {
+			for (int8_t i = 0; i < 32; i++) {
 				DDRB = aes_encrypted[i];			//This line doesn't make sense
 				uart_putcHex(aes_encrypted[i]);
 			}
