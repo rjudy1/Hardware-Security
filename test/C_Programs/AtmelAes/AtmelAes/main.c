@@ -2,6 +2,8 @@
 #include <avr/io.h>
 #undef F_CPU
 
+
+
 // from https://atmega32-avr.com/establish-uart-communication-atmega8-arduino-uno/
 // two way: https://circuitdigest.com/microcontroller-projects/uart-communication-between-two-atmega8-microcontrollers
 
@@ -12,7 +14,7 @@
 #include <avr/pgmspace.h>
 //header to enable data flow control over pins
 
-#define F_CPU 25000000 //telling controller crystal frequency attached
+#define F_CPU 8000000 //telling controller crystal frequency attached
 
 #include <util/delay.h> //header to enable delay function in program
 #include "aes.h"
@@ -83,7 +85,10 @@ int main(void)
 	uint8_t response = '8';
 	uint8_t aes_key[160] = { 'a','e','s','E','n','c','r','y','p','t','i','o','n','K','e','y' };
 	uint8_t aes_unencrypted[16] = 	{'h', 'e', 'l', 'l', 'o', ',',' ', 'w','o','r','l','d', '0', '0', '0', '0' };
-	uint8_t aes_encrypted[32] = {0};
+	//int sizeOfArray =	sizeof(aes_unencrypted)/sizeof(aes_unencrypted[0]);			//Length of unencrypted text string
+	//int sizeOfEncrypted = sizeOfArray + (16 - sizeOfArray%16)%16;
+	
+	uint8_t aes_encrypted[32];
 
 	
 	DDRB = 0b11111111; //seven seg
@@ -130,9 +135,19 @@ int main(void)
 			aes_cipher(aes_unencrypted, aes_encrypted);
 			
 			uart_puts(PSTR("Encrypted text (hexadecimal): "));
-			for (int8_t i = 0; i < 16; i++) {
+			for (int8_t i = 0; i < 32; i++) {
 				DDRB = aes_encrypted[i];			//This line doesn't make sense
 				uart_putcHex(aes_encrypted[i]);
+			}
+			uart_puts(PSTR("\r\n"));
+			
+			
+			uart_puts(PSTR("Decrypted text (test): "));
+			uint8_t aes_decrypted[16];			//Make sure the inverse actually did something
+			aes_inverse_cipher(aes_encrypted, aes_decrypted);
+			for (int8_t i = 0; i < 16; i++) {
+				DDRB = aes_decrypted[i];			//This line doesn't make sense
+				uart_putc(aes_decrypted[i]);
 			}
 			uart_puts(PSTR("\r\n"));
 			
@@ -141,6 +156,8 @@ int main(void)
 //				DDRB = x;
 //				uart_putc(x);
 //			}
+
+
 		}
 
 		receiveData = UDR;
