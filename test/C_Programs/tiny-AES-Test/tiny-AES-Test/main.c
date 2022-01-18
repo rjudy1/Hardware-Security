@@ -63,7 +63,7 @@ int main(void)
 	uart_puts(PSTR("Text to Encrypt: "));
 	for(char i = 0; i < 16; i++)
 	{
-		uart_putcHex(input[i]);
+		uart_putc(input[i]);
 	}
 	uart_puts(PSTR("\r\n"));
 	
@@ -76,6 +76,32 @@ int main(void)
 		uart_putcHex(input[i]);
 	}
 	uart_puts(PSTR("\r\n"));
+	
+	uart_puts(PSTR("\r\nBrute Start\r\n"));
+	unsigned char guess = 0;
+
+	while(1)
+	{
+		uart_puts(PSTR("Guess: "));
+		uart_putcHex(guess);
+		uart_puts(PSTR("    : "));
+		
+		int8_t input2[] = {'h','e','l','l','o', ',' , ' ', 'w','o','r','l','d','0','0','0','0'};
+		input2[15] = guess;
+		
+		AES_ECB_encrypt(&ctx, input2);
+		for(char i = 0; i < 16; i++)
+		{
+			uart_putcHex(input2[i]);
+		}
+		uart_puts(PSTR("\r\n"));
+		
+		guess++;
+		if(guess == 0)
+		{
+			while(1);
+		}
+	}
 	
 	while(1);		//Stop program
 }
