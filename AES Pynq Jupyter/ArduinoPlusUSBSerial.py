@@ -1,6 +1,15 @@
 import time
 import serial
 
+
+from pynq.overlays.base import BaseOverlay
+from pynq.lib.arduino import arduino_io
+
+base = BaseOverlay('base.bit')
+
+trigger_out = arduino_io.Arduino_IO(base.iop_arduino.mb_info, 14, 'out')
+trigger_in = arduino_io.Arduino_IO(base.iop_arduino.mb_info, 15, 'in')
+
 class CWSerial:
     def __init__(self, device):
         self.device = device
@@ -8,7 +17,7 @@ class CWSerial:
 
     def configure(self):
         self.connection = serial.Serial(
-            self.device, 9600, timeout=5, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE,
+            self.device, 38400, timeout=5, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE, xonxoff=False)
         time.sleep(1)
 
@@ -17,24 +26,13 @@ class CWSerial:
 
 
 cw_com = CWSerial("/dev/ttyUSB0")
-print(cw_com.read())
-
-
-import time
-
-from pynq.overlays.base import BaseOverlay
-from pynq.lib.arduino import arduino_io
-
-base = BaseOverlay('base.bit')
-
-p1 = arduino_io.Arduino_IO(base.iop_arduino.mb_info, 14, 'out')
-p2 = arduino_io.Arduino_IO(base.iop_arduino.mb_info, 15, 'in')
 
 while (True):
     # should do encryption
-    if p2.read():
-        p1.write(1)
+    if trigger_in.read():
+        trigger_out.write(1)
         sleep(.5)
-        p1.write(0)
-        encrypt(...)
+        trigger_out.write(0)
+        data = cw_com.read()
+        encrypt(key, str.encode(data))
         
