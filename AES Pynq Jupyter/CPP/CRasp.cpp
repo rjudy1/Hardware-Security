@@ -32,7 +32,6 @@ int main()
     /* End of In[8] */
 
     /* In[9] */
-        //TODO
         //Implemented method in this file
 
     /* In[10] */
@@ -46,13 +45,13 @@ int main()
 
     while(true)
     {
-        string inp = cw_com.readline();
+        string inp = cw_com.readlineCW();
 
         if(inp.at(0) == 'k')
         {
             key = format_hexstr_as_bytestr(inp.substr(1));
-            cw_com.write(make_cmd(cw_com.getACK()));
-            inp = cw_com.readline();
+            cw_com.writeCW(make_cmd(cw_com.getACK()));
+            inp = cw_com.readlineCW();
         }
     }
 

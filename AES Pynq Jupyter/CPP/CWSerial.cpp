@@ -1,10 +1,18 @@
 #include <iostream>
 #include "CWSerial.h"
+#include <fcntl.h>
+#include <errno.h>
+#include <termios.h>
+#include <unistd.h>
+
 
 using namespace std;
 
-    string ACK = "z00";
-    string READ = "r";
+string ACK = "z00";
+string READ = "r";
+
+struct termios tty;
+int serial_port;
 
 CWSerial::CWSerial(string device)
 {
@@ -15,36 +23,59 @@ CWSerial::CWSerial(string device)
 
 void CWSerial::configure()
 {
-    
-    cout << "CWSerial::configure() NYI" << endl;
-    //TODO not yet implemented
+    const char* deviceCharStar = device.c_str();
+    serial_port = open(deviceCharStar, O_RDWR);
+    if(serial_port < 0)
+    {
+        cerr << "Error from tcgetattr: " << errno << endl;
+    }
+    if(tcgetattr(serial_port, &tty) != 0)
+    {
+        cerr << "Error from tcgetattr: " << errno << endl;
+    }
+    tty.c_cflag &= ~PARENB;     //No parity bits
+    tty.c_cflag &= ~CSTOPB;     //Two stop bits
+    tty.c_cflag |= CS8;         //Eight bits per byte
+    tty.c_cflag &= ~CRTSCTS;    //Flow control RTS/CTS disabled
+    tty.c_cflag |= CREAD | CLOCAL; // Turn on READ & ignore ctrl lines (CLOCAL = 1)
+    cfsetispeed(&tty, B38400);
+    cfsetospeed(&tty, B38400);
+    if (tcsetattr(serial_port, TCSANOW, &tty) != 0)
+    {
+        cerr << "Error from tcgetattr: " << errno << endl;
+    }
 }
 
-string CWSerial::read()
+string CWSerial::readCW()
 {
-    //TODO not yet implemented
-    cout << "CWSerial::read() NYI" << endl;
-    return "CWSerial read() NYI";
+    //TODO check this
+    char read_buf [2048];
+    int sizeOfMessageReceived = read(serial_port, &read_buf, sizeof(read_buf));
+    string returnMe = "";
+    for(int i = 0; i < sizeOfMessageReceived; i++)
+    {
+        returnMe = returnMe + read_buf[i];
+    }
+    return returnMe;
 }
 
-string CWSerial::read(int msg_size)
+string CWSerial::readCW(int msg_size)
 {
-    //TODO not yet implemented
-    cout << "CWSerial::read(int msg_size) NYI" << endl;
-    return "CWSerial read(msg_size) NYI";
+    //TODO
+    cout << "read(int msg_size) doesn't do anything with msg_size at all (right now)" << endl;
+    return readCW();
 }
 
-string CWSerial::readline()
+string CWSerial::readlineCW()
 {
     //TODO not yet implemented
-    cout << "CWSerial::readLine() NYI" << endl;
-    return "CWSerial readLine() NYI";
+    return readCW();
 }
 
-void CWSerial::write(string cmd)
+void CWSerial::writeCW(string cmd)
 {
-    cout << "CWSerial::write(string cmd) NYI" << endl;
-    //TODO not yet implemented
+    const char* cmdCharStar = cmd.c_str();
+    write(serial_port, cmdCharStar, sizeof(cmdCharStar));
 }
 
 string CWSerial::getACK()
