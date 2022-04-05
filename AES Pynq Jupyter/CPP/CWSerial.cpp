@@ -8,7 +8,7 @@
 
 using namespace std;
 
-string ACK = "z00";
+string ACK = "z00\n";
 string READ = "r";
 
 struct termios tty;
@@ -34,12 +34,16 @@ void CWSerial::configure()
         cerr << "Error from tcgetattr: " << errno << endl;
     }
     tty.c_cflag &= ~PARENB;     //No parity bits
-    tty.c_cflag &= ~CSTOPB;     //Two stop bits
+    tty.c_cflag &= ~CSTOPB;     // Clear stop field, only one stop bit used
     tty.c_cflag |= CS8;         //Eight bits per byte
     tty.c_cflag &= ~CRTSCTS;    //Flow control RTS/CTS disabled
     tty.c_cflag |= CREAD | CLOCAL; // Turn on READ & ignore ctrl lines (CLOCAL = 1)
+
     cfsetispeed(&tty, B38400);
     cfsetospeed(&tty, B38400);
+
+    tty.c_lflag &= ~ECHO; // Disable echo
+
     if (tcsetattr(serial_port, TCSANOW, &tty) != 0)
     {
         cerr << "Error from tcgetattr: " << errno << endl;
@@ -50,7 +54,11 @@ string CWSerial::readCW()
 {
     //TODO check this
     char read_buf [2048];
-    int sizeOfMessageReceived = read(serial_port, &read_buf, sizeof(read_buf));
+    int sizeOfMessageReceived = 0;
+    while(sizeOfMessageReceived == 0)
+    {
+        sizeOfMessageReceived = read(serial_port, &read_buf, sizeof(read_buf));
+    }
     string returnMe = "";
     for(int i = 0; i < sizeOfMessageReceived; i++)
     {
@@ -75,7 +83,8 @@ string CWSerial::readlineCW()
 void CWSerial::writeCW(string cmd)
 {
     const char* cmdCharStar = cmd.c_str();
-    write(serial_port, cmdCharStar, sizeof(cmdCharStar));
+    cout << "writing: " << cmdCharStar << endl;
+    write(serial_port, cmdCharStar, cmd.length());
 }
 
 string CWSerial::getACK()
