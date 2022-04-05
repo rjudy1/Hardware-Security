@@ -53,6 +53,25 @@ int main()
             cw_com.writeCW(make_cmd(cw_com.getACK()));
             inp = cw_com.readlineCW();
         }
+
+        if(inp.at(0) == 'p')
+        {
+            data = format_hexstr_as_bytestr(inp.substr(1));
+        }
+
+        cout << "Key length: " << key.length() << "   Data length: " << data.length() << endl;
+
+        if((key.length() > 0) && (data.length() > 0))
+        {
+            gpiowrite(14, 1);       //Set GPIO high
+            string ciphertext = encrypt(key, data);
+            ciphertext = ciphertext.substr(0, 16);
+            cw_com.writeCW(make_cmd(cw_com.readCW(), format_as_hexstr(ciphertext)));
+            cw_com.writeCW(make_cmd(cw_com.getACK));
+
+            gpiowrite(14, 0);       //Set GPIO low
+        }
+
     }
 
 
