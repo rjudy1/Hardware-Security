@@ -43,26 +43,36 @@ int main()
     CWSerial cw_com = CWSerial("/dev/ttyUSB0");
     cw_com.configure();
 
+
+    cout << "Entering main loop" << endl;
     while(true)
     {
+        cout << "Start of main loop" << endl;
         string inp = cw_com.readlineCW();
+        cout << "Line read" << endl;
+        cout << "First line of the read line is " << inp.at(0) << endl;
 
         if(inp.at(0) == 'k')
         {
+            cout << "In K if statement" << endl;
             key = format_hexstr_as_bytestr(inp.substr(1));
             cw_com.writeCW(make_cmd(cw_com.getACK()));
             inp = cw_com.readlineCW();
+            cout << "End of K if statement" << endl;
         }
 
         if(inp.at(0) == 'p')
         {
+            cout << "In P if statement" << endl;
             data = format_hexstr_as_bytestr(inp.substr(1));
+            cout << "End of P if statement" << endl;
         }
 
         cout << "Key length: " << key.length() << "   Data length: " << data.length() << endl;
 
         if((key.length() > 0) && (data.length() > 0))
         {
+            cout << "Now doing trigger" << endl;
             gpioWrite(14, 1);       //Set GPIO high
             string ciphertext = encrypt(key, data);
             ciphertext = ciphertext.substr(0, 16);
@@ -70,6 +80,7 @@ int main()
             cw_com.writeCW(make_cmd(cw_com.getACK()));
 
             gpioWrite(14, 0);       //Set GPIO low
+            cout << "Now ending trigger" << endl;
         }
 
     }
