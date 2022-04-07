@@ -8,7 +8,7 @@
 
 using namespace std;
 
-string ACK = "z00\n";
+string ACK = "z00";
 string READ = "r";
 
 struct termios tty;
@@ -38,11 +38,16 @@ void CWSerial::configure()
     tty.c_cflag |= CS8;         //Eight bits per byte
     tty.c_cflag &= ~CRTSCTS;    //Flow control RTS/CTS disabled
     tty.c_cflag |= CREAD | CLOCAL; // Turn on READ & ignore ctrl lines (CLOCAL = 1)
+    tty.c_lflag |= ICANON;      //turn on cannonical mode
+
+    tty.c_oflag |= ONLRET;      //No carriage return
 
     cfsetispeed(&tty, B38400);
     cfsetospeed(&tty, B38400);
 
     tty.c_lflag &= ~ECHO; // Disable echo
+    tty.c_lflag &= ~ECHOE;  //Disable erasure
+    tty.c_lflag &= ~ECHONL;     //Disable new line echo
 
     if (tcsetattr(serial_port, TCSANOW, &tty) != 0)
     {
