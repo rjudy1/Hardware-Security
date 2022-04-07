@@ -10,7 +10,7 @@ using namespace std;
 int main()
 {
     /* In[1] */
-    cout << "Hello World!" << endl;
+//    cout << "Hello World!" << endl;
     /* End of In[1] */
 
     /* In[2] */
@@ -49,9 +49,9 @@ int main()
     cout << "Entering main loop" << endl;
     while(true)
     {
-        cout << "Start of main loop" << endl;
+//        cout << "Start of main loop" << endl;
         string inp = cw_com.readlineCW();
-//        cout << "Line read: " << inp << endl;
+        cout << "Line read: " << inp << endl;
 //        cout << "First char of the read line is " << inp.at(0) << endl;
 
         if(inp.at(0) == 'k')
@@ -60,23 +60,15 @@ int main()
 //            cout << "substr: " << inp.substr(1) << endl;
             key = format_hexstr_as_bytestr(inp.substr(1));
             cw_com.writeCW(make_cmd(cw_com.getACK()));
-            inp = cw_com.readlineCW();
-            cout << "End of K if statement" << endl;
+//            cout << "End of K if statement" << endl;
         }
 
-        if(inp.at(0) == 'p')
+        if((inp.at(0) == 'p') && (key.length() > 0))
         {
             cout << "In P if statement" << endl;
             data = format_hexstr_as_bytestr(inp.substr(1));
-            cout << "End of P if statement" << endl;
-        }
-
-        cout << "Key length: " << key.length() << "   Data length: " << data.length() << endl;
-//        cout << "Key: " << key << "    Data: " << data << endl;
-
-        if((key.length() > 0) && (data.length() > 0))
-        {
-            cout << "Now doing trigger" << endl;
+//            cout << "End of P if statement" << endl;
+//            cout << "Now doing trigger" << endl;
             gpioWrite(14, 1);       //Set GPIO high
             string ciphertext = encrypt(key, data);
             ciphertext = ciphertext.substr(0, 16);
@@ -84,7 +76,7 @@ int main()
             cw_com.writeCW(make_cmd(cw_com.getACK()));
 
             gpioWrite(14, 0);       //Set GPIO low
-            cout << "Now ending trigger" << endl;
+//            cout << "Now ending trigger" << endl;
         }
 
     }
@@ -106,7 +98,7 @@ string encrypt(string key, string plaintext)
 //    cout << "Plaintext: " << plaintext << endl;
     AES_ECB_encrypt(&ctx, (uint8_t*)charStarPlainText);
 
-    cout << "Key: " << key << endl;
+//    cout << "Key: " << key << endl;
     string returnMe = "";
     for(int i = 0; i < 16; i++)
     {
@@ -128,7 +120,7 @@ string make_cmd(string cmd, string byte_data)
     {
 //        cout << i << ": " << (int)returnMe.at(i) << endl;
     }
-    cout << "Done printing string - make_cmd" << endl;
+//    cout << "Done printing string - make_cmd" << endl;
     return returnMe;
 }
 
@@ -148,9 +140,9 @@ string format_bytestr_as_hexstr(string text)
 string format_hexstr_as_bytestr(string hexstr)
 {
     string returnMe = "";
-    cout << "hex_to_byte_preloop" << endl;
-    cout << "hexstring: " << hexstr << endl;
-    cout << "hexstr length: " << hexstr.length() << endl;
+//    cout << "hex_to_byte_preloop" << endl;
+//    cout << "hexstring: " << hexstr << endl;
+//    cout << "hexstr length: " << hexstr.length() << endl;
     for(int i = 0; i < hexstr.length() - 1; i = i + 2)
     {
 //        cout << "Loop, i is " << i << endl;
@@ -163,7 +155,7 @@ string format_hexstr_as_bytestr(string hexstr)
         char addMeToString = firstChar*16 + secondChar;
         returnMe = returnMe + addMeToString;
     }
-    cout << "End of loop, returnMe is: " << returnMe << endl;
+//    cout << "End of loop, returnMe is: " << returnMe << endl;
     return returnMe;
 }
 

@@ -18,7 +18,7 @@ CWSerial::CWSerial(string device)
 {
     this->device = device;
     //TODO connection variable
-    cout << "Constructor" << endl;
+//    cout << "Constructor" << endl;
 }
 
 void CWSerial::configure()
@@ -42,8 +42,8 @@ void CWSerial::configure()
 
     tty.c_oflag |= ONLRET;      //No carriage return
 
-    cfsetispeed(&tty, B38400);
-    cfsetospeed(&tty, B38400);
+    cfsetispeed(&tty, B9600);
+    cfsetospeed(&tty, B9600);
 
     tty.c_lflag &= ~ECHO; // Disable echo
     tty.c_lflag &= ~ECHOE;  //Disable erasure
@@ -75,7 +75,7 @@ string CWSerial::readCW()
 string CWSerial::readCW(int msg_size)
 {
     //TODO
-    cout << "read(int msg_size) doesn't do anything with msg_size at all (right now)" << endl;
+//    cout << "read(int msg_size) doesn't do anything with msg_size at all (right now)" << endl;
     return readCW();
 }
 
@@ -90,6 +90,7 @@ void CWSerial::writeCW(string cmd)
     const char* cmdCharStar = cmd.c_str();
     cout << "writing: " << cmdCharStar << endl;
     write(serial_port, cmdCharStar, cmd.length());
+    tcdrain(serial_port);
 }
 
 string CWSerial::getACK()
