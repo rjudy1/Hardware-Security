@@ -42,8 +42,8 @@ void CWSerial::configure()
 
     tty.c_oflag |= ONLRET;      //No carriage return
 
-    cfsetispeed(&tty, B9600);
-    cfsetospeed(&tty, B9600);
+    cfsetispeed(&tty, B19200);
+    cfsetospeed(&tty, B19200);
 
     tty.c_lflag &= ~ECHO; // Disable echo
     tty.c_lflag &= ~ECHOE;  //Disable erasure

@@ -18,7 +18,7 @@ int main()
     {
         return 1;       //If this fails, return 1 (error), stop the program
     }
-    gpioSetMode(14, PI_OUTPUT);
+    gpioSetMode(26, PI_OUTPUT);
     /* End of In[2] */
 
     /* In[3] pulls in the AES library, skipping for now */
@@ -42,7 +42,7 @@ int main()
     /* In[ ]: */
     string data = "";
     string key = "aesEncryptionKey";            //CHANGE KEY CHANGE KEY CHANGE KEY CHANGE KEY CHANGE KEY CHANGE KEY
-    CWSerial cw_com = CWSerial("/dev/ttyUSB0");
+    CWSerial cw_com = CWSerial("/dev/ttyS0");     // was /dev/ttyUSB0
     cw_com.configure();
 
 
@@ -68,15 +68,15 @@ int main()
             cout << "In P if statement" << endl;
             data = format_hexstr_as_bytestr(inp.substr(1));
 //            cout << "End of P if statement" << endl;
-//            cout << "Now doing trigger" << endl;
-            gpioWrite(14, 1);       //Set GPIO high
+            cout << "Now doing trigger" << endl;
+            gpioWrite(26, 1);       //Set GPIO high
             string ciphertext = encrypt(key, data);
             ciphertext = ciphertext.substr(0, 16);
             cw_com.writeCW(make_cmd(cw_com.getREAD(), format_bytestr_as_hexstr(ciphertext)));
             cw_com.writeCW(make_cmd(cw_com.getACK()));
 
-            gpioWrite(14, 0);       //Set GPIO low
-//            cout << "Now ending trigger" << endl;
+            gpioWrite(26, 0);       //Set GPIO low
+            cout << "Now ending trigger" << endl;
         }
 
     }
@@ -128,7 +128,7 @@ string format_bytestr_as_hexstr(string text)
 {
     static char hex[] = "0123456789ABCDEF";
     string returnMe = "";
-    for(int i =0; i < text.length(); i++)
+    for(int i = 0; i < text.length(); i++)
     {
         char convertThisCharToHex = text.at(i);
         returnMe = returnMe + hex[convertThisCharToHex / 16];       //Gets the first hex digit
