@@ -142,6 +142,8 @@ AES_CONST_VAR uint8_t Rcon[11] = {
 */
 static void checkInterruptFlag(void)
 {
+    DDRB = DDRB | 0b00000001;           //Pin B0 is output
+    PORTB = PORTB | 0b00000001;         //PORTB is high (for checking time in interrupt routine)
     if(interruptFlagTriggered == 1)
     {
         interruptFlagTriggered = 0;         //Be ready for the next one
@@ -170,6 +172,7 @@ static void checkInterruptFlag(void)
             ADMUX = adc;        //Randomly pick a channel for ADC
         }
     }
+    PORTB = PORTB & 0b11111110;         //PORTB is low (for checking time in interrupt routine end)
     /*if(interruptFlagTriggered == 1)
     {
         interruptFlagTriggered = 0;
